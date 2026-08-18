@@ -1,0 +1,106 @@
+# Guía del Asistente Académico Inteligente (.agents)
+
+Este archivo instruye a cualquier Agente de IA sobre el flujo de trabajo, estructura y criterios para procesar, organizar y enriquecer apuntes universitarios en esta bóveda de Obsidian.
+
+---
+
+## 1. Rol y Propósito del Agente
+El usuario enviará notas, transcripciones o dictados de clase en **formato desorganizado o flujo de pensamiento**.
+El agente debe asumir un rol activo y resolver:
+
+1. **Identificar la materia, la fecha y el número de sesión:**
+   - **Orden habitual de clases:**
+     1. `minería de datos` (habitualmente la primera clase del día).
+     2. `arquitectura funcional de computadoras`.
+     3. `proyectos I+d`.
+   - Si no se especifica la materia, deducirla por el contexto o el orden de la jornada.
+   - **Formato de Fechas:**
+     - **En el nombre del archivo NO se coloca la fecha.**
+     - En los metadatos YAML y tareas de plugins: Usar formato ISO `YYYY-MM-DD`.
+     - En el cuerpo de los apuntes (subtítulo bajo el encabezado principal): Mostrar la fecha en español legible (ejemplo: `*Viernes, 14 de agosto de 2026*`).
+
+2. **Estructurar y limpiar el contenido:**
+   - Extraer y pulir las ideas principales y secundarias.
+   - Mejorar definiciones ambiguas para que sean claras y pedagógicas sin distorsionar lo explicado en clase.
+   - Añadir **ejemplos didácticos breves** si facilitan la comprensión del tema.
+   - Emplear tablas comparativas, listas limpias y diagramas **Mermaid** cuando haya flujos, arquitecturas o comparaciones.
+
+3. **Distinción Estricta: Tareas vs. Avisos / Criterios del Curso:**
+   - **Avisos y Criterios Informativos (NO son tareas con checkbox):**
+     - Ponderaciones de evaluación (ej. Exámenes 40%, Prácticas 35%).
+     - Metodologías generales (ej. "los entregables se suben a Teams y van encadenados").
+     - Anuncios de calendario (ej. "en la unidad 2 posiblemente no haya clase los lunes").
+     - *Tratamiento:* Se documentan en tablas, listas o bloques de alerta dentro del apunte. **NUNCA crear checkboxes `- [ ]` para avisos generales.**
+   - **Tareas Reales Asignadas (Creación obligatoria con checkbox):**
+     - Solo se registran cuando el profesor **asigna una tarea, ejercicio, investigación o entregable concreto a realizar**.
+     - Toda tarea real DEBE incluir:
+       1. **Descripción detallada** de qué se debe hacer.
+       2. **Fecha límite** (`📅 YYYY-MM-DD`) si se proporcionó.
+       3. **Etiqueta de la materia** (`🏷️ #[materia]`).
+     - Formato: `- [ ] [Nombre y descripción clara de la tarea] 📅 YYYY-MM-DD 🏷️ #[materia]`
+     - Si en la sesión **no se dejaron tareas**, la sección `## Tareas Asignadas` debe indicar: `*(Sin tareas asignadas en esta sesión)*`.
+
+4. **Interconectar la Bóveda:**
+   - Vincular siempre con la nota de la sesión anterior mediante `[[[N° Sesión Anterior]. [Tema Anterior]]]`.
+
+---
+
+## 2. Nomenclatura y Rutas de Archivos
+
+- **Ruta:** `/Notas Universidad 2026/[nombre de la materia]/`
+- **Formato de nombre:** `[N° de Sesión]. [Tema Principal].md`
+- **Ejemplos:**
+  - `1. Introducción y Evaluación.md`
+  - `2. Antecedentes Históricos de la Minería de Datos.md`
+  - `3. Elementos de los Modelos y Métodos de Búsqueda.md`
+- **Materias oficiales y Colores en Vista Gráfica:**
+  - `minería de datos` 🔵 (Azul `#3B82F6`)
+  - `arquitectura funcional de computadoras` 🟠 (Naranja `#F59E0B`)
+  - `proyectos I+d` 🟢 (Verde `#10B981`)
+  - Tablero Agenda 🟣 (Violeta `#8B5CF6`)
+
+---
+
+## 3. Plantilla Estándar para Notas de Clase
+
+```markdown
+---
+fecha: YYYY-MM-DD
+materia: [minería de datos | arquitectura funcional de computadoras | proyectos I+d]
+tema: [Título o concepto central]
+tags:
+  - universidad
+  - [materia_tag]
+---
+
+# [Título de la Sesión / Tema Principal]
+*[Día de la semana], [Día] de [Mes] de [Año]*
+
+## Conexiones
+- Nota anterior: [[N°. Tema Anterior]]
+
+---
+
+## Conceptos Clave
+- [Resumen ejecutivo de las ideas esenciales vistas en clase]
+
+---
+
+## 1. [Tema / Sección 1]
+- **[Concepto]:** [Definición clara y bien estructurada]
+- [Explicación detallada con viñetas]
+- > **Ejemplo / Caso Práctico:** [Ejemplo didáctico relevante]
+
+---
+
+## 2. [Tema / Sección 2]
+[Desarrollo, tablas, avisos o diagramas Mermaid si aplican]
+
+---
+
+## Tareas Asignadas
+*(Sin tareas asignadas en esta sesión)*
+<!-- O si se asignó tarea real:
+- [ ] [Nombre de la tarea con su descripción y requisitos] 📅 YYYY-MM-DD 🏷️ #[materia]
+-->
+```
