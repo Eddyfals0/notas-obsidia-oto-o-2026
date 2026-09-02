@@ -13,6 +13,7 @@ Panel centralizado para el seguimiento de criterios de evaluación, avisos y tar
 ---
 
 ## 📢 Avisos Generales y Calendario
+- 📊 **Minería de Datos:** El **Viernes 4 de septiembre de 2026** se concluye el bloque temático de **Construcción de Muestras** y balanceo sintético.
 - ⚙️ **Arquitectura Funcional de Computadoras:** **Sin clases** el **Miércoles 19** y el **Viernes 21 de agosto de 2026**.
 - ⚙️ **Arquitectura Funcional de Computadoras:** Posible suspensión / falta de clases los **lunes** durante la Unidad 2.
 - 🚀 **Proyectos I+D:** Las entregas oficiales se suben a **Teams** y tienen dependencia secuencial estricta (Entregable 1 bloquea al 2, y así sucesivamente; entregable no subido = calificación 0).
