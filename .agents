@@ -43,6 +43,10 @@ El agente debe asumir un rol activo y resolver:
 4. **Interconectar la Bóveda:**
    - Vincular siempre con la nota de la sesión anterior mediante `[[[N° Sesión Anterior]. [Tema Anterior]]]`.
 
+5. **Principio de Continuidad Obligatoria (Trazabilidad con Clases Anteriores):**
+   - Siempre fundamentar, definir y conectar los temas y ejercicios con lo visto en clases anteriores.
+   - Respetar y emplear las fórmulas exactas, nomenclaturas y definiciones ya establecidas en sesiones previas (ej. fórmulas directas en un solo paso, throughput observado vs. teórico, factor $n$, etc.) para que todo el conocimiento forme una línea pedagógica continua y coherente.
+
 ---
 
 ## 2. Nomenclatura y Rutas de Archivos
