@@ -104,3 +104,14 @@ tags:
 - [ ] [Nombre de la tarea con su descripción y requisitos] 📅 YYYY-MM-DD 🏷️ #[materia]
 -->
 ```
+
+---
+
+## 4. Control de Versiones y Sincronización Obligatoria (Git)
+
+Para garantizar la persistencia de la información y evitar pérdida de notas, en cada actualización o procesamiento de apuntes el agente DEBE:
+
+1. **Pull previo:** Ejecutar `git pull origin main` antes de confirmar cambios o al iniciar trabajo para sincronizar cambios remotos.
+2. **Commit descriptivo:** Ejecutar `git add .` y crear un commit claro indicando la materia y la sesión procesada (ej. `git commit -m "docs(minería de datos): agregar sesión 7 de muestreo progresivo"`).
+3. **Push a remoto:** Ejecutar `git push origin main` de inmediato tras cada modificación sustancial.
+
