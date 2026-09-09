@@ -21,12 +21,81 @@ Este glosario reúne y define formal y conceptualmente todos los términos técn
 
 ---
 
+---
+
 ## 📑 Índice Temático del Glosario
-1. [[#Módulo 1: Fundamentos, Metodología KDD y Modelos|Fundamentos, Metodología KDD y Modelos]]
-2. [[#Módulo 2: Población, Técnicas de Muestreo y Cobertura Geométrica|Población, Técnicas de Muestreo y Cobertura Geométrica]]
-3. [[#Módulo 3: Calidad de Datos, Limpieza y Normalización Textual|Calidad de Datos, Limpieza y Normalización Textual]]
-4. [[#Módulo 4: Tratamiento y Técnicas de Imputación de Valores Faltantes|Tratamiento y Técnicas de Imputación de Valores Faltantes]]
-5. [[#Módulo 5: Detección y Taxonomía de Valores Atípicos (Outliers)|Detección y Taxonomía de Valores Atípicos (Outliers)]]
+1. [[#🧠 Diccionario Intuitivo: Conceptos Raros Explicados con Peras y Manzanas|Conceptos Raros Explicados con Peras y Manzanas]]
+2. [[#Módulo 1: Fundamentos, Metodología KDD y Modelos|Fundamentos, Metodología KDD y Modelos]]
+3. [[#Módulo 2: Población, Técnicas de Muestreo y Cobertura Geométrica|Población, Técnicas de Muestreo y Cobertura Geométrica]]
+4. [[#Módulo 3: Calidad de Datos, Limpieza y Normalización Textual|Calidad de Datos, Limpieza y Normalización Textual]]
+5. [[#Módulo 4: Tratamiento y Técnicas de Imputación de Valores Faltantes|Tratamiento y Técnicas de Imputación de Valores Faltantes]]
+6. [[#Módulo 5: Detección y Taxonomía de Valores Atípicos (Outliers)|Detección y Taxonomía de Valores Atípicos (Outliers)]]
+
+---
+
+## 🧠 Diccionario Intuitivo: Conceptos Raros Explicados con Peras y Manzanas
+
+Para que no te pierdas en las palabras rimbombantes de los libros, aquí tienes la traducción a español cotidiano con analogías reales:
+
+### 🍬 1. ¿Qué diablos es un "Estrato"?
+* **En palabras no tradicionales:** Un estrato es simplemente **un montoncito de cosas que son del mismo color o tipo**.
+* **La analogía de los dulces M&M's:**  
+  Imagina que abres una bolsa de dulces donde hay **90 amarillos**, **8 azules** y solo **2 rojos**.
+  * Si metes la mano a ciegas (muestreo aleatorio), casi seguro sacarás puros amarillos y los rojos (la minoría) se quedarán olvidados en la bolsa.
+  * ¿Qué es estratificar? Es vaciar la bolsa en la mesa y separar los dulces en **tres montoncitos**: el montoncito amarillo, el azul y el rojo. **Cada montoncito es un ESTRATO**.
+  * Luego te obligas a sacar 1 dulce de cada montoncito. ¡Listo! Tu plato tiene todos los colores representados. Eso es **Muestreo Estratificado**.
+
+---
+
+### 📦 2. ¿Qué es un "Cluster / Conglomerado" y en qué se diferencia del Estrato?
+* **En el Estrato:** Todos los elementos dentro del montoncito son **idénticos entre sí** (puros dulces rojos, o puras mujeres, o puros ricos).
+* **En el Cluster:** El grupo es una **caja mixta con variedad**.  
+  * *Analogía:* Un salón de clases de la universidad es un cluster. Adentro hay hombres, mujeres, aplicados, reprobados, ricos y de clase media. El salón entero es una "mini-ciudad".
+  * En el muestreo por clusters, en lugar de revisar 100 salones, rifas y eliges al azar 5 salones completos.
+
+---
+
+### 🎮 3. ¿Qué es un "Descriptor"?
+* **En palabras no tradicionales:** Son las **características o estadísticas de la tarjeta de tu personaje en un videojuego**.
+* *Analogía:* Si tu personaje es un guerrero, sus descriptores son: $[ \text{Fuerza} = 90, \, \text{Velocidad} = 40, \, \text{Magia} = 10, \, \text{Nivel} = 5 ]$.  
+* En una tabla de Excel, **cada columna es un descriptor**. Si tienes 10 columnas, tu modelo vive en un "hiperespacio de 10 dimensiones".
+
+---
+
+### 🧭 4. ¿Qué significa que los descriptores sean "Ortogonales"?
+* **En palabras no tradicionales:** Significa que **"cero copia", cada columna te da información $100\%$ nueva y no repite chismes**.
+* *Analogía de la Brújula:*  
+  Caminar hacia el **Norte** y caminar hacia el **Este** son direcciones **ortogonales (a $90^\circ$)**. Caminar al Norte no te acerca ni un milímetro al Este. Son independientes.
+  * Si en tu base de datos pones `Salario Mensual` y `Salario Anual`, es como caminar al Norte y luego al Norte otra vez: **¡no te estás moviendo en ninguna dirección nueva!** Solo estás repitiendo lo mismo y haciendo que el modelo se obsesione con el dinero.
+
+---
+
+### 🪢 5. ¿Qué es la "Cobertura Convexa" (*Convex Hull*)?
+* **En palabras no tradicionales:** Es la **liga elástica que rodea los clavos**.
+* *Analogía:* Imagina que clavas 50 clavos en una tabla de madera. Luego tomas una liga elástica gigante y la sueltas alrededor de todos los clavos. La liga se va a tensar tocando únicamente los clavos de las orillas exteriores.  
+  La forma geométrica que forma esa liga tensada es la **cobertura convexa**. Si tu muestra conserva los clavos de la orilla, la Red Neuronal puede dibujar la frontera perfecta.
+
+---
+
+### 🗺️ 6. ¿Qué es un "Embedding"?
+* **En palabras no tradicionales:** Es el **traductor de palabras a coordenadas de GPS**.
+* *Analogía:* Una computadora es ciega a las letras. Para que entienda qué es *"médico"* y *"doctor"*, el embedding le asigna una latitud y longitud numérica en un mapa:
+  * *"Médico"* = Coordenada $(45.12, 12.80)$
+  * *"Doctor"* = Coordenada $(45.14, 12.81)$
+  * Como están a 2 milímetros de distancia en el mapa, la computadora sabe que son casi lo mismo.
+
+---
+
+### ❓ 7. ¿Qué son MCAR, MAR y MNAR? (El misterio de los datos faltantes)
+* **MCAR (El Accidente Puro):** Se te cayó una taza de café encima de la hoja de la encuesta y borró 3 respuestas. El café cayó al azar, no tiene malicia ni truco.
+* **MAR (El Condicionado):** Los jóvenes no contestaron la pregunta de *"¿A qué edad se va a pensionar?"*. La falta del dato no es por accidente, sino porque tienen 20 años y no piensan en pensiones (depende de su edad, que sí la conoces).
+* **MNAR (El Secreto Oculto):** La persona que gana 10 millones de pesos al mes deja en blanco la casilla de *"¿Cuánto gana?"* porque le da miedo el SAT o los secuestros. El dato falta **precisamente por culpa del valor que está escondiendo**.
+
+---
+
+### 🦒 8. ¿Qué es un "Outlier"?
+* **En palabras no tradicionales:** Es **la jirafa en un corral de gallinas**.
+* *Analogía:* Todos los animales miden entre 20 y 40 centímetros, y de repente hay un animal que mide 5 metros. Ese es un **Outlier**. Si calculas el "promedio de altura del corral", la jirafa hace que el promedio dé 2 metros y arruina todos tus cálculos.
 
 ---
 
