@@ -99,6 +99,24 @@ Para que no te pierdas en las palabras rimbombantes de los libros, aquí tienes 
 
 ---
 
+### 🌡️ 9. ¿Qué es un "Outlier Contextual"? (El ejemplo de Puebla vs Veracruz)
+* **En palabras no tradicionales:** Es **traer abrigo de esquiar en la playa o andar en traje de baño en un nevado**. El valor no está prohibido por las leyes de la física, pero en ese lugar o momento no tiene sentido.
+* *Analogía:*  
+  * En **Veracruz**, tener una temperatura de **$32^\circ\text{C}$** en verano es el pan de cada día (humedad, calor de costa).
+  * En **Puebla** (a $2,160$ metros de altura sobre el mar), tener **$32^\circ\text{C}$** es un récord histórico de calor sofocante.
+  * Si metes todos los datos en una sola bolsa sin separar por ciudad, el algoritmo nunca sabrá que en Puebla la gente se estaba asfixiando, porque "$32^\circ\text{C}$" le parece un número normal en México. El contexto cualitativo (la ciudad) es lo que define si es atípico.
+
+---
+
+### 🌵 10. ¿Cómo detecta outliers el algoritmo KNN sin saber clases?
+* **En palabras no tradicionales:** Es **la casa en medio del desierto**.
+* *Analogía:*  
+  * Imagina que estás en una fiesta abarrotada: volteas a tu alrededor y tus $3$ vecinos más cercanos están a medio metro de distancia. La "distancia promedio a tus vecinos" es diminuta ($0.5\text{ m}$). Eres parte de la bola (un punto normal).
+  * Ahora imagina una casa en el desierto de Sonora. Para encontrar a sus $3$ vecinos más cercanos tiene que viajar $50\text{ km}$ a la redonda.
+  * En Minería de Datos con 4 columnas, KNN mide esa distancia en el mapa de números: **a quien le toque una distancia promedio gigantesca a sus vecinos, es porque vive aislado en medio de la nada**. ¡Ese es el Outlier! No te importa de qué partido político es o cuánto gana, solo que está solo.
+
+---
+
 ## Módulo 1: Fundamentos, Metodología KDD y Modelos
 
 ### Minería de Datos (*Data Mining*)
@@ -257,7 +275,19 @@ $$z = \frac{x - \mu}{\sigma}$$
 Técnica robusta no paramétrica basada en cuartiles:
 $$IQR = Q_3 - Q_1$$
 $$\text{Límites} = [Q_1 - 1.5 \times IQR, \quad Q_3 + 1.5 \times IQR]$$
-*(Los valores fuera de estas vallas se clasifican como posibles outliers)*.
+*(Los valores fuera de estas vallas se clasifican como posibles outliers; más allá de $\pm 3 \times IQR$ son extremos)*.
 
 ### Enmascaramiento (*Masking*)
 Efecto adverso donde la presencia de múltiples outliers extremos contamina e infla artificialmente la media ($\mu$) y la desviación estándar ($\sigma$), haciendo que el Z-Score no logre detectarlos.
+
+### Detección de Outliers con KNN (Score de Distancia al Hiperespacio)
+Método no supervisado multivariable que mapea todas las observaciones en un espacio de $D$ dimensiones. En lugar de clasificar por clases, calcula la distancia promedio a sus $k$ vecinos más cercanos:
+$$\bar{d}_k(p_i) = \frac{1}{k} \sum_{j \in N_k(p_i)} d(p_i, p_j)$$
+Las instancias con distancias anormalmente altas habitan en regiones de bajísima densidad y se etiquetan como anomalías multivariadas.
+
+### Ruido en DBSCAN (Cluster `-1`)
+Puntos en un espacio multidimensional que no alcanzan a reunir al menos `min_samples` vecinos dentro de un radio hiperbólico $\epsilon$. Scikit-Learn les asigna automáticamente la etiqueta `-1`, sirviendo como detector nativo de anomalías por densidad.
+
+### `ydata-profiling` (Análisis Exploratorio Automatizado)
+Librería de Python (sucesora de `pandas-profiling`) que genera un informe HTML interactivo integral con un solo comando. Proporciona alertas automáticas de calidad, diagramas de caja (boxplots), cuantiles, cardinalidad y matrices de correlación no lineal ($\phi_K$).
+
