@@ -117,6 +117,15 @@ Para que no te pierdas en las palabras rimbombantes de los libros, aquí tienes 
 
 ---
 
+### ⚽ 11. ¿Qué es una Hiperesfera y la Prueba de Esfericidad? (La canica vs el balón de fútbol americano)
+* **En palabras no tradicionales:** Es saber si tu nube de datos es **una burbuja de jabón redonda** o **un balón de fútbol americano aplastado y chueco**.
+* *Analogía:*  
+  * Si tus variables no tienen relación entre sí y tienen la misma fuerza (varianza), los puntos se amontonan en el centro como abejas en un panal y forman una **burbuja redonda perfecta (Hiperesfera)**. Medir distancias con una regla normal (distancia euclidiana) funciona de maravilla en todas direcciones.
+  * Pero si dos variables son comadres (están correlacionadas, como Estatura y Peso), la nube se estira como un balón de fútbol americano.
+  * **La Prueba de Esfericidad:** Es el árbitro que mide la nube. Si el árbitro dice *"¡Es esférica!"*, puedes usar **K-Means**. Si dice *"¡No es esférica, está aplastada o tiene curvas raras!"*, la distancia euclidiana te va a engañar y tienes que usar **DBSCAN** (densidad pura).
+
+---
+
 ## Módulo 1: Fundamentos, Metodología KDD y Modelos
 
 ### Minería de Datos (*Data Mining*)
@@ -244,7 +253,15 @@ Algoritmo de imputación multivariable que calcula la distancia euclidiana entre
 Método no paramétrico iterativo del estado del arte que entrena bosques aleatorios para predecir los valores faltantes de cada columna, capturando interacciones no lineales complejas sin requerir escalado de datos.
 
 ### Imputación por Clustering No Supervisado ($M'$ sin $A_x$)
-Técnica para imputar un atributo clave $A_x$ cuando no hay etiquetas de clase: se genera un subconjunto $M'$ omitiendo $A_x$, se ejecuta **K-Means** o **DBSCAN** para formar nubes densas, y se imputa el valor central del cluster al que pertenezca la instancia.
+Técnica en dos etapas para imputar un atributo clave $A_x$ cuando no hay etiquetas de clase:
+1. **Etapa 1:** Se proyecta el espacio $M' = M \setminus \{A_x\}$ con las columnas completas y se entrena un modelo de agrupamiento (**K-Means** si hay esfericidad o **DBSCAN** por densidad).
+2. **Etapa 2:** Se identifica la comunidad o cluster al que pertenece cada fila incompleta y se imputa la tendencia central (media o mediana) de $A_x$ de esa comunidad, o la media ponderada por KNN de la vecindad inmediata.
+
+### Prueba de Esfericidad (Bartlett / Mauchly)
+Prueba estadística de contraste que evalúa si la matriz de covarianza/correlación de los datos es proporcional a la matriz identidad ($\mathbf{\Sigma} \propto \mathbf{I}$). Si se cumple la hipótesis nula, las variables son ortogonales, los clusters son hiperesferas concéntricas perfectas y la distancia euclidiana es válida (apta para K-Means). Si se rechaza, la nube es elipsoidal (variables correlacionadas) y requiere modelos de densidad como DBSCAN o distancias de Mahalanobis.
+
+### Hiperesfera y Decaimiento Normal Multivariado
+Geometría que adoptan los datos en $\mathbb{R}^D$ cuando siguen una distribución normal multivariada simétrica. La máxima densidad habita en el centroide $\boldsymbol{\mu}$ y disminuye de forma gaussiana en cáscaras esféricas concéntricas hacia la periferia.
 
 ### SMOTE (*Synthetic Minority Over-sampling Technique*)
 Algoritmo de balanceo que enriquece clases minoritarias creando instancias sintéticas a lo largo del segmento de línea que une a cada punto minoritario con sus vecinos más cercanos ($k$-NN):
