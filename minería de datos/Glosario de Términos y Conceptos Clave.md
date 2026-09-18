@@ -126,6 +126,21 @@ Para que no te pierdas en las palabras rimbombantes de los libros, aquí tienes 
 
 ---
 
+### 🎛️ 12. ¿Qué son los Pesos Sinápticos ($w_i$) y el Sesgo ($b$)? (La mesa de mezclas y la cadenita del antro)
+* **En palabras no tradicionales:** Los pesos son **las perillas de volumen que le suben o bajan a cada pista de audio**, y el sesgo es **el cadenero del antro**.
+* *Analogía:*  
+  * Imagina que estás decidiendo si vas a salir de fiesta o no. Tienes 3 entradas:
+    * $x_1$: ¿Tienes dinero?
+    * $x_2$: ¿Va la persona que te gusta?
+    * $x_3$: ¿Tienes examen mañana a las 7 AM?
+  * Tu cerebro no le da la misma importancia a todo. Le asigna un **peso ($w_i$)**:
+    * $w_1 = +2$ (te anima a ir).
+    * $w_2 = +10$ (¡peso gigantesco excitatorio!).
+    * $w_3 = -8$ (peso negativo inhibitorio: tener examen frena tus ganas).
+  * **¿Y qué es el Sesgo ($b$)?** Es tu estado de ánimo base (el cadenero): si estás súper deprimido en pijama ($b = -15$), se necesita una combinación brutalmente tentadora de amigos y fiesta para convencerte de levantarte de la cama y que la neurona "se dispare".
+
+---
+
 ## Módulo 1: Fundamentos, Metodología KDD y Modelos
 
 ### Minería de Datos (*Data Mining*)
@@ -307,4 +322,30 @@ Puntos en un espacio multidimensional que no alcanzan a reunir al menos `min_sam
 
 ### `ydata-profiling` (Análisis Exploratorio Automatizado)
 Librería de Python (sucesora de `pandas-profiling`) que genera un informe HTML interactivo integral con un solo comando. Proporciona alertas automáticas de calidad, diagramas de caja (boxplots), cuantiles, cardinalidad y matrices de correlación no lineal ($\phi_K$).
+
+---
+
+## Módulo 6: Fundamentos de Redes Neuronales Artificiales y el Perceptrón
+
+### Neurona Biológica
+Célula viva especializada del sistema nervioso compuesta por dendritas receptoras, soma integrador metabólico, axón transmisor y botones sinápticos moduladores.
+
+### Perceptrón
+Modelo matemático computacional propuesto por Frank Rosenblatt (1958) que calcula una suma lineal ponderada de sus entradas, incorpora un término de sesgo y evalúa una función de activación no lineal:
+$$y = \phi\left(\sum_{i=1}^n w_i x_i + b\right)$$
+
+### Pesos Sinápticos ($w_i$)
+Parámetros numéricos ajustables que multiplican cada atributo de entrada, representando la fuerza de la conexión. Determinan si un estímulo es excitatorio ($w_i > 0$) o inhibitorio ($w_i < 0$), y geométricamente definen la rotación del hiperplano de decisión.
+
+### Sesgo / Bias ($b$ o $-\theta$)
+Término independiente escalar que desplaza el hiperplano de decisión fuera del origen en el hiperespacio, controlando la facilidad con la que la neurona alcanza el umbral de disparo.
+
+### Suma Ponderada ($z$)
+Combinación lineal previa a la activación que emula la acumulación de voltaje eléctrico en el soma:
+$$z = \mathbf{w}^T \mathbf{x} + b$$
+
+### Función de Activación Escalón (Heaviside)
+Función no lineal de umbral que emula la ley biológica del "todo o nada":
+$$\phi(z) = \begin{cases} 1 & \text{si } z \ge 0 \\ 0 & \text{si } z < 0 \end{cases}$$
+
 
