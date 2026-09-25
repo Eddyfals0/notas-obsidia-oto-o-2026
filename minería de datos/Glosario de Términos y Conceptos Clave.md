@@ -397,6 +397,13 @@ Fenómeno adverso común en funciones sigmoideas y tanh donde, al encadenar múl
 ### `Leaky ReLU`
 Variante modificada de ReLU que asigna una pequeña pendiente no nula a los valores negativos ($\max(\alpha z, z)$ con $\alpha \approx 0.01$) para prevenir el problema de la "ReLU muerta" (*Dying ReLU*).
 
+### Descenso del Gradiente (*Gradient Descent*)
+Algoritmo general de optimización iterativa de primer orden que busca el mínimo de la función de costo $J(\mathbf{w}, b)$ dando pasos proporcionales al negativo del gradiente ($-\eta \nabla J$). Constituye el mecanismo fundamental para calibrar los pesos de cualquier red neuronal.
+
+### Gradiente ($\nabla J$)
+Vector de derivadas parciales $[\frac{\partial J}{\partial w_1}, \dots, \frac{\partial J}{\partial w_n}, \frac{\partial J}{\partial b}]^T$ que apunta exactamente en la dirección de máximo crecimiento (subida) del error en el hiperespacio de parámetros.
+
+
 
 
 
