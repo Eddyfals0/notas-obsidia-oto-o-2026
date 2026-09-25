@@ -154,6 +154,19 @@ Para que no te pierdas en las palabras rimbombantes de los libros, aquí tienes 
 
 ---
 
+### 🕵️ 14. ¿Cómo funciona Backpropagation? (El jefe furioso y el reparto de culpas)
+* **En palabras no tradicionales:** Es **averiguar quién tuvo la culpa del error en una empresa con varios niveles de jefes y empleados**.
+* *Analogía:*  
+  * La empresa entrega un pedido equivocado al cliente final (Error en la Capa de Salida).
+  * El Director General (la salida) se da cuenta del error. Pero él no hizo todo el trabajo; él solo firmó lo que le pasaron sus **Gerentes (las Capas Ocultas)**.
+  * ¿Cómo reparte la culpa hacia atrás (**Backpropagation**)?
+    * Si el Gerente A le pasó un reporte con un sello gigante de confianza (un **peso $w$ enorme**), el Director le echa la mayor parte de la bronca al Gerente A.
+    * Si el Gerente B casi no participó (un peso chiquito), apenas le llama la atención.
+  * Luego el Gerente A va con sus **empleados (los pesos de la primera capa)** y les reparte su parte de la culpa usando la misma regla de la cadena.
+  * Al final, **todos los empleados ajustan su forma de trabajar** (actualizan sus pesos $w$) para que la próxima vez el pedido salga bien.
+
+---
+
 ## Módulo 1: Fundamentos, Metodología KDD y Modelos
 
 ### Minería de Datos (*Data Mining*)
@@ -411,6 +424,27 @@ Principio de diseño que exige inicializar los pesos sinápticos con valores ale
 
 ### Factor de Diferencia de Ajuste ($\Delta w, \Delta b$)
 Magnitud vectorial y escalar de corrección calculada en cada paso ($\Delta \mathbf{w} = \eta e \mathbf{p}^T, \Delta b = \eta e$) que modula la rotación y traslación exacta del hiperplano de decisión.
+
+### Perceptrón Multicapa (*Multi-Layer Perceptron - MLP*)
+Arquitectura de red neuronal alimentada hacia adelante (*feedforward*) compuesta por una capa de entrada, una o más capas ocultas con activaciones no lineales y una capa de salida, capaz de aproximar cualquier función continua (*Teorema de Aproximación Universal*).
+
+### Capas Ocultas (*Hidden Layers*)
+Capas intermedias entre la entrada y la salida que no interactúan con el entorno. Su función geométrica es deformar y rotar el hiperespacio para transformar datos no separables linealmente en una representación donde sí lo sean.
+
+### Problema del XOR
+Limitación matemática insalvable del perceptrón simple de una sola capa demostrada por Minsky y Papert (1969), al probar que no existe ninguna línea recta que pueda separar las salidas de una compuerta lógica XOR, justificando la necesidad obligatoria de capas ocultas.
+
+### Paso Hacia Adelante (*Forward Pass*)
+Etapa de inferencia donde las entradas viajan progresivamente a través de las capas multiplicándose por matrices de pesos y evaluando funciones de activación hasta obtener la predicción final $\hat{y}$ y el costo $J$.
+
+### Propagación Hacia Atrás (*Backpropagation*)
+Algoritmo de aprendizaje supervisado (Rumelhart, Hinton, Williams, 1986) que utiliza la **Regla de la Cadena** del cálculo diferencial para propagar en reversa el gradiente del error desde la capa de salida hacia las capas ocultas, permitiendo calcular $\frac{\partial J}{\partial W^{[l]}}$ para todas las neuronas internas.
+
+### Modos de Actualización de Pesos
+- **Online / Estocástico (SGD):** Actualiza pesos tras procesar cada dato individual (rápido pero con trayectoria ruidosa).
+- **Batch (Por Época):** Acumula el gradiente promedio y actualiza una sola vez al terminar la época completa (muy estable pero costoso en memoria).
+- **Mini-Batch:** Divide los datos en bloques pequeños (ej. 32 o 64), logrando el balance ideal entre aceleración en GPU y estabilidad del gradiente.
+
 
 
 
