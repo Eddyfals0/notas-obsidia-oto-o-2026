@@ -380,6 +380,15 @@ Regla de finalización del entrenamiento: se detiene exitosamente cuando los err
 ### Tasa de Aprendizaje (*Learning Rate* $\eta$ o $\alpha$)
 Hiperparámetro escalar $\eta \in (0, 1]$ que modula porcentualmente la magnitud del ajuste aplicado a los pesos ($\Delta \mathbf{w} = \eta e \mathbf{p}^T$) y al sesgo ($\Delta b = \eta e$). Geométricamente, determina qué tanto gira y se traslada el hiperplano de decisión en cada equivocación; previene el *overshooting* (oscilación descontrolada) y garantiza un aprendizaje estable y gradual.
 
+### Decaimiento del Learning Rate (*Learning Rate Decay / Schedules*)
+Técnica de optimización que reduce progresivamente el valor de $\eta$ a medida que avanzan las épocas de entrenamiento (de forma lineal, exponencial $\eta_0 e^{-kt}$, o adaptativa por mesetas). Permite exploración rápida al inicio y ajuste fino de máxima precisión al final.
+
+### `MLPClassifier` (Scikit-Learn)
+Estimador estándar de Python para clasificación con redes neuronales multicapa (*Multi-Layer Perceptron*). Permite configurar capas ocultas (`hidden_layer_sizes`), funciones de activación (`relu`, `logistic`), optimizadores (`sgd`, `adam`) y políticas de learning rate (`adaptive`).
+- **`coefs_`**: Lista de matrices que almacena los **pesos sinápticos ($w$)** aprendidos para cada capa.
+- **`intercepts_`**: Lista de vectores que almacena los **sesgos / bias ($b$)** aprendidos.
+
+
 
 
 
