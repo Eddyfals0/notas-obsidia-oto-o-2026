@@ -403,6 +403,16 @@ Algoritmo general de optimización iterativa de primer orden que busca el mínim
 ### Gradiente ($\nabla J$)
 Vector de derivadas parciales $[\frac{\partial J}{\partial w_1}, \dots, \frac{\partial J}{\partial w_n}, \frac{\partial J}{\partial b}]^T$ que apunta exactamente en la dirección de máximo crecimiento (subida) del error en el hiperespacio de parámetros.
 
+### Error Acumulado Global ($E_{\text{global}}$)
+Suma escalar de todas las discrepancias absolutas o cuadráticas cometidas por la red neuronal a lo largo de una época completa sobre los $N$ patrones de entrenamiento ($E_{\text{global}} = \sum |e_k|$). Si $E_{\text{global}} \le \epsilon$, se declara la convergencia de la red.
+
+### Ruptura de la Simetría (*Symmetry Breaking*)
+Principio de diseño que exige inicializar los pesos sinápticos con valores aleatorios pequeños y distintos de cero para garantizar que cada neurona calcule gradientes diferentes y aprenda detectores de características independientes.
+
+### Factor de Diferencia de Ajuste ($\Delta w, \Delta b$)
+Magnitud vectorial y escalar de corrección calculada en cada paso ($\Delta \mathbf{w} = \eta e \mathbf{p}^T, \Delta b = \eta e$) que modula la rotación y traslación exacta del hiperplano de decisión.
+
+
 
 
 
