@@ -377,5 +377,9 @@ Pase secuencial completo donde la red neuronal evalúa y calibra sus parámetros
 ### Criterio de Parada y Límite Máximo de Épocas (`max_epochs`)
 Regla de finalización del entrenamiento: se detiene exitosamente cuando los errores de una época completa son cero ($e = 0, \forall i$), o forzosamente cuando se alcanza el límite `max_epochs` para evitar bucles infinitos en datos no separables linealmente.
 
+### Tasa de Aprendizaje (*Learning Rate* $\eta$ o $\alpha$)
+Hiperparámetro escalar $\eta \in (0, 1]$ que modula porcentualmente la magnitud del ajuste aplicado a los pesos ($\Delta \mathbf{w} = \eta e \mathbf{p}^T$) y al sesgo ($\Delta b = \eta e$). Geométricamente, determina qué tanto gira y se traslada el hiperplano de decisión en cada equivocación; previene el *overshooting* (oscilación descontrolada) y garantiza un aprendizaje estable y gradual.
+
+
 
 
