@@ -388,6 +388,16 @@ Estimador estándar de Python para clasificación con redes neuronales multicapa
 - **`coefs_`**: Lista de matrices que almacena los **pesos sinápticos ($w$)** aprendidos para cada capa.
 - **`intercepts_`**: Lista de vectores que almacena los **sesgos / bias ($b$)** aprendidos.
 
+### Función ReLU (*Rectified Linear Unit*)
+Función de activación no lineal por tramos definida como $\text{ReLU}(z) = \max(0, z)$. Es el estándar del Deep Learning gracias a su derivada constante ($1$ para $z > 0$), eliminando el desvanecimiento del gradiente y requiriendo un costo computacional ínfimo.
+
+### Desvanecimiento del Gradiente (*Vanishing Gradient Problem*)
+Fenómeno adverso común en funciones sigmoideas y tanh donde, al encadenar múltiples capas profundas, las derivadas cercanas a cero se multiplican sucesivamente, provocando que el gradiente se aproxime asintóticamente a cero y congele la actualización de los pesos en las primeras capas.
+
+### `Leaky ReLU`
+Variante modificada de ReLU que asigna una pequeña pendiente no nula a los valores negativos ($\max(\alpha z, z)$ con $\alpha \approx 0.01$) para prevenir el problema de la "ReLU muerta" (*Dying ReLU*).
+
+
 
 
 
