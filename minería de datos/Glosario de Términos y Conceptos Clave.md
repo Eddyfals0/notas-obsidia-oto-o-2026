@@ -141,6 +141,19 @@ Para que no te pierdas en las palabras rimbombantes de los libros, aquí tienes 
 
 ---
 
+### 🃏 13. ¿Qué es una Época y cómo aprende el Perceptrón? (El mazo de tarjetas de estudio)
+* **En palabras no tradicionales:** Una época es **revisar todo tu mazo de tarjetas de preguntas de principio a fin una sola vez**.
+* *Analogía:*  
+  * Tienes un mazo de 50 tarjetas para estudiar.
+  * Tomas la tarjeta 1, respondes:
+    * Si acertaste ($e = 0$): no tocas nada, vas bien.
+    * Si te equivocaste: ajustas las perillas de tu cerebro sumando o restando la pregunta ($\mathbf{w}^{\text{nuevo}} = \mathbf{w} + e\mathbf{p}$).
+  * Cuando terminas de contestar las 50 tarjetas, **¡eso fue exactamente UNA ÉPOCA!**
+  * Si en esa vuelta tuviste 8 errores, no puedes irte a dormir: barajas el mazo y arrancas la **Época 2**.
+  * ¿Cuándo termina el entrenamiento? Cuando logres dar una vuelta completa a las 50 tarjetas con **CERO errores**, o cuando llegues al límite de paciencia (`max_epochs`).
+
+---
+
 ## Módulo 1: Fundamentos, Metodología KDD y Modelos
 
 ### Minería de Datos (*Data Mining*)
@@ -344,8 +357,25 @@ Término independiente escalar que desplaza el hiperplano de decisión fuera del
 Combinación lineal previa a la activación que emula la acumulación de voltaje eléctrico en el soma:
 $$z = \mathbf{w}^T \mathbf{x} + b$$
 
-### Función de Activación Escalón (Heaviside)
-Función no lineal de umbral que emula la ley biológica del "todo o nada":
-$$\phi(z) = \begin{cases} 1 & \text{si } z \ge 0 \\ 0 & \text{si } z < 0 \end{cases}$$
+### Función de Activación Escalón (Heaviside / hardlim)
+Función no lineal de umbral rígido que emula la ley biológica del "todo o nada":
+$$\text{hardlim}(n) = \begin{cases} 1 & \text{si } n \ge 0 \\ 0 & \text{si } n < 0 \end{cases}$$
+
+### Error de Predicción ($e$)
+Diferencia entre el valor objetivo deseado ($t$) y la salida calculada por la neurona ($a$):
+$$e = t - a \in \{-1, 0, +1\}$$
+
+### Regla de Aprendizaje del Perceptrón (Rosenblatt / Hagan)
+Algoritmo iterativo de calibración de parámetros que corrige los pesos y el bias exclusivamente cuando la neurona comete un error ($e \neq 0$):
+$$\mathbf{w}^{\text{nuevo}} = \mathbf{w}^{\text{anterior}} + e \cdot \mathbf{p}^T$$
+$$b^{\text{nuevo}} = b^{\text{anterior}} + e$$
+*(Donde $\mathbf{p}$ es el vector del patrón de entrada; suma $\mathbf{p}$ si el error es $+1$, resta $\mathbf{p}$ si el error es $-1$)*.
+
+### Época (*Epoch*)
+Pase secuencial completo donde la red neuronal evalúa y calibra sus parámetros a través de la totalidad de los patrones disponibles en el conjunto de entrenamiento.
+
+### Criterio de Parada y Límite Máximo de Épocas (`max_epochs`)
+Regla de finalización del entrenamiento: se detiene exitosamente cuando los errores de una época completa son cero ($e = 0, \forall i$), o forzosamente cuando se alcanza el límite `max_epochs` para evitar bucles infinitos en datos no separables linealmente.
+
 
 
