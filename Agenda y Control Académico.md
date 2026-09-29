@@ -13,6 +13,7 @@ Panel centralizado para el seguimiento de criterios de evaluación, avisos y tar
 ---
 
 ## 📢 Avisos Generales y Calendario
+- 📊 **Minería de Datos:** El **Miércoles 30 de septiembre de 2026**, la sesión comenzará a las **11:30 AM** (en lugar de las 11:00 AM) por compromiso del docente en reunión del comité académico de la facultad.
 - 📊 **Minería de Datos:** Entrega de la **Actividad Integral del Titanic** (Kaggle) el **Jueves 10 de septiembre de 2026**.
 - 📊 **Minería de Datos:** El **Viernes 4 de septiembre de 2026** se concluye el bloque temático de **Construcción de Muestras** y balanceo sintético.
 - ⚙️ **Arquitectura Funcional de Computadoras:** **Sin clases** el **Miércoles 19** y el **Viernes 21 de agosto de 2026**.

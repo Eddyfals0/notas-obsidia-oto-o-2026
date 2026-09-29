@@ -445,6 +445,34 @@ Algoritmo de aprendizaje supervisado (Rumelhart, Hinton, Williams, 1986) que uti
 - **Batch (Por Época):** Acumula el gradiente promedio y actualiza una sola vez al terminar la época completa (muy estable pero costoso en memoria).
 - **Mini-Batch:** Divide los datos en bloques pequeños (ej. 32 o 64), logrando el balance ideal entre aceleración en GPU y estabilidad del gradiente.
 
+### Momento o Inercia (*Momentum* $\beta$)
+Término de aceleración y suavizado dinámico en la optimización del gradiente descendente que añade una fracción constante ($\beta \in [0.1, 0.3]$) del vector de actualización de la época inmediata anterior ($\Delta w_t = \eta \nabla J + \beta \Delta w_{t-1}$). Geométricamente actúa como la inercia de una bola rodando cuesta abajo, amortiguando oscilaciones caóticas y facilitando el escape de mesetas o mínimos locales.
+
+### Normalización Min-Max en Redes
+Escalado lineal que comprime todo el dominio de un atributo al intervalo compacto $[0, 1]$ mediante $x' = \frac{x - x_{\min}}{x_{\max} - x_{\min}}$. Es crucial para evitar que variables con magnitudes grandes dominen artificialmente la suma ponderada de la neurona, aunque es muy sensible a valores atípicos (outliers) que pueden colapsar el resto de la distribución.
+
+### Estandarización Z-Score en Redes
+Transformación estadística que centra la distribución del atributo en media $\mu = 0$ con desviación estándar unitaria $\sigma = 1$ mediante $z = \frac{x - \mu}{\sigma}$. Es preferida frente a Min-Max cuando los datos poseen colas largas o tras una fase de limpieza de outliers, ya que no comprime la nube de puntos densa.
+
+### Codificación One-Hot (*One-Hot Encoding*)
+Técnica de preprocesamiento para variables categóricas nominales que transforma un atributo de $K$ categorías en $K$ columnas binarias mutuamente ortogonales en el hiperespacio. Previene que la red asuma órdenes espurios o distancias euclidianas erróneas asociadas al uso de enteros ordinales (*Label Encoding*).
+
+### Capacidad de Expresividad y Sobreajuste (*Overfitting*)
+Poder de representación de una red determinado por la cantidad de capas y neuronas. Si la red posee excesiva expresividad, sus hiperplanos se retuercen para memorizar el ruido y las particularidades de la muestra de entrenamiento en lugar de capturar la regla generadora de la población, logrando $100\%$ de precisión en *Train* pero fallando drásticamente en datos nuevos.
+
+### Subajuste (*Underfitting*)
+Condición donde el modelo es demasiado rígido o simple (alto sesgo) y carece de suficiente expresividad para capturar la estructura de los datos, presentando un error elevado tanto en el conjunto de entrenamiento como en el de validación.
+
+### Tríada de Partición (Train, Validation, Test)
+Metodología estándar de división de datos para machine learning supervisado:
+- **Train ($60\% - 70\%$):** Utilizado directamente por el optimizador para ajustar los pesos y sesgos.
+- **Validation ($15\% - 20\%$):** Conjunto independiente evaluado por época para monitorear la curva de error, ajustar hiperparámetros y detectar sobreajuste.
+- **Test ($15\% - 20\%$):** Conjunto ciego evaluado una única vez al final del proyecto para medir el rendimiento real e insesgado del modelo.
+
+### Parada Temprana (*Early Stopping*)
+Mecanismo de regularización que monitorea la función de pérdida del conjunto de validación en cada época y detiene automáticamente el entrenamiento en el instante en que dicha pérdida alcanza su valor mínimo y comienza a ascender, previniendo que la red entre en la zona de sobreajuste.
+
+
 
 
 
