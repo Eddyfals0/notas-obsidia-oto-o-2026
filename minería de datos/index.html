@@ -1,0 +1,2880 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minería de Datos — Guía Visual e Interactiva Completa</title>
+  <!-- KaTeX for formulas -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <!-- Three.js for 3D visualizer -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <style>
+    /* ==========================================================================
+       ESTILO: IMPECCABLE QUIET DESIGN
+       - Colores relajados, no luminiscentes ni chillones
+       - Cero sombras pesadas (diseño plano, sobrio y editorial)
+       - Cero bordes de colores (líneas sutiles de color piedra neutro)
+       - Tipografía limpia, legible y con aire para estudiar a gusto
+       ========================================================================== */
+    :root {
+      --bg-page: #fbfbfa;
+      --bg-card: #ffffff;
+      --bg-subtle: #f5f4f0;
+      --bg-hover: #eeece7;
+
+      --text-main: #232528;
+      --text-soft: #5b5e65;
+      --text-muted: #878a92;
+
+      --border-subtle: #e5e3dd;
+      --border-medium: #d4d1c8;
+
+      /* Acentos tranquilos y desaturados */
+      --accent-slate: #3a5369;
+      --accent-sage: #456152;
+      --accent-clay: #7c5445;
+      --accent-taupe: #69655f;
+
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --font-serif: "Charter", "Georgia", "Cambria", serif;
+      --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+      --max-width: 1140px;
+      --reading-width: 72ch;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Barra de desplazamiento tranquila */
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-page);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-medium);
+      border-radius: 4px;
+    }
+
+    /* ==========================================================================
+       CABECERA FIJA Y BUSCADOR RÁPIDO
+       ========================================================================== */
+    .top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background-color: rgba(251, 251, 250, 0.97);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .nav-container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0.8rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: baseline;
+      gap: 0.6rem;
+      text-decoration: none;
+      color: var(--text-main);
+    }
+
+    .brand-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .brand-tag {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+
+    .nav-tools {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-grow: 1;
+      justify-content: flex-end;
+    }
+
+    .search-box {
+      position: relative;
+      max-width: 300px;
+      width: 100%;
+    }
+
+    .search-input {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      padding: 0.4rem 0.75rem 0.4rem 2rem;
+      font-size: 0.85rem;
+      color: var(--text-main);
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+    .search-input:focus {
+      border-color: var(--accent-slate);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 0.65rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 13px;
+      height: 13px;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .nav-pill-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      padding: 0.35rem 0.75rem;
+      font-size: 0.8rem;
+      color: var(--text-soft);
+      border-radius: 4px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.15s ease;
+      white-space: nowrap;
+    }
+    .nav-pill-btn:hover {
+      background: var(--bg-subtle);
+      color: var(--text-main);
+    }
+
+    /* Sub-barra horizontal con acceso directo a temas */
+    .topics-bar {
+      border-bottom: 1px solid var(--border-subtle);
+      background: var(--bg-page);
+      overflow-x: auto;
+      white-space: nowrap;
+      scrollbar-width: none;
+    }
+    .topics-bar::-webkit-scrollbar {
+      display: none;
+    }
+    .topics-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0.4rem 1.25rem;
+      display: flex;
+      gap: 0.4rem;
+    }
+    .sub-pill {
+      font-size: 0.775rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 3px;
+      text-decoration: none;
+      color: var(--text-soft);
+      border: 1px solid transparent;
+      transition: all 0.15s ease;
+    }
+    .sub-pill:hover, .sub-pill.active {
+      color: var(--text-main);
+      background: var(--bg-subtle);
+      border-color: var(--border-subtle);
+    }
+
+    /* ==========================================================================
+       CONTENEDOR PRINCIPAL Y ENCABEZADO DIDÁCTICO
+       ========================================================================== */
+    .page-body {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2.5rem 1.25rem 6rem;
+      width: 100%;
+    }
+
+    .intro-banner {
+      padding-bottom: 2.25rem;
+      margin-bottom: 2.5rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .intro-label {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--accent-slate);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.4rem;
+    }
+
+    .intro-title {
+      font-size: 2.15rem;
+      font-weight: 600;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+      margin-bottom: 0.85rem;
+    }
+
+    .intro-desc {
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      color: var(--text-soft);
+      max-width: var(--reading-width);
+      line-height: 1.65;
+      margin-bottom: 1.5rem;
+    }
+
+    .stats-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-subtle);
+    }
+    .stat-box {
+      display: flex;
+      flex-direction: column;
+    }
+    .stat-val {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+    .stat-name {
+      font-size: 0.785rem;
+      color: var(--text-muted);
+    }
+
+    /* ==========================================================================
+       LAYOUT: ÍNDICE LATERAL + CONTENIDO
+       ========================================================================== */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 2.5rem;
+      align-items: start;
+    }
+
+    @media (max-width: 920px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+      .side-menu {
+        display: none;
+      }
+    }
+
+    .side-menu {
+      position: sticky;
+      top: 5.5rem;
+      max-height: calc(100vh - 7rem);
+      overflow-y: auto;
+      padding-right: 0.75rem;
+      border-right: 1px solid var(--border-subtle);
+    }
+    .side-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+    }
+    .side-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    .side-item a {
+      font-size: 0.825rem;
+      color: var(--text-soft);
+      text-decoration: none;
+      display: block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 3px;
+      transition: all 0.15s ease;
+      line-height: 1.35;
+    }
+    .side-item a:hover {
+      background: var(--bg-subtle);
+      color: var(--text-main);
+    }
+    .side-item a.active {
+      background: var(--bg-subtle);
+      color: var(--accent-slate);
+      font-weight: 600;
+    }
+
+    /* Stream de contenido */
+    .articles-stream {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 3.5rem;
+    }
+
+    /* ==========================================================================
+       BLOQUES Y TARJETAS EDITORIALES
+       ========================================================================== */
+    .section-block {
+      scroll-margin-top: 5rem;
+    }
+
+    .section-head {
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 0.85rem;
+    }
+
+    .section-tag {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--accent-slate);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.25rem;
+    }
+
+    .section-title {
+      font-size: 1.55rem;
+      font-weight: 600;
+      letter-spacing: -0.015em;
+      color: var(--text-main);
+      margin-bottom: 0.4rem;
+    }
+
+    .section-intro {
+      font-size: 0.95rem;
+      color: var(--text-soft);
+      max-width: var(--reading-width);
+      line-height: 1.6;
+    }
+
+    /* Tarjeta de tema */
+    .topic-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      padding: 1.75rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .topic-card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-subtle);
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .topic-card-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text-main);
+      letter-spacing: -0.01em;
+    }
+
+    .topic-meta-badges {
+      display: flex;
+      gap: 0.4rem;
+      font-size: 0.725rem;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+    }
+    .topic-meta-badge {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      padding: 0.15rem 0.45rem;
+      border-radius: 3px;
+    }
+
+    /* Prosa didáctica y relajada */
+    .prose {
+      font-size: 0.95rem;
+      color: var(--text-main);
+      line-height: 1.7;
+    }
+
+    .prose p {
+      margin-bottom: 1.1rem;
+    }
+
+    .prose h4 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin: 1.4rem 0 0.55rem;
+      letter-spacing: -0.01em;
+    }
+
+    .prose ul, .prose ol {
+      margin-bottom: 1.15rem;
+      padding-left: 1.3rem;
+    }
+
+    .prose li {
+      margin-bottom: 0.4rem;
+      color: var(--text-soft);
+    }
+
+    .prose strong {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    /* Cuadros de explicación simple ("En Cristiano") */
+    .simple-callout {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      padding: 1.15rem 1.25rem;
+      margin: 1.35rem 0;
+    }
+    .simple-callout-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--accent-slate);
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .simple-callout-text {
+      font-size: 0.9rem;
+      color: var(--text-soft);
+      line-height: 1.6;
+    }
+
+    /* Bloques de fórmulas sobrios */
+    .formula-box {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      padding: 0.9rem;
+      border-radius: 4px;
+      text-align: center;
+      margin: 1.15rem 0;
+      overflow-x: auto;
+    }
+
+    /* Barra de conexión con la clase anterior/siguiente */
+    .trail-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.65rem 0.85rem;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      font-size: 0.8rem;
+      margin-top: 1.35rem;
+      flex-wrap: wrap;
+    }
+    .trail-label {
+      font-weight: 600;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 0.725rem;
+      text-transform: uppercase;
+    }
+    .trail-link {
+      color: var(--accent-slate);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .trail-link:hover {
+      text-decoration: underline;
+    }
+    .trail-arrow {
+      color: var(--border-medium);
+    }
+
+    /* Tablas limpias sin colores chillones */
+    .simple-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.35rem 0;
+      font-size: 0.865rem;
+    }
+    .simple-table th, .simple-table td {
+      padding: 0.6rem 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .simple-table th {
+      background: var(--bg-subtle);
+      color: var(--text-main);
+      font-weight: 600;
+      font-size: 0.785rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .simple-table tr:hover td {
+      background-color: var(--bg-subtle);
+    }
+
+    /* ==========================================================================
+       SIMULADORES Y LABORATORIOS VISUALES
+       ========================================================================== */
+    .lab-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      margin: 1.75rem 0;
+      overflow: hidden;
+    }
+
+    .lab-topbar {
+      padding: 0.75rem 1.15rem;
+      border-bottom: 1px solid var(--border-subtle);
+      background: var(--bg-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+    }
+
+    .lab-title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .lab-controls {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .lab-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      font-size: 0.765rem;
+      padding: 0.3rem 0.65rem;
+      border-radius: 3px;
+      cursor: pointer;
+      font-weight: 500;
+      color: var(--text-main);
+      transition: all 0.15s ease;
+    }
+    .lab-btn:hover {
+      background: var(--bg-subtle);
+      border-color: var(--border-medium);
+    }
+    .lab-btn.active {
+      background: var(--accent-slate);
+      color: #ffffff;
+      border-color: var(--accent-slate);
+    }
+
+    .lab-slider {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    .lab-slider input[type="range"] {
+      width: 75px;
+      accent-color: var(--accent-slate);
+    }
+
+    .lab-viewport {
+      position: relative;
+      background: #fbfbfa;
+      width: 100%;
+      height: 350px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .lab-viewport canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .lab-footer {
+      padding: 0.75rem 1.15rem;
+      background: var(--bg-card);
+      border-top: 1px solid var(--border-subtle);
+      font-size: 0.815rem;
+      color: var(--text-soft);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+    }
+    .lab-footer-stat {
+      font-family: var(--font-mono);
+      color: var(--text-main);
+      font-weight: 500;
+    }
+
+    /* Estilo del Grafo SVG Interactivo */
+    .svg-pipeline {
+      width: 100%;
+      height: auto;
+      max-height: 360px;
+      background: var(--bg-page);
+    }
+    .node-group {
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+    .node-group:hover circle {
+      stroke-width: 3px;
+    }
+    .node-group text {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      fill: var(--text-main);
+      text-anchor: middle;
+      user-select: none;
+    }
+    .edge-line {
+      stroke: var(--border-medium);
+      stroke-width: 1.5px;
+      transition: stroke 0.2s ease, stroke-width 0.2s ease;
+    }
+    .edge-line.active {
+      stroke: var(--accent-slate);
+      stroke-width: 2.5px;
+    }
+
+    /* ==========================================================================
+       GLOSARIO EN CUADRÍCULA
+       ========================================================================== */
+    .glossary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.15rem;
+      margin-top: 1.35rem;
+    }
+    .glossary-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      padding: 1.15rem;
+    }
+    .glossary-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.35rem;
+    }
+    .glossary-term {
+      font-size: 0.925rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+    .glossary-alias {
+      font-size: 0.725rem;
+      font-family: var(--font-mono);
+      color: var(--accent-clay);
+      background: var(--bg-subtle);
+      padding: 0.1rem 0.35rem;
+      border-radius: 3px;
+    }
+    .glossary-metaphor {
+      font-size: 0.825rem;
+      color: var(--accent-slate);
+      font-style: italic;
+      margin-bottom: 0.5rem;
+      line-height: 1.4;
+    }
+    .glossary-desc {
+      font-size: 0.835rem;
+      color: var(--text-soft);
+      line-height: 1.55;
+    }
+
+    .hidden-item {
+      display: none !important;
+    }
+
+    /* Pie de página */
+    .footer {
+      border-top: 1px solid var(--border-subtle);
+      background: var(--bg-card);
+      padding: 2.5rem 1.25rem;
+      margin-top: auto;
+      font-size: 0.815rem;
+      color: var(--text-muted);
+    }
+    .footer-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================================================
+       NAVEGACIÓN SUPERIOR
+       ========================================================================== -->
+  <header class="top-nav">
+    <div class="nav-container">
+      <a href="#hero" class="brand">
+        <span class="brand-title">Minería de Datos</span>
+        <span class="brand-tag">Notas Explicadas · Otoño 2026</span>
+      </a>
+
+      <div class="nav-tools">
+        <div class="search-box">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="searchInput" class="search-input" placeholder="Buscar concepto (ej: Backprop, MCAR, Convex)...">
+        </div>
+
+        <a href="#grafo-pipeline" class="nav-pill-btn">El Hilo Conductor</a>
+        <a href="#glosario" class="nav-pill-btn">Glosario Fácil</a>
+      </div>
+    </div>
+
+    <!-- Barra horizontal de saltos rápidos -->
+    <div class="topics-bar">
+      <div class="topics-inner">
+        <a href="#bloque-1" class="sub-pill">1. KDD y Modelos (1-3)</a>
+        <a href="#bloque-2" class="sub-pill">2. Convex Hull y Test (4-5)</a>
+        <a href="#bloque-3" class="sub-pill">3. Muestreo Progresivo (6-8)</a>
+        <a href="#bloque-4" class="sub-pill">4. Muestreo Sistemático (9)</a>
+        <a href="#bloque-5" class="sub-pill">5. Limpieza y Ortogonalidad (10)</a>
+        <a href="#bloque-6" class="sub-pill">6. Outliers y KNN (11)</a>
+        <a href="#bloque-7" class="sub-pill">7. Imputación y Esfericidad (12)</a>
+        <a href="#bloque-8" class="sub-pill">8. Perceptrón (13-14)</a>
+        <a href="#bloque-9" class="sub-pill">9. MLP y XOR (15)</a>
+        <a href="#bloque-10" class="sub-pill">10. Momento y Escalas (16)</a>
+        <a href="#bloque-11" class="sub-pill">11. Topología y Fuga (17)</a>
+        <a href="#glosario" class="sub-pill">12. Glosario Didáctico</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       CUERPO DE LA PÁGINA
+       ========================================================================== -->
+  <main class="page-body">
+
+    <!-- INTRODUCCIÓN GENERAL -->
+    <section id="hero" class="intro-banner">
+      <div class="intro-label">Explicación Completa de Punta a Punta</div>
+      <h1 class="intro-title">¿Cómo Funciona la Minería de Datos?</h1>
+      <p class="intro-desc">
+        Todo lo que hemos visto en clase conectado como una sola historia. Sin tecnicismos vacíos: 
+        aquí entenderás por qué tomamos una muestra, por qué no cualquier gráfica sirve, 
+        cómo se mueven los planos en el espacio y cómo aprenden las redes neuronales sin perderse.
+      </p>
+
+      <div class="stats-pills">
+        <div class="stat-box">
+          <span class="stat-val">17 Temas</span>
+          <span class="stat-name">Del temario de clase</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-val">6 Laboratorios</span>
+          <span class="stat-name">Gráficas interactivas que funcionan</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-val">12 Analogías</span>
+          <span class="stat-name">Con peras y manzanas</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-val">Cero Humo</span>
+          <span class="stat-name">Explicado en cristiano</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- GRID PRINCIPAL -->
+    <div class="main-grid">
+
+      <!-- MENÚ LATERAL DE SEGUIMIENTO -->
+      <aside class="side-menu">
+        <div class="side-title">Temas del Curso</div>
+        <ul class="side-list">
+          <li class="side-item"><a href="#grafo-pipeline">El Mapa General</a></li>
+          <li class="side-item"><a href="#bloque-1">1. KDD y Modelos (1 a 3)</a></li>
+          <li class="side-item"><a href="#bloque-2">2. Convex Hull y Muestras (4 y 5)</a></li>
+          <li class="side-item"><a href="#bloque-3">3. Muestreo Progresivo (6 a 8)</a></li>
+          <li class="side-item"><a href="#bloque-4">4. Muestreo Sistemático y FPS (9)</a></li>
+          <li class="side-item"><a href="#bloque-5">5. Limpieza y Ortogonalidad (10)</a></li>
+          <li class="side-item"><a href="#bloque-6">6. Outliers: Puebla vs Veracruz (11)</a></li>
+          <li class="side-item"><a href="#bloque-7">7. Imputación y Esfericidad (12)</a></li>
+          <li class="side-item"><a href="#bloque-8">8. Biología y el Perceptrón (13 y 14)</a></li>
+          <li class="side-item"><a href="#bloque-9">9. Capas Ocultas y XOR (15)</a></li>
+          <li class="side-item"><a href="#bloque-10">10. Momento y Normalización (16)</a></li>
+          <li class="side-item"><a href="#bloque-11">11. Topología y Fuga de Datos (17)</a></li>
+          <li class="side-item"><a href="#glosario">12. Diccionario de Analogías</a></li>
+        </ul>
+      </aside>
+
+      <!-- ARTÍCULOS Y SIMULADORES -->
+      <div class="articles-stream">
+
+        <!-- ==================================================================
+             LAB 1: EL MAPA GENERAL DEL CURSO (SVG INTERACTIVO ROBUSTO)
+             ================================================================== -->
+        <section id="grafo-pipeline" class="section-block">
+          <div class="section-head">
+            <div class="section-tag">Visión Panorámica</div>
+            <h2 class="section-title">El Hilo Conductor: La Cadena del Conocimiento</h2>
+            <p class="section-intro">
+              En esta materia nada está suelto. Cada clase nació para resolver un problema de la clase anterior.
+              Haz clic en cualquier círculo del diagrama para ver de qué trata y cómo se conecta con el resto.
+            </p>
+          </div>
+
+          <div class="lab-box">
+            <div class="lab-topbar">
+              <span class="lab-title">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                Mapa de Ruta Interactivo
+              </span>
+              <div class="lab-controls">
+                <button class="lab-btn" onclick="resetPipelineSelection()">Ver Todos</button>
+              </div>
+            </div>
+
+            <!-- Grafo SVG 100% responsivo y nítido -->
+            <div class="lab-viewport" style="height: auto; padding: 1rem 0;">
+              <svg class="svg-pipeline" viewBox="0 0 920 300" id="pipelineSvg">
+                <!-- Conexiones -->
+                <line x1="80" y1="70" x2="220" y2="70" class="edge-line" id="edge-1-2" />
+                <line x1="220" y1="70" x2="360" y2="70" class="edge-line" id="edge-2-3" />
+                <line x1="360" y1="70" x2="500" y2="70" class="edge-line" id="edge-3-4" />
+                <line x1="500" y1="70" x2="640" y2="70" class="edge-line" id="edge-4-5" />
+                <line x1="640" y1="70" x2="780" y2="70" class="edge-line" id="edge-5-6" />
+
+                <line x1="780" y1="70" x2="780" y2="210" class="edge-line" id="edge-6-7" />
+
+                <line x1="780" y1="210" x2="640" y2="210" class="edge-line" id="edge-7-8" />
+                <line x1="640" y1="210" x2="500" y2="210" class="edge-line" id="edge-8-9" />
+                <line x1="500" y1="210" x2="360" y2="210" class="edge-line" id="edge-9-10" />
+                <line x1="360" y1="210" x2="220" y2="210" class="edge-line" id="edge-10-11" />
+                <line x1="220" y1="210" x2="80" y2="210" class="edge-line" id="edge-11-12" />
+
+                <!-- Nodos Fila 1 -->
+                <g class="node-group" onclick="selectPipelineNode(1)" id="pnode-1">
+                  <circle cx="80" cy="70" r="24" fill="#ffffff" stroke="#3a5369" stroke-width="2" />
+                  <text x="80" y="74" font-weight="600">1. KDD</text>
+                  <text x="80" y="112" fill="#5b5e65" font-size="10">Proceso Base</text>
+                </g>
+
+                <g class="node-group" onclick="selectPipelineNode(2)" id="pnode-2">
+                  <circle cx="220" cy="70" r="24" fill="#ffffff" stroke="#3a5369" stroke-width="2" />
+                  <text x="220" y="74" font-weight="600">2. Hull</text>
+                  <text x="220" y="112" fill="#5b5e65" font-size="10">Cobertura</text>
+                </g>
+
+                <g class="node-group" onclick="selectPipelineNode(3)" id="pnode-3">
+                  <circle cx="360" cy="70" r="24" fill="#ffffff" stroke="#456152" stroke-width="2" />
+                  <text x="360" y="74" font-weight="600">3. Estratos</text>
+                  <text x="360" y="112" fill="#5b5e65" font-size="10">Proporciones</text>
+                </g>
+
+                <g class="node-group" onclick="selectPipelineNode(4)" id="pnode-4">
+                  <circle cx="500" cy="70" r="24" fill="#ffffff" stroke="#456152" stroke-width="2" />
+                  <text x="500" y="74" font-weight="600">4. Progr.</text>
+                  <text x="500" y="112" fill="#5b5e65" font-size="10">Estabilidad W</text>
+                </g>
+
+                <g class="node-group" onclick="selectPipelineNode(5)" id="pnode-5">
+                  <circle cx="640" cy="70" r="24" fill="#ffffff" stroke="#7c5445" stroke-width="2" />
+                  <text x="640" y="74" font-weight="600">5. Sistem.</text>
+                  <text x="640" y="112" fill="#5b5e65" font-size="10">FPS y Faltantes</text>
+                </g>
+
+                <g class="node-group" onclick="selectPipelineNode(6)" id="pnode-6">
+                  <circle cx="780" cy="70" r="24" fill="#ffffff" stroke="#7c5445" stroke-width="2" />
+                  <text x="780" y="74" font-weight="600">6. Limpieza</text>
+                  <text x="780" y="112" fill="#5b5e65" font-size="10">Ortogonalidad</text>
+                </g>
+
+                <!-- Nodos Fila 2 (regreso hacia redes) -->
+                <g class="node-group" onclick="selectPipelineNode(7)" id="pnode-7">
+                  <circle cx="780" cy="210" r="24" fill="#ffffff" stroke="#3a5369" stroke-width="2" />
+                  <text x="780" y="214" font-weight="600">7. Outliers</text>
+                  <text x="780" y="252" fill="#5b5e65" font-size="10">KNN y Tukey</text>
+                </g>
+
+                <g class="node-group" onclick="selectPipelineNode(8)" id="pnode-8">
+                  <circle cx="640" cy="210" r="24" fill="#ffffff" stroke="#3a5369" stroke-width="2" />
+                  <text x="640" y="214" font-weight="600">8. Imputa</text>
+                  <text x="640" y="252" fill="#5b5e65" font-size="10">DBSCAN y Bartlett</text>
+                </g>
+
+                <g class="node-group" onclick="selectPipelineNode(9)" id="pnode-9">
+                  <circle cx="500" cy="210" r="24" fill="#ffffff" stroke="#456152" stroke-width="2" />
+                  <text x="500" y="214" font-weight="600">9. Neurona</text>
+                  <text x="500" y="252" fill="#5b5e65" font-size="10">Perceptrón</text>
+                </g>
+
+                <g class="node-group" onclick="selectPipelineNode(10)" id="pnode-10">
+                  <circle cx="360" cy="210" r="24" fill="#ffffff" stroke="#456152" stroke-width="2" />
+                  <text x="360" y="214" font-weight="600">10. XOR</text>
+                  <text x="360" y="252" fill="#5b5e65" font-size="10">Backpropagation</text>
+                </g>
+
+                <g class="node-group" onclick="selectPipelineNode(11)" id="pnode-11">
+                  <circle cx="220" cy="210" r="24" fill="#ffffff" stroke="#69655f" stroke-width="2" />
+                  <text x="220" y="214" font-weight="600">11. Escalas</text>
+                  <text x="220" y="252" fill="#5b5e65" font-size="10">Momento β</text>
+                </g>
+
+                <g class="node-group" onclick="selectPipelineNode(12)" id="pnode-12">
+                  <circle cx="80" cy="210" r="24" fill="#ffffff" stroke="#69655f" stroke-width="2" />
+                  <text x="80" y="214" font-weight="600">12. Topol.</text>
+                  <text x="80" y="252" fill="#5b5e65" font-size="10">Evitar Fuga</text>
+                </g>
+              </svg>
+            </div>
+
+            <div class="lab-footer">
+              <div id="pipelineDescText">
+                Toca cualquier paso del diagrama arriba para ver su explicación y por qué lo necesitamos.
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ==================================================================
+             BLOQUE 1: FUNDAMENTOS Y EL PROCESO KDD (NOTAS 1, 2, 3)
+             ================================================================== -->
+        <section id="bloque-1" class="section-block">
+          <div class="section-head">
+            <div class="section-tag">Bloque I · Notas 1 a 3</div>
+            <h2 class="section-title">¿Qué es Minería de Datos y Cómo Piensa un Modelo?</h2>
+            <p class="section-intro">
+              La diferencia entre tener un maestro que te califica o estar solo buscando patrones en la oscuridad,
+              los 4 requisitos de un patrón y las 3 preguntas que todo modelo debe responder.
+            </p>
+          </div>
+
+          <!-- NOTA 1 -->
+          <article class="topic-card searchable-target">
+            <div class="topic-card-head">
+              <h3 class="topic-card-title">Nota 1 · Aprendizaje Supervisado vs No Supervisado</h3>
+              <div class="topic-meta-badges">
+                <span class="topic-meta-badge">Sesión 1</span>
+                <span class="topic-meta-badge">Clasificación · Clustering</span>
+              </div>
+            </div>
+            <div class="prose">
+              <p>
+                Todo en minería de datos y machine learning se divide según una pregunta clave: 
+                <strong>¿Sabemos de antemano la respuesta correcta para entrenar o no?</strong>
+              </p>
+              <h4>1. Aprendizaje Supervisado (Con maestro)</h4>
+              <p>
+                Tenemos ejemplos con su respuesta correcta ya anotada. El algoritmo intenta predecir esa respuesta:
+              </p>
+              <ul>
+                <li><strong>Clasificación:</strong> La respuesta es una etiqueta o categoría. Ejemplo: ¿Este correo es Spam o No Spam? ¿Este tumor es benigno o maligno? (Árboles de decisión, Redes Neuronales).</li>
+                <li><strong>Regresión:</strong> La respuesta es un número continuo. Ejemplo: ¿Cuánto costará esta casa el próximo mes? ¿Qué temperatura hará mañana?</li>
+              </ul>
+
+              <h4>2. Aprendizaje No Supervisado (Sin maestro)</h4>
+              <p>
+                Nadie nos da respuestas ni etiquetas; solo tenemos un montón de datos sueltos. El algoritmo busca regularidades por su cuenta:
+              </p>
+              <ul>
+                <li><strong>Clustering (Agrupamiento):</strong> Juntar datos que se parecen entre sí (ejemplo: agrupar clientes según sus hábitos de compra sin saber previamente qué tipos de clientes existen).</li>
+                <li><strong>Reglas de Asociación:</strong> Descubrir cosas que suelen ocurrir juntas (el clásico: *"Quien compra pañales en el supermercado los viernes también compra cerveza"*).</li>
+              </ul>
+            </div>
+            <div class="trail-bar">
+              <span class="trail-label">Conexión</span>
+              <span>Punto de partida</span>
+              <span class="trail-arrow">➔</span>
+              <a href="#nota-2" class="trail-link">Nota 2: El Proceso KDD</a>
+            </div>
+          </article>
+
+          <!-- NOTA 2 -->
+          <article id="nota-2" class="topic-card searchable-target">
+            <div class="topic-card-head">
+              <h3 class="topic-card-title">Nota 2 · El Proceso KDD y los 4 Atributos de un Patrón</h3>
+              <div class="topic-meta-badges">
+                <span class="topic-meta-badge">Sesión 2</span>
+                <span class="topic-meta-badge">KDD · Patrones</span>
+              </div>
+            </div>
+            <div class="prose">
+              <p>
+                Muchos creen que minería de datos es sentarse a programar algoritmos mágicos. La realidad es que es un proceso ordenado llamado <strong>KDD (*Knowledge Discovery in Databases*)</strong> que va desde los datos sucios hasta el conocimiento real.
+              </p>
+
+              <div class="simple-callout">
+                <div class="simple-callout-title">Los 4 Requisitos para que algo sea un "Patrón Real"</div>
+                <div class="simple-callout-text">
+                  Si encuentras una curiosidad en tus datos, no cantes victoria todavía. Para que valga la pena debe ser:
+                  <ol style="margin-top:0.4rem; padding-left:1.2rem;">
+                    <li><strong>Frecuente:</strong> Se repite muchas veces, no fue una coincidencia de una sola vez.</li>
+                    <li><strong>Válido:</strong> Se cumple también con datos nuevos que no habías visto antes.</li>
+                    <li><strong>Comprensible:</strong> Lo puedes explicar a una persona sin que parezca brujería.</li>
+                    <li><strong>Útil:</strong> Sirve para tomar una decisión real que ahorre tiempo o dinero.</li>
+                  </ol>
+                </div>
+              </div>
+
+              <h4>Diferencia Rápida: Algoritmo vs. Modelo</h4>
+              <ul>
+                <li><strong>El Algoritmo:</strong> Es el proceso de entrenamiento, la receta paso a paso (ejemplo: el código que calcula y ajusta pesos).</li>
+                <li><strong>El Modelo:</strong> Es el resultado final ya entrenado con todo lo aprendido (la estructura con números y fórmulas fijas lista para predecir).</li>
+              </ul>
+            </div>
+            <div class="trail-bar">
+              <span class="trail-label">Conexión</span>
+              <a href="#bloque-1" class="trail-link">Nota 1: Paradigmas</a>
+              <span class="trail-arrow">➔</span>
+              <span>Nota 2: KDD</span>
+              <span class="trail-arrow">➔</span>
+              <a href="#nota-3" class="trail-link">Nota 3: Los 3 Pilares</a>
+            </div>
+          </article>
+
+          <!-- NOTA 3 -->
+          <article id="nota-3" class="topic-card searchable-target">
+            <div class="topic-card-head">
+              <h3 class="topic-card-title">Nota 3 · Los Tres Pilares de Cualquier Modelo</h3>
+              <div class="topic-meta-badges">
+                <span class="topic-meta-badge">Sesión 3</span>
+                <span class="topic-meta-badge">Representación · Evaluación · Búsqueda</span>
+              </div>
+            </div>
+            <div class="prose">
+              <p>
+                No importa si estás usando un árbol de decisión, una red neuronal o un algoritmo genético: todos los modelos de minería se sostienen sobre <strong>tres patas indispensables</strong>:
+              </p>
+              <table class="simple-table">
+                <thead>
+                  <tr>
+                    <th>Pilar</th>
+                    <th>En palabras simples</th>
+                    <th>Ejemplo en Árboles</th>
+                    <th>Ejemplo en Redes Neuronales</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>1. Representación</strong></td>
+                    <td>¿Cómo guardas lo que aprendiste?</td>
+                    <td>Preguntas lógicas organizadas en ramas (Si edad > 30...)</td>
+                    <td>Números organizados en matrices de pesos ($w$) y sesgos ($b$)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>2. Evaluación</strong></td>
+                    <td>¿Cómo sabes si el modelo lo está haciendo bien o mal?</td>
+                    <td>Entropía de la información (qué tan puras quedan las ramas)</td>
+                    <td>Error Cuadrático Medio o Pérdida ($Loss$)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>3. Búsqueda</strong></td>
+                    <td>¿Cómo encuentras la mejor configuración posible?</td>
+                    <td>Elegir en cada paso la pregunta que mejor separa los datos</td>
+                    <td>Descenso de gradiente (ir bajando paso a pasito la colina del error)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="trail-bar">
+              <span class="trail-label">Conexión</span>
+              <a href="#nota-2" class="trail-link">Nota 2: KDD</a>
+              <span class="trail-arrow">➔</span>
+              <span>Nota 3: 3 Pilares</span>
+              <span class="trail-arrow">➔</span>
+              <a href="#bloque-2" class="trail-link">Nota 4: Cobertura Convexa</a>
+            </div>
+          </article>
+        </section>
+
+
+        <!-- ==================================================================
+             BLOQUE 2: COBERTURA CONVEXA Y PARTICIÓN TEST (NOTAS 4, 5)
+             ================================================================== -->
+        <section id="bloque-2" class="section-block">
+          <div class="section-head">
+            <div class="section-tag">Bloque II · Notas 4 y 5</div>
+            <h2 class="section-title">El Espacio de los Datos: La Liga Elástica y la Trampa de los Estratos</h2>
+            <p class="section-intro">
+              Por qué tu modelo solo sabe predecir dentro del territorio donde aprendió y el peligro de inventar
+              demasiadas categorías cuando tienes pocos datos para evaluar.
+            </p>
+          </div>
+
+          <!-- NOTA 4 -->
+          <article class="topic-card searchable-target">
+            <div class="topic-card-head">
+              <h3 class="topic-card-title">Nota 4 · Cobertura Convexa (*Convex Hull*) y Partición Train-Test</h3>
+              <div class="topic-meta-badges">
+                <span class="topic-meta-badge">Sesión 4</span>
+                <span class="topic-meta-badge">Convex Hull</span>
+                <span class="topic-meta-badge">Interpolación vs Extrapolación</span>
+              </div>
+            </div>
+            <div class="prose">
+              <p>
+                Cada dato con varias características vive como un punto en un espacio geométrico. 
+                Cuando separamos nuestros datos en <strong>Entrenamiento (Train)</strong> y <strong>Prueba (Test)</strong>, 
+                ocurre un fenómeno geométrico crucial:
+              </p>
+
+              <div class="simple-callout">
+                <div class="simple-callout-title">La Analogía de la Liga Elástica (Convex Hull)</div>
+                <div class="simple-callout-text">
+                  Imagina que cada punto de tus datos de entrenamiento es un clavo en una tabla. 
+                  Si rodeas todos esos clavos con una liga elástica y la sueltas, la figura que queda dibujada por fuera es la <strong>Cobertura Convexa</strong>.
+                  <br><br>
+                  • <strong>Si un dato nuevo cae DENTRO de la liga:</strong> El modelo puede <em>interpolar</em> con seguridad porque ya conoce vecinos a su alrededor.<br>
+                  • <strong>Si un dato nuevo cae FUERA de la liga:</strong> El modelo tiene que <em>extrapolar a ciegas</em>. No tiene puntos de referencia y cualquier respuesta suya es una apuesta riesgosa.
+                </div>
+              </div>
+            </div>
+
+            <!-- LAB 2: CONVEX HULL INTERACTIVO -->
+            <div class="lab-box">
+              <div class="lab-topbar">
+                <span class="lab-title">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                  Laboratorio 2: Prueba la Cobertura Convexa en Vivo
+                </span>
+                <div class="lab-controls">
+                  <button class="lab-btn" onclick="genHullData()">Nuevos Datos</button>
+                  <span style="font-size:0.75rem; color:var(--text-muted);">Haz clic en cualquier parte del recuadro</span>
+                </div>
+              </div>
+              <div class="lab-viewport">
+                <canvas id="hullCanvas"></canvas>
+              </div>
+              <div class="lab-footer">
+                <div id="hullMsg">
+                  Haz clic dentro o fuera del área gris para poner un dato de prueba y ver si interpola o extrapola.
+                </div>
+                <div class="lab-footer-stat" id="hullCounter">Train: 24 | Test: 8</div>
+              </div>
+            </div>
+
+            <div class="prose">
+              <h4>¿Cómo Separan los Modelos estos Puntos?</h4>
+              <p>
+                Un modelo clásico (como el perceptrón o una regresión) intenta trazar una línea (o un hiperplano si hay muchas variables) 
+                que deje los puntos de una clase de un lado y los de otra clase del otro:
+              </p>
+              <div class="formula-box">
+                $$w_1 x_1 + w_2 x_2 + \dots + w_D x_D + b = 0$$
+              </div>
+              <p>
+                Los <strong>pesos ($w$)</strong> hacen girar la línea como las manecillas de un reloj, y el <strong>sesgo ($b$)</strong> la empuja más lejos o más cerca del origen.
+              </p>
+            </div>
+            <div class="trail-bar">
+              <span class="trail-label">Conexión</span>
+              <a href="#nota-3" class="trail-link">Nota 3: Representación</a>
+              <span class="trail-arrow">➔</span>
+              <span>Nota 4: Cobertura Convexa</span>
+              <span class="trail-arrow">➔</span>
+              <a href="#nota-5" class="trail-link">Nota 5: Estratificación y Test</a>
+            </div>
+          </article>
+
+          <!-- NOTA 5 -->
+          <article id="nota-5" class="topic-card searchable-target">
+            <div class="topic-card-head">
+              <h3 class="topic-card-title">Nota 5 · Estratificación y la Trampa de los 12 Estratos</h3>
+              <div class="topic-meta-badges">
+                <span class="topic-meta-badge">Sesión 5</span>
+                <span class="topic-meta-badge">12 Estratos</span>
+                <span class="topic-meta-badge">random_state</span>
+              </div>
+            </div>
+            <div class="prose">
+              <p>
+                Para que la muestra represente bien a la población usamos <strong>estratos</strong> (como asegurar que haya hombres y mujeres en la misma proporción que en la vida real). Pero cuidado con emocionarse cruzando variables:
+              </p>
+              <h4>El Caso Real de Clase: 12 Estratos</h4>
+              <p>
+                Cruzamos tres cosas en alumnos universitarios:
+              </p>
+              <ul>
+                <li>Género (2 opciones: Hombre / Mujer)</li>
+                <li>Turno (2 opciones: Matutino / Vespertino)</li>
+                <li>Rendimiento (3 opciones: Alto / Medio / Bajo)</li>
+              </ul>
+              <div class="formula-box">
+                $$2 \times 2 \times 3 = 12 \text{ combinaciones posibles}$$
+              </div>
+
+              <div class="simple-callout">
+                <div class="simple-callout-title">El Peligro: ¿Por qué esto rompe la evaluación?</div>
+                <div class="simple-callout-text">
+                  Si un grupo raro (ejemplo: mujeres del turno vespertino con promedio bajo) representa apenas el 1.5% de la escuela, 
+                  en una muestra pequeña de prueba (Test) te va a quedar <strong>1 sola persona o ninguna</strong>.
+                  <br><br>
+                  Si tu modelo acierta con esa persona, dirá: <em>"¡100% de precisión en este grupo!"</em>. Y si falla: <em>"¡0% de precisión!"</em>. 
+                  Esa evaluación no sirve para nada; es puro azar por falta de datos suficientes en ese rincón.
+                </div>
+              </div>
+
+              <h4>¿Y qué significa `random_state=42` en el código?</h4>
+              <p>
+                Las computadoras no saben generar azar de verdad; usan una fórmula matemática que parece aleatoria. 
+                Ponerle un número fijo como <code>random_state=42</code> congela esa fórmula para que cada vez que tú o tu profesor corran el programa, 
+                salga <strong>exactamente la misma partición de datos</strong> y los resultados se puedan repetir y verificar.
+              </p>
+            </div>
+            <div class="trail-bar">
+              <span class="trail-label">Conexión</span>
+              <a href="#bloque-2" class="trail-link">Nota 4: Convex Hull</a>
+              <span class="trail-arrow">➔</span>
+              <span>Nota 5: Estratificación</span>
+              <span class="trail-arrow">➔</span>
+              <a href="#bloque-3" class="trail-link">Nota 6: Muestreo Progresivo</a>
+            </div>
+          </article>
+        </section>
+
+
+        <!-- ==================================================================
+             BLOQUE 3: MUESTREO PROGRESIVO Y NO NORMALIDAD (NOTAS 6, 7, 8)
+             ================================================================== -->
+        <section id="bloque-3" class="section-block">
+          <div class="section-head">
+            <div class="section-tag">Bloque III · Notas 6 a 8</div>
+            <h2 class="section-title">¿Cuántos Datos Necesito? Muestreo Progresivo</h2>
+            <p class="section-intro">
+              Por qué las fórmulas de los libros de texto fallan en big data, cómo saber cuándo dejar de meter datos
+              y qué pasa cuando tus clases tienen forma de arcos y medias lunas.
+            </p>
+          </div>
+
+          <!-- NOTA 6 -->
+          <article class="topic-card searchable-target">
+            <div class="topic-card-head">
+              <h3 class="topic-card-title">Nota 6 · Recolección y la Regla Sagrada: P > 0</h3>
+              <div class="topic-meta-badges">
+                <span class="topic-meta-badge">Sesión 6</span>
+                <span class="topic-meta-badge">Regla P > 0</span>
+              </div>
+            </div>
+            <div class="prose">
+              <p>
+                Antes de entrenar cualquier modelo hay que preparar los datos en 5 pasos: 
+                <strong>Delimitar la población $\to$ Limpiar $\to$ Integrar $\to$ Transformar $\to$ Reducir</strong>.
+              </p>
+              <div class="simple-callout">
+                <div class="simple-callout-title">La Regla de Oro del Muestreo ($P > 0$)</div>
+                <div class="simple-callout-text">
+                  Para que un muestreo sea <em>probabilístico</em> y confiable, <strong>todo individuo de la población debe tener una probabilidad mayor a cero de ser elegido</strong>.
+                  <br>
+                  Si haces una encuesta en Twitter para saber qué opina el país sobre el transporte público, la gente que no tiene internet tiene probabilidad cero ($P=0$). 
+                  Tus datos nacerán sesgados y ningún modelo del mundo podrá arreglar ese error de origen.
+                </div>
+              </div>
+            </div>
+            <div class="trail-bar">
+              <span class="trail-label">Conexión</span>
+              <a href="#nota-5" class="trail-link">Nota 5: Estratos</a>
+              <span class="trail-arrow">➔</span>
+              <span>Nota 6: Regla P > 0</span>
+              <span class="trail-arrow">➔</span>
+              <a href="#nota-7" class="trail-link">Nota 7: Muestreo Progresivo</a>
+            </div>
+          </article>
+
+          <!-- NOTA 7 -->
+          <article id="nota-7" class="topic-card searchable-target">
+            <div class="topic-card-head">
+              <h3 class="topic-card-title">Nota 7 · Muestreo Progresivo y la Ventana de Estabilidad (W)</h3>
+              <div class="topic-meta-badges">
+                <span class="topic-meta-badge">Sesión 7</span>
+                <span class="topic-meta-badge">Ventana W</span>
+                <span class="topic-meta-badge">Criterio de Parada</span>
+              </div>
+            </div>
+            <div class="prose">
+              <p>
+                En big data no puedes aplicar una formulita de estadística clásica para calcular el tamaño de muestra, porque los datos no son campanitas perfectas y procesar todo cuesta mucho dinero y tiempo de servidor.
+              </p>
+              <h4>¿Cómo funciona el Muestreo Progresivo?</h4>
+              <p>
+                Empezamos con un lote pequeño de datos y medimos su promedio o error. Luego agregamos otro puñado. 
+                Al principio el número salta de un lado a otro. Pero llega un punto donde agregar más datos ya no cambia casi nada.
+              </p>
+              <div class="simple-callout">
+                <div class="simple-callout-title">El Criterio de la Ventana de Estabilidad (W)</div>
+                <div class="simple-callout-text">
+                  Fijamos una tolerancia (ejemplo: $\epsilon = 3\%$) y una ventana (ejemplo: $W = 3$ veces seguidas). 
+                  Si durante 3 lotes consecutivos el promedio casi no se mueve: <strong>¡se detiene el muestreo!</strong> 
+                  Ya tenemos la muestra ideal y no gastamos cómputo a lo tonto.
+                </div>
+              </div>
+            </div>
+
+            <!-- LAB 3: MUESTREO PROGRESIVO INTERACTIVO -->
+            <div class="lab-box">
+              <div class="lab-topbar">
+                <span class="lab-title">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                  Laboratorio 3: Simula la Ventana de Estabilidad
+                </span>
+                <div class="lab-controls">
+                  <button class="lab-btn" onclick="stepProgressive()">+ Agregar Lote (+25)</button>
+                  <button class="lab-btn" onclick="runProgressiveAuto()">Completar Automático</button>
+                  <button class="lab-btn" onclick="resetProgressive()">Reiniciar</button>
+                </div>
+              </div>
+              <div class="lab-viewport" style="height:280px;">
+                <canvas id="progCanvas"></canvas>
+              </div>
+              <div class="lab-footer">
+                <div id="progStatus">
+                  Haz clic en "+ Agregar Lote" para ver cómo la estimación se calma hasta alcanzar la estabilidad.
+                </div>
+                <div class="lab-footer-stat" id="progStats">Lote N: 50 | Ventana: 0/3</div>
+              </div>
+            </div>
+
+            <div class="trail-bar">
+              <span class="trail-label">Conexión</span>
+              <a href="#nota-6" class="trail-link">Nota 6: Recolección</a>
+              <span class="trail-arrow">➔</span>
+              <span>Nota 7: Muestreo Progresivo</span>
+              <span class="trail-arrow">➔</span>
+              <a href="#nota-8" class="trail-link">Nota 8: Arcos y Desbalance</a>
+            </div>
+          </article>
+
+          <!-- NOTA 8 -->
+          <article id="nota-8" class="topic-card searchable-target">
+            <div class="topic-card-head">
+              <h3 class="topic-card-title">Nota 8 · Poblaciones Complejas: Arcos y Clases Raras</h3>
+              <div class="topic-badges">
+                <span class="topic-meta-badge">Sesión 8</span>
+                <span class="topic-meta-badge">Arcos no lineales</span>
+              </div>
+            </div>
+            <div class="prose">
+              <p>
+                En el mundo real los datos forman figuras raras: dos arcos entrelazados (como medias lunas) y una clase que tiene el 95% de los datos mientras otra tiene solo el 5%.
+              </p>
+              <p>
+                Si tomas una muestra al azar sin cuidado:
+              </p>
+              <ul>
+                <li>La clase del 5% puede desaparecer por completo de tus primeros lotes.</li>
+                <li>La línea que intenta separar a los arcos los cortará por la mitad porque no son figuras convexas.</li>
+              </ul>
+              <p>
+                Por eso se combina el muestreo progresivo con estratificación para obligar a que las figuras curvas y las clases raras sobrevivan intactas en la muestra.
+              </p>
+            </div>
+            <div class="trail-bar">
+              <span class="trail-label">Conexión</span>
+              <a href="#nota-7" class="trail-link">Nota 7: Progresivo</a>
+              <span class="trail-arrow">➔</span>
+              <span>Nota 8: Arcos</span>
+              <span class="trail-arrow">➔</span>
+              <a href="#bloque-4" class="trail-link">Nota 9: Sistemático y FPS</a>
+            </div>
+          </article>
+        </section>
+
+
+        <!-- ==================================================================
+             BLOQUE 4: MUESTREO SISTEMÁTICO Y VISIÓN INDUSTRIAL (NOTA 9)
+             ================================================================== -->
+        <section id="bloque-4" class="section-block">
+          <div class="section-head">
+            <div class="section-tag">Bloque IV · Nota 9</div>
+            <h2 class="section-title">Cámaras, Sensores y Datos Faltantes</h2>
+            <p class="section-intro">
+              Cómo optimizar una cámara de seguridad para que la inteligencia artificial no se sobrecaliente sin dejar escapar intrusos, y los 3 misterios de por qué faltan datos.
+            </p>
+          </div>
+
+          <!-- NOTA 9 -->
+          <article class="topic-card searchable-target">
+            <div class="topic-card-head">
+              <h3 class="topic-card-title">Nota 9 · Muestreo Sistemático, Deducción de FPS y Tipos de Datos Faltantes</h3>
+              <div class="topic-meta-badges">
+                <span class="topic-meta-badge">Sesión 9</span>
+                <span class="topic-meta-badge">Fórmula FPS</span>
+                <span class="topic-meta-badge">MCAR · MAR · MNAR</span>
+              </div>
+            </div>
+            <div class="prose">
+              <h4>El Caso Real de la Cámara en la Fábrica</h4>
+              <p>
+                Una empresa quiere vigilar una puerta con visión artificial. Procesar 60 fotos por segundo (FPS) en una computadora quema la tarjeta gráfica y es carísimo. 
+                ¿Cuál es la <strong>menor cantidad de fotos por segundo ($FPS$)</strong> que podemos analizar sin arriesgarnos a que un intruso corriendo pase desapercibido?
+              </p>
+              <div class="formula-box">
+                $$T_{\text{mín}} = \frac{L_{\text{puerta}}}{V_{\text{máx}}} \implies FPS_{\text{mín}} \ge \alpha \cdot \frac{V_{\text{máx}}}{L_{\text{puerta}}}$$
+              </div>
+              <p>
+                Si la zona vigilada mide $2\text{ metros}$ y una persona corriendo rápido va a $5\text{ m/s}$, la persona cruza en apenas $0.4\text{ segundos}$. 
+                Para atraparla con un factor de seguridad $\alpha = 2$ (capturar al menos 2 fotos mientras cruza), necesitamos procesar mínimo:
+                $$FPS \ge 2 \times \frac{5}{2} = 5\text{ fotogramas por segundo}$$
+                ¡Bajamos de 60 FPS a solo 5 FPS sin perder seguridad y ahorrando 90% de cómputo!
+              </p>
+
+              <h4>Los 3 Tipos de Datos Faltantes (*Missing Data*)</h4>
+              <div class="simple-callout">
+                <div class="simple-callout-title">La Analogía del Estudiante sin Tarea</div>
+                <div class="simple-callout-text">
+                  • <strong>MCAR (Completely at Random - Puro Accidente):</strong> Al estudiante se le cayó la hoja por la ventana por una ráfaga de viento. No hay trampa ni relación con nada; es puro azar.<br>
+                  • <strong>MAR (At Random - Depende de otra cosa):</strong> El estudiante no entregó la tarea porque llovió y se le mojó la mochila. La falta del dato se explica por otra variable conocida.<br>
+                  • <strong>MNAR (Not at Random - Con Mala Intención):</strong> El estudiante escondió la hoja a propósito porque sacó cero y no quería que lo vieran. El dato falta <em>precisamente por el valor que tiene</em>. Este es el más peligroso de arreglar.
+                </div>
+              </div>
+            </div>
+            <div class="trail-bar">
+              <span class="trail-label">Conexión</span>
+              <a href="#bloque-3" class="trail-link">Nota 8: Complejidad</a>
+              <span class="trail-arrow">➔</span>
+              <span>Nota 9: Sistemático y FPS</span>
+              <span class="trail-arrow">➔</span>
+              <a href="#bloque-5" class="trail-link">Nota 10: Limpieza y Ortogonalidad</a>
+            </div>
+          </article>
+        </section>
+
+
+        <!-- ==================================================================
+             BLOQUE 5: LIMPIEZA Y ORTOGONALIDAD (NOTA 10)
+             ================================================================== -->
+        <section id="bloque-5" class="section-block">
+          <div class="section-head">
+            <div class="section-tag">Bloque V · Nota 10</div>
+            <h2 class="section-title">Limpieza Avanzada y Ejes Independientes (Ortogonalidad)</h2>
+            <p class="section-intro">
+              Cómo comparar textos con ángulos en vez de palabras idénticas y por qué dos variables que dicen lo mismo rompen las matemáticas del modelo.
+            </p>
+          </div>
+
+          <!-- NOTA 10 -->
+          <article class="topic-card searchable-target">
+            <div class="topic-card-head">
+              <h3 class="topic-card-title">Nota 10 · Embeddings, Distancia Coseno y Variables Ortogonales</h3>
+              <div class="topic-meta-badges">
+                <span class="topic-meta-badge">Sesión 10</span>
+                <span class="topic-meta-badge">Distancia Coseno</span>
+                <span class="topic-meta-badge">Ortogonalidad</span>
+              </div>
+            </div>
+            <div class="prose">
+              <h4>¿Cómo comparamos si dos textos dicen lo mismo?</h4>
+              <p>
+                Si comparas letras exactas, *"automóvil veloz"* y *"coche rápido"* parecerían totalmente distintos. 
+                Los <strong>Embeddings</strong> convierten los significados en flechas en el espacio (vectores). 
+                Para medir qué tan parecidos son, medimos el <strong>ángulo entre las dos flechas (Similitud Coseno)</strong>:
+              </p>
+              <div class="formula-box">
+                $$\text{Distancia Coseno} = 1 - \cos(\theta)$$
+              </div>
+              <p>
+                Si apuntan exactamente al mismo lugar, el ángulo es 0° y la distancia es 0 (significan lo mismo sin importar qué palabras usaron).
+              </p>
+
+              <h4>¿Qué significa que las variables sean "Ortogonales"?</h4>
+              <div class="simple-callout">
+                <div class="simple-callout-title">El Volante y el Acelerador</div>
+                <div class="simple-callout-text">
+                  El volante gira el auto y el pedal acelera. Son <strong>ortogonales (independientes)</strong> porque mover uno no mueve al otro.<br>
+                  Pero si metes en tu base de datos el "Peso en Kilos" y el "Peso en Libras", metiste dos variables amarradas. 
+                  En matemáticas eso crea <em>multicolinealidad</em>: el modelo le da doble importancia a la misma cosa y los cálculos de distancia euclidiana se deforman por completo. 
+                  Hay que eliminar una de las dos.
+                </div>
+              </div>
+            </div>
+            <div class="trail-bar">
+              <span class="trail-label">Conexión</span>
+              <a href="#bloque-4" class="trail-link">Nota 9: Faltantes</a>
+              <span class="trail-arrow">➔</span>
+              <span>Nota 10: Ortogonalidad</span>
+              <span class="trail-arrow">➔</span>
+              <a href="#bloque-6" class="trail-link">Nota 11: Outliers y KNN</a>
+            </div>
+          </article>
+        </section>
+
+
+        <!-- ==================================================================
+             BLOQUE 6: OUTLIERS MULTIVARIADOS (NOTA 11)
+             ================================================================== -->
+        <section id="bloque-6" class="section-block">
+          <div class="section-head">
+            <div class="section-tag">Bloque VI · Nota 11</div>
+            <h2 class="section-title">Outliers: La Trampa de Ver una Variable a la Vez</h2>
+            <p class="section-intro">
+              La famosa analogía de Puebla contra Veracruz y por qué las gráficas de caja (IQR) no pueden ver
+              cosas raras cuando hay más de una dimensión involucrada.
+            </p>
+          </div>
+
+          <!-- NOTA 11 -->
+          <article class="topic-card searchable-target">
+            <div class="topic-card-head">
+              <h3 class="topic-card-title">Nota 11 · Outliers Contextuales, IQR de Tukey y Detección con KNN</h3>
+              <div class="topic-meta-badges">
+                <span class="topic-meta-badge">Sesión 11</span>
+                <span class="topic-meta-badge">Puebla vs Veracruz</span>
+                <span class="topic-meta-badge">IQR vs KNN</span>
+              </div>
+            </div>
+            <div class="prose">
+              <div class="simple-callout">
+                <div class="simple-callout-title">El Ejemplo Clásico: Puebla vs. Veracruz</div>
+                <div class="simple-callout-text">
+                  Tener 32°C de calor con 80% de humedad es lo más normal del mundo en el puerto de <strong>Veracruz</strong> en verano.<br>
+                  Pero tener 32°C con ese vapor en la sierra de <strong>Puebla</strong> en pleno enero es un evento meteorológico anómalo extremo.<br>
+                  El número "32" no es raro por sí solo; es raro <em>en su contexto</em>.
+                </div>
+              </div>
+
+              <h4>¿Por qué las gráficas de caja (IQR) no ven el peligro?</h4>
+              <p>
+                Si revisas la Temperatura sola, 32°C está dentro del límite de Tukey ($Q_3 + 1.5 \times IQR$). 
+                Si revisas la Humedad sola, también está dentro del rango. 
+                <strong>Las fórmulas de 1 variable dicen que el dato es normal</strong>. 
+                Pero si juntas Temperatura y Humedad en una gráfica de 2 dimensiones, ¡ese punto está en medio de la nada, solo y aislado!
+              </p>
+            </div>
+
+            <!-- LAB 4: DETECTOR DE OUTLIERS INTERACTIVO -->
+            <div class="lab-box">
+              <div class="lab-topbar">
+                <span class="lab-title">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                  Laboratorio 4: Falla de Tukey vs Detección Multivariada
+                </span>
+                <div class="lab-controls">
+                  <button class="lab-btn active" id="btnTukey" onclick="switchOutlierLab('tukey')">Método Tukey (IQR)</button>
+                  <button class="lab-btn" id="btnKNN" onclick="switchOutlierLab('knn')">KNN (Distancia Vecinos)</button>
+                  <button class="lab-btn" id="btnDBSCAN" onclick="switchOutlierLab('dbscan')">DBSCAN (Densidad)</button>
+                </div>
+              </div>
+              <div class="lab-viewport" style="height:320px;">
+                <canvas id="outlierCanvas"></canvas>
+              </div>
+              <div class="lab-footer">
+                <div id="outlierMsg">
+                  Modo Tukey: Observa cómo el punto anómalo del centro cae adentro del recuadro y no es detectado.
+                </div>
+              </div>
+            </div>
+
+            <div class="trail-bar">
+              <span class="trail-label">Conexión</span>
+              <a href="#bloque-5" class="trail-link">Nota 10: Descriptores</a>
+              <span class="trail-arrow">➔</span>
+              <span>Nota 11: Outliers</span>
+              <span class="trail-arrow">➔</span>
+              <a href="#bloque-7" class="trail-link">Nota 12: Imputación y Bartlett</a>
+            </div>
+          </article>
+        </section>
+
+
+        <!-- ==================================================================
+             BLOQUE 7: IMPUTACIÓN Y ESFERICIDAD (NOTA 12)
+             ================================================================== -->
+        <section id="bloque-7" class="section-block">
+          <div class="section-head">
+            <div class="section-tag">Bloque VII · Nota 12</div>
+            <h2 class="section-title">Canicas vs Balones: La Prueba de Bartlett e Imputación</h2>
+            <p class="section-intro">
+              ¿Tus grupos son esferas perfectas o están deformados como balones de americano? Cómo rellenar datos faltantes
+              usando la comunidad más cercana con DBSCAN.
+            </p>
+          </div>
+
+          <!-- NOTA 12 -->
+          <article class="topic-card searchable-target">
+            <div class="topic-card-head">
+              <h3 class="topic-card-title">Nota 12 · Prueba de Esfericidad e Imputación en 2 Etapas con DBSCAN</h3>
+              <div class="topic-meta-badges">
+                <span class="topic-meta-badge">Sesión 12</span>
+                <span class="topic-meta-badge">Prueba de Bartlett</span>
+                <span class="topic-meta-badge">DBSCAN Imputación</span>
+              </div>
+            </div>
+            <div class="prose">
+              <div class="simple-callout">
+                <div class="simple-callout-title">La Prueba de Bartlett: ¿Canica o Balón de Americano?</div>
+                <div class="simple-callout-text">
+                  Muchos algoritmos asumen que tus datos forman <strong>canicas redondas perfectas</strong> en el espacio (distancia euclidiana limpia).<br>
+                  La <strong>Prueba de Esfericidad de Bartlett</strong> revisa si eso es verdad:
+                  <ul>
+                    <li>Si se cumple: Tus variables no están pegadas. Los grupos son como canicas y medir distancias en línea recta funciona de perlas.</li>
+                    <li>Si se rechaza: Las variables están correlacionadas y la nube se estira como un <strong>balón de fútbol americano inclinado</strong>. Usar distancia común aquí te dará respuestas engañosas; requieres algoritmos basados en densidad como DBSCAN.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <h4>Cómo Rellenar Datos Faltantes (Imputación en 2 Etapas)</h4>
+              <ol>
+                <li><strong>Etapa 1:</strong> Apartamos las columnas que sí están completas y corremos <strong>DBSCAN</strong> para descubrir comunidades naturales.</li>
+                <li><strong>Etapa 2:</strong> Para cada fila a la que le falta un dato, vemos a qué comunidad pertenece y le ponemos la <strong>mediana de su propio grupo</strong> (no el promedio de todo el mundo).</li>
+                <li><strong>¿Y los puntos de ruido (`-1`)?:</strong> Para los datos raros que no encajan en ningún grupo usamos los $k$ vecinos más cercanos (KNN).</li>
+              </ol>
+            </div>
+            <div class="trail-bar">
+              <span class="trail-label">Conexión</span>
+              <a href="#bloque-6" class="trail-link">Nota 11: Outliers</a>
+              <span class="trail-arrow">➔</span>
+              <span>Nota 12: Imputación</span>
+              <span class="trail-arrow">➔</span>
+              <a href="#bloque-8" class="trail-link">Nota 13: El Perceptrón</a>
+            </div>
+          </article>
+        </section>
+
+
+        <!-- ==================================================================
+             BLOQUE 8: BIOLOGÍA Y EL PERCEPTRÓN SIMPLE (NOTAS 13, 14)
+             ================================================================== -->
+        <section id="bloque-8" class="section-block">
+          <div class="section-head">
+            <div class="section-tag">Bloque VIII · Notas 13 y 14</div>
+            <h2 class="section-title">El Cerebro en la Computadora: El Perceptrón Simple</h2>
+            <p class="section-intro">
+              De las 86 mil millones de neuronas biológicas a una fórmula matemática simple. La perilla del DJ,
+              el cadenero del antro y cómo se aprende ajustando pesos.
+            </p>
+          </div>
+
+          <!-- NOTA 13 -->
+          <article class="topic-card searchable-target">
+            <div class="topic-card-head">
+              <h3 class="topic-card-title">Nota 13 · Biología Cerebral y la Neurona Artificial</h3>
+              <div class="topic-meta-badges">
+                <span class="topic-meta-badge">Sesión 13</span>
+                <span class="topic-meta-badge">86 mil millones</span>
+                <span class="topic-meta-badge">hardlim</span>
+              </div>
+            </div>
+            <div class="prose">
+              <p>
+                El cerebro humano tiene unas <strong>86 mil millones de neuronas</strong> y gasta apenas 20 watts de energía.
+                Para imitarlo en computadora, Frank Rosenblatt inventó el <strong>Perceptrón</strong>:
+              </p>
+              <table class="simple-table">
+                <thead>
+                  <tr>
+                    <th>En tu Cerebro</th>
+                    <th>En la Neurona Artificial</th>
+                    <th>¿Qué hace?</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Dendritas</td>
+                    <td>Entradas ($x_1, x_2, \dots$)</td>
+                    <td>Cables que reciben información del exterior</td>
+                  </tr>
+                  <tr>
+                    <td>Sinapsis</td>
+                    <td>Pesos sinápticos ($w_1, w_2, \dots$)</td>
+                    <td>La perilla de volumen que decide qué entrada importa más</td>
+                  </tr>
+                  <tr>
+                    <td>Soma (Núcleo)</td>
+                    <td>Suma ponderada ($\sum w_i x_i + b$)</td>
+                    <td>Suma todo el impulso que llegó</td>
+                  </tr>
+                  <tr>
+                    <td>Umbral del axón</td>
+                    <td>Función escalón `hardlim`</td>
+                    <td>La ley del todo o nada: si superas el umbral emite 1, si no emite 0</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="simple-callout">
+                <div class="simple-callout-title">El DJ y el Cadenero del Antro</div>
+                <div class="simple-callout-text">
+                  Los <strong>pesos ($w$)</strong> son como los faders de la consola del DJ: le suben o le bajan el volumen a cada señal.<br>
+                  El <strong>sesgo (*bias* $b$)</strong> es el cadenero en la puerta del antro: decide qué tan estricto es el filtro para dejar pasar la señal (disparar la neurona).
+                </div>
+              </div>
+            </div>
+            <div class="trail-bar">
+              <span class="trail-label">Conexión</span>
+              <a href="#bloque-7" class="trail-link">Nota 12: Esfericidad</a>
+              <span class="trail-arrow">➔</span>
+              <span>Nota 13: Anatomía Neurona</span>
+              <span class="trail-arrow">➔</span>
+              <a href="#nota-14" class="trail-link">Nota 14: Regla de Aprendizaje</a>
+            </div>
+          </article>
+
+          <!-- NOTA 14 -->
+          <article id="nota-14" class="topic-card searchable-target">
+            <div class="topic-card-head">
+              <h3 class="topic-card-title">Nota 14 · Cómo Aprende el Perceptrón (Regla de Rosenblatt)</h3>
+              <div class="topic-meta-badges">
+                <span class="topic-meta-badge">Sesión 14</span>
+                <span class="topic-meta-badge">Regla Rosenblatt</span>
+                <span class="topic-meta-badge">Tasa de Aprendizaje</span>
+              </div>
+            </div>
+            <div class="prose">
+              <p>
+                Calculamos la diferencia entre la respuesta real ($t$) y lo que dijo la neurona ($a$):
+                $$e = t - a$$
+                Si acertó ($e=0$), no tocamos nada. Si falló, aplicamos la regla de actualización:
+              </p>
+              <div class="formula-box">
+                $$w^{\text{nuevo}} = w^{\text{anterior}} + \eta \cdot e \cdot x$$
+                $$b^{\text{nuevo}} = b^{\text{anterior}} + \eta \cdot e$$
+              </div>
+
+              <div class="simple-callout">
+                <div class="simple-callout-title">La Tasa de Aprendizaje ($\eta$) y el Tiro de Golf</div>
+                <div class="simple-callout-text">
+                  Al salir del tee, el golfista tira con el <em>driver</em> para avanzar rápido 200 metros (tasa $\eta$ grande para orientar la línea).<br>
+                  Pero cuando ya está en el pastito cerca del hoyo, tiene que usar el <em>putter</em> con golpes suaves (decaimiento de $\eta$). 
+                  Si sigue usando el driver en el green, la pelota volará de lado a lado y jamás caerá en el hoyo (oscilación infinita).
+                </div>
+              </div>
+            </div>
+
+            <!-- LAB 5: PLANO 3D INTERACTIVO -->
+            <div class="lab-box">
+              <div class="lab-topbar">
+                <span class="lab-title">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+                  Laboratorio 5: Mueve el Hiperplano en 3D
+                </span>
+                <div class="lab-controls">
+                  <div class="lab-slider">
+                    <label>w₁</label>
+                    <input type="range" id="slW1" min="-3" max="3" step="0.2" value="1.2" oninput="update3DPlane()">
+                  </div>
+                  <div class="lab-slider">
+                    <label>w₂</label>
+                    <input type="range" id="slW2" min="-3" max="3" step="0.2" value="-0.8" oninput="update3DPlane()">
+                  </div>
+                  <div class="lab-slider">
+                    <label>Bias b</label>
+                    <input type="range" id="slB" min="-3" max="3" step="0.2" value="0.4" oninput="update3DPlane()">
+                  </div>
+                  <button class="lab-btn" onclick="toggle3DSphericity()">Modo Bartlett</button>
+                </div>
+              </div>
+              <div class="lab-viewport" id="threeView" style="height:360px;">
+                <!-- Three.js o Canvas 2D interactivo -->
+                <canvas id="fallbackPlaneCanvas" style="display:none;"></canvas>
+              </div>
+              <div class="lab-footer">
+                <div id="threeDesc">
+                  Arrastra con el ratón para rotar el espacio 3D. Mueve los deslizadores para ver cómo los pesos giran el plano y el sesgo lo empuja.
+                </div>
+              </div>
+            </div>
+
+            <div class="trail-bar">
+              <span class="trail-label">Conexión</span>
+              <a href="#nota-13" class="trail-link">Nota 13: Perceptrón</a>
+              <span class="trail-arrow">➔</span>
+              <span>Nota 14: Calibración</span>
+              <span class="trail-arrow">➔</span>
+              <a href="#bloque-9" class="trail-link">Nota 15: El XOR y MLP</a>
+            </div>
+          </article>
+        </section>
+
+
+        <!-- ==================================================================
+             BLOQUE 9: REDES MULTICAPA Y EL XOR (NOTA 15)
+             ================================================================== -->
+        <section id="bloque-9" class="section-block">
+          <div class="section-head">
+            <div class="section-tag">Bloque IX · Nota 15</div>
+            <h2 class="section-title">El Problema del XOR y la Magia de Backpropagation</h2>
+            <p class="section-intro">
+              Por qué una sola neurona se rinde ante cuatro simples puntos y cómo se resuelve con capas ocultas
+              y el famoso "reparto de culpas" hacia atrás.
+            </p>
+          </div>
+
+          <!-- NOTA 15 -->
+          <article class="topic-card searchable-target">
+            <div class="topic-card-head">
+              <h3 class="topic-card-title">Nota 15 · La Pared del XOR y el Algoritmo de Backpropagation</h3>
+              <div class="topic-badges">
+                <span class="topic-meta-badge">Sesión 15</span>
+                <span class="topic-meta-badge">Problema del XOR</span>
+                <span class="topic-meta-badge">Reparto de culpas</span>
+              </div>
+            </div>
+            <div class="prose">
+              <h4>El Famoso Invierno de la IA: La Barrera del XOR</h4>
+              <p>
+                En 1969, Minsky y Papert demostraron que una sola neurona es incapaz de resolver la compuerta XOR:
+                $$(0,0) \to 0, \quad (1,1) \to 0, \quad (0,1) \to 1, \quad (1,0) \to 1$$
+                Dibuja esos 4 puntos en una hoja: los unos están en esquinas opuestas. 
+                <strong>¡Es imposible trazar una sola línea recta que deje los unos de un lado y los ceros del otro!</strong>
+                Hacen falta como mínimo <strong>dos líneas rectas</strong> que encierren el área; es decir, necesitamos una <strong>capa oculta</strong>.
+              </p>
+            </div>
+
+            <!-- LAB 6: XOR INTERACTIVO -->
+            <div class="lab-box">
+              <div class="lab-topbar">
+                <span class="lab-title">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg>
+                  Laboratorio 6: Demostración Visual del XOR
+                </span>
+                <div class="lab-controls">
+                  <button class="lab-btn active" id="btnXorSingle" onclick="switchXOR('single')">1 Línea (Perceptrón Falla)</button>
+                  <button class="lab-btn" id="btnXorMLP" onclick="switchXOR('mlp')">2 Líneas (Red Multicapa Resuelve)</button>
+                </div>
+              </div>
+              <div class="lab-viewport" style="height:320px;">
+                <canvas id="xorCanvas"></canvas>
+              </div>
+              <div class="lab-footer">
+                <div id="xorMsg">
+                  1 Sola Línea: Imposible separar los 4 puntos (error mínimo de 25%).
+                </div>
+                <div class="lab-footer-stat" id="xorStat">Error: 25.0%</div>
+              </div>
+            </div>
+
+            <div class="prose">
+              <h4>¿Cómo aprende una neurona oculta si nadie sabe qué respuesta debía dar?</h4>
+              <p>
+                En la salida sabes si la red acertó o falló. Pero en las neuronas de en medio, nadie sabe qué tenían que responder. 
+                La solución se llama <strong>Backpropagation (*Propagación hacia atrás*)</strong>:
+              </p>
+              <div class="simple-callout">
+                <div class="simple-callout-title">El "Reparto de Culpas" hacia atrás</div>
+                <div class="simple-callout-text">
+                  Si la respuesta final fue un desastre, la señal de error viaja de reversa usando la <strong>Regla de la Cadena</strong> del cálculo diferencial:
+                  $$\frac{\partial E}{\partial w_{ij}} = \frac{\partial E}{\partial a} \cdot \frac{\partial a}{\partial z} \cdot \frac{\partial z}{\partial w_{ij}}$$
+                  A las neuronas que estuvieron conectadas con los cables más gruesos ($w$ grandes) hacia el error se les asigna la mayor parte de la culpa 
+                  y se les corrige el peso con mayor fuerza.
+                </div>
+              </div>
+            </div>
+            <div class="trail-bar">
+              <span class="trail-label">Conexión</span>
+              <a href="#nota-14" class="trail-link">Nota 14: Perceptrón</a>
+              <span class="trail-arrow">➔</span>
+              <span>Nota 15: Backprop y XOR</span>
+              <span class="trail-arrow">➔</span>
+              <a href="#bloque-10" class="trail-link">Nota 16: Momento y Escalamiento</a>
+            </div>
+          </article>
+        </section>
+
+
+        <!-- ==================================================================
+             BLOQUE 10: MOMENTO Y ESCALAMIENTO (NOTA 16)
+             ================================================================== -->
+        <section id="bloque-10" class="section-block">
+          <div class="section-head">
+            <div class="section-tag">Bloque X · Nota 16</div>
+            <h2 class="section-title">Inercia Física (Momento) y la Regla del Escalamiento</h2>
+            <p class="section-intro">
+              Por qué el algoritmo de gradiente rebota en zigzag como loco y cómo arreglarlo con inercia,
+              más el peligro mortal de numerar colores con números arbitrarios.
+            </p>
+          </div>
+
+          <!-- NOTA 16 -->
+          <article class="topic-card searchable-target">
+            <div class="topic-card-head">
+              <h3 class="topic-card-title">Nota 16 · El Término de Momento y la Normalización Obligatoria</h3>
+              <div class="topic-meta-badges">
+                <span class="topic-meta-badge">Sesión 16</span>
+                <span class="topic-meta-badge">Momento β</span>
+                <span class="topic-meta-badge">Min-Max vs Z-Score</span>
+              </div>
+            </div>
+            <div class="prose">
+              <h4>El Problema del Zigzag y el Momento ($\beta$)</h4>
+              <p>
+                Al bajar por un valle estrecho, el gradiente da saltos gigantescos rebotando de pared a pared sin avanzar casi nada hacia el fondo. 
+                Le agregamos <strong>Momento (inercia pesada $\beta = 0.9$)</strong>:
+              </p>
+              <div class="formula-box">
+                $$\Delta w_t = \eta \nabla E + \beta \Delta w_{t-1}$$
+              </div>
+              <p>
+                Como los rebotes laterales cambian de signo (+ y -), con la inercia se cancelan mutuamente. 
+                Pero hacia adelante el impulso siempre va al mismo lado, así que la red <strong>acelera limpiamente hacia el mínimo</strong>.
+              </p>
+
+              <h4>¿Por qué es obligatorio normalizar los datos?</h4>
+              <p>
+                Si la variable $X_1$ es el salario en pesos ($50,000$) y $X_2$ es la edad ($25$ años):
+                ¡El salario aplasta numéricamente a la edad! La neurona solo verá el salario y la edad quedará completamente muda. 
+                Normalizamos todo a escala $[0, 1]$ o con $Z = \frac{x - \mu}{\sigma}$ para que todas las variables compitan en igualdad de condiciones.
+              </p>
+
+              <h4>El Error de Label Encoding y el Triunfo de One-Hot</h4>
+              <div class="simple-callout">
+                <div class="simple-callout-title">El Peligro de Ponerle 1, 2 y 3 a los Colores</div>
+                <div class="simple-callout-text">
+                  Si le pones Rojo=1, Verde=2 y Azul=3: ¡le estás diciendo a la máquina que el Azul vale el triple que el Rojo y que el promedio de Rojo y Azul es Verde! 
+                  Eso es un disparate geométrico.<br>
+                  La solución es <strong>One-Hot Encoding</strong>: cada color se convierte en su propia columna binaria con ceros y unos. 
+                  Así todos quedan a la misma distancia y ninguno es "mayor" que otro.
+                </div>
+              </div>
+            </div>
+            <div class="trail-bar">
+              <span class="trail-label">Conexión</span>
+              <a href="#bloque-9" class="trail-link">Nota 15: Backprop</a>
+              <span class="trail-arrow">➔</span>
+              <span>Nota 16: Momento y Escalas</span>
+              <span class="trail-arrow">➔</span>
+              <a href="#bloque-11" class="trail-link">Nota 17: Topología y Fuga de Datos</a>
+            </div>
+          </article>
+        </section>
+
+
+        <!-- ==================================================================
+             BLOQUE 11: TOPOLOGÍA Y FUGA DE DATOS (NOTA 17)
+             ================================================================== -->
+        <section id="bloque-11" class="section-block">
+          <div class="section-head">
+            <div class="section-tag">Bloque XI · Nota 17</div>
+            <h2 class="section-title">Arquitectura de Redes y el Fraude del Data Leakage</h2>
+            <p class="section-intro">
+              El error más común de los estudiantes al preparar datos, la búsqueda de neuronas en dos fases
+              y por qué una red con más capas no siempre es mejor.
+            </p>
+          </div>
+
+          <!-- NOTA 17 -->
+          <article class="topic-card searchable-target">
+            <div class="topic-card-head">
+              <h3 class="topic-card-title">Nota 17 · Búsqueda Coarse-to-Fine, Cuellos de Botella y Fuga de Datos</h3>
+              <div class="topic-badges">
+                <span class="topic-meta-badge">Sesión 17</span>
+                <span class="topic-meta-badge">Data Leakage</span>
+                <span class="topic-meta-badge">Cuello de Botella</span>
+              </div>
+            </div>
+            <div class="prose">
+              <div class="simple-callout">
+                <div class="simple-callout-title">Fuga de Datos (*Data Leakage*): El Examen con Respuestas</div>
+                <div class="simple-callout-text">
+                  Si escalas toda tu base de datos antes de separarla en Train y Test: <strong>cometiste un fraude estadístico</strong>.<br>
+                  El promedio y los máximos ya llevan información de los datos de prueba. Tu modelo sacará 10 en la prueba porque ya vio el futuro, 
+                  pero cuando lo pongas en producción fallará miserablemente.<br><br>
+                  <strong>La Regla de Oro:</strong>
+                  1. Primero se parte en Train y Test.<br>
+                  2. El escalador aprende <em>únicamente</em> de Train (<code>fit_transform(X_train)</code>).<br>
+                  3. A Test solo se le aplica esa regla fija sin aprender nada nuevo (<code>transform(X_test)</code>).
+                </div>
+              </div>
+
+              <h4>Búsqueda Inteligente de Neuronas: Coarse-to-Fine</h4>
+              <p>
+                En vez de probar todas las combinaciones posibles de neuronas a lo loco (lo cual tarda días):
+              </p>
+              <ul>
+                <li><strong>Paso 1 (Grueso - *Coarse*):</strong> Pruebas con saltos grandes: 10, 30, 50, 100 neuronas. Ves que alrededor de 30 da el mejor resultado.</li>
+                <li><strong>Paso 2 (Fino - *Fine*):</strong> Te concentras solo cerca del ganador: pruebas 26, 28, 30, 32 y 34 neuronas. Encuentras la mejor red en minutos.</li>
+              </ul>
+
+              <h4>Cuidado con los Cuellos de Botella Informacionales</h4>
+              <p>
+                Si armas una red con capas de:
+                $$64 \text{ neuronas} \longrightarrow 2 \text{ neuronas} \longrightarrow 32 \text{ neuronas}$$
+                La capa de 2 neuronas aplastó toda la información. Lo que se perdió en ese embudo no hay forma humana ni matemática 
+                de recuperarlo en la capa siguiente. ¡Evita poner capas minúsculas en medio de capas grandes!
+              </p>
+            </div>
+            <div class="trail-bar">
+              <span class="trail-label">Conexión</span>
+              <a href="#bloque-10" class="trail-link">Nota 16: Escalamiento</a>
+              <span class="trail-arrow">➔</span>
+              <span>Nota 17: Topología</span>
+              <span class="trail-arrow">➔</span>
+              <a href="#glosario" class="trail-link">Glosario: Las 12 Analogías</a>
+            </div>
+          </article>
+        </section>
+
+
+        <!-- ==================================================================
+             BLOQUE 12: GLOSARIO DE ANALOGÍAS ("CON PERAS Y MANZANAS")
+             ================================================================== -->
+        <section id="glosario" class="section-block">
+          <div class="section-head">
+            <div class="section-tag">Bloque XII · Glosario Didáctico</div>
+            <h2 class="section-title">Diccionario Intuitivo: Todo Explicado con Peras y Manzanas</h2>
+            <p class="section-intro">
+              Las 12 metáforas cotidianas que usamos en el curso para que ningún concepto abstracto se te olvide.
+            </p>
+          </div>
+
+          <div class="glossary-grid">
+
+            <div class="glossary-card searchable-target">
+              <div class="glossary-header">
+                <span class="glossary-term">1. Estrato</span>
+                <span class="glossary-alias">Canasta de Frutas</span>
+              </div>
+              <div class="glossary-metaphor">"La canasta con proporciones obligatorias de manzanas y naranjas."</div>
+              <div class="glossary-desc">
+                Grupos conocidos de antemano (como Turno o Género). Sirve para obligar a que tu muestra tenga exactamente el mismo porcentaje que la población real.
+              </div>
+            </div>
+
+            <div class="glossary-card searchable-target">
+              <div class="glossary-header">
+                <span class="glossary-term">2. Cluster</span>
+                <span class="glossary-alias">Grupos de Fiesta</span>
+              </div>
+              <div class="glossary-metaphor">"Los grupitos que se arman solos en una fiesta sin que nadie los organice."</div>
+              <div class="glossary-desc">
+                Grupos descubiertos por un algoritmo sin etiquetas previas, simplemente porque la gente en ese grupo tiene gustos parecidos.
+              </div>
+            </div>
+
+            <div class="glossary-card searchable-target">
+              <div class="glossary-header">
+                <span class="glossary-term">3. Descriptor</span>
+                <span class="glossary-alias">Ficha de RPG</span>
+              </div>
+              <div class="glossary-metaphor">"Los puntos de fuerza, velocidad y magia de tu personaje."</div>
+              <div class="glossary-desc">
+                Cada columna medible de un dato. En matemáticas, cada descriptor representa un eje independiente en el espacio.
+              </div>
+            </div>
+
+            <div class="glossary-card searchable-target">
+              <div class="glossary-header">
+                <span class="glossary-term">4. Ortogonalidad</span>
+                <span class="glossary-alias">Volante y Gas</span>
+              </div>
+              <div class="glossary-metaphor">"El volante y el acelerador: mover uno no mueve al otro."</div>
+              <div class="glossary-desc">
+                Variables con correlación cero. Ninguna duplica la información de otra, garantizando que el modelo no se confunda.
+              </div>
+            </div>
+
+            <div class="glossary-card searchable-target">
+              <div class="glossary-header">
+                <span class="glossary-term">5. Cobertura Convexa</span>
+                <span class="glossary-alias">La Liga Elástica</span>
+              </div>
+              <div class="glossary-metaphor">"La liga elástica que rodea todos los clavos en una tabla."</div>
+              <div class="glossary-desc">
+                El perímetro exterior de tus datos de entrenamiento. Si un dato nuevo cae dentro de la liga, el modelo interpola con seguridad; si cae fuera, adivina a ciegas.
+              </div>
+            </div>
+
+            <div class="glossary-card searchable-target">
+              <div class="glossary-header">
+                <span class="glossary-term">6. Embedding</span>
+                <span class="glossary-alias">GPS de Palabras</span>
+              </div>
+              <div class="glossary-metaphor">"Darle coordenadas de latitud y longitud a las palabras según su significado."</div>
+              <div class="glossary-desc">
+                Convertir frases o imágenes en flechas con números donde cosas con significado similar quedan cerquita una de otra.
+              </div>
+            </div>
+
+            <div class="glossary-card searchable-target">
+              <div class="glossary-header">
+                <span class="glossary-term">7. MCAR vs MNAR</span>
+                <span class="glossary-alias">La Tarea Faltante</span>
+              </div>
+              <div class="glossary-metaphor">"¿Se le cayó la hoja por el viento (MCAR) o la escondió porque sacó cero (MNAR)?"</div>
+              <div class="glossary-desc">
+                Por qué faltan datos. Si es por puro accidente (MCAR) no hay sesgo; si falta intencionalmente (MNAR) el dato que falta esconde una trampa.
+              </div>
+            </div>
+
+            <div class="glossary-card searchable-target">
+              <div class="glossary-header">
+                <span class="glossary-term">8. Outlier Global</span>
+                <span class="glossary-alias">Jirafa en Gallinero</span>
+              </div>
+              <div class="glossary-metaphor">"Una persona que mide 2 metros y medio caminando en la calle."</div>
+              <div class="glossary-desc">
+                Un dato tan extremo que resalta de inmediato en cualquier lista sin importar ninguna otra condición.
+              </div>
+            </div>
+
+            <div class="glossary-card searchable-target">
+              <div class="glossary-header">
+                <span class="glossary-term">9. Outlier Contextual</span>
+                <span class="glossary-alias">Puebla vs Veracruz</span>
+              </div>
+              <div class="glossary-metaphor">"32°C en el puerto jarocho en julio vs 32°C en la sierra poblana en enero."</div>
+              <div class="glossary-desc">
+                Un número que parece normal por sí solo pero que es súper raro cuando se toma en cuenta el lugar o la temporada.
+              </div>
+            </div>
+
+            <div class="glossary-card searchable-target">
+              <div class="glossary-header">
+                <span class="glossary-term">10. KNN Anomaly</span>
+                <span class="glossary-alias">El Ermitaño</span>
+              </div>
+              <div class="glossary-metaphor">"La persona cuya casa más cercana queda a 15 kilómetros de distancia."</div>
+              <div class="glossary-desc">
+                Puntúa qué tan raro es un punto midiendo la distancia promedio a sus vecinos. Si está lejísimos de todos, es una anomalía.
+              </div>
+            </div>
+
+            <div class="glossary-card searchable-target">
+              <div class="glossary-header">
+                <span class="glossary-term">11. Bartlett</span>
+                <span class="glossary-alias">Canica vs Balón</span>
+              </div>
+              <div class="glossary-metaphor">"Una canica redonda simétrica frente a un balón de americano alargado."</div>
+              <div class="glossary-desc">
+                Revisa si tus datos forman esferas perfectas (distancia euclidiana válida) o elipses aplastadas (se necesita DBSCAN).
+              </div>
+            </div>
+
+            <div class="glossary-card searchable-target">
+              <div class="glossary-header">
+                <span class="glossary-term">12. Pesos y Bias</span>
+                <span class="glossary-alias">DJ y Cadenero</span>
+              </div>
+              <div class="glossary-metaphor">"La perilla de volumen del DJ (pesos w) y el cadenero en la puerta del antro (bias b)."</div>
+              <div class="glossary-desc">
+                Los pesos deciden qué señal importa más; el sesgo decide qué tan difícil es que la neurona se excite y responda.
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- ==========================================================================
+       PIE DE PÁGINA
+       ========================================================================== -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <strong>Minería de Datos — BUAP 2026</strong> · Notas de estudio integradas.
+      </div>
+      <div>
+        Estilo tranquilo sin sombras ni bordes chillones · Hecho para aprender de verdad.
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       SCRIPTS ROBUSTOS (KATEX, PIPELINE SVG, 6 SIMULADORES ACTIVOS)
+       ========================================================================== -->
+  <script>
+    // Inicialización al cargar la página
+    document.addEventListener("DOMContentLoaded", function() {
+      // 1. Render de KaTeX seguro
+      if (typeof renderMathInElement === "function") {
+        try {
+          renderMathInElement(document.body, {
+            delimiters: [
+              {left: "$$", right: "$$", display: true},
+              {left: "$", right: "$", display: false}
+            ],
+            throwOnError: false
+          });
+        } catch (e) {
+          console.warn("KaTeX error:", e);
+        }
+      }
+
+      // 2. Inicializar los laboratorios con protección contra fallos
+      try { initHull(); } catch(e) { console.error("Error Hull:", e); }
+      try { initProg(); } catch(e) { console.error("Error Prog:", e); }
+      try { initOutlier(); } catch(e) { console.error("Error Outlier:", e); }
+      try { init3DOr2DPlane(); } catch(e) { console.error("Error 3D:", e); }
+      try { initXOR(); } catch(e) { console.error("Error XOR:", e); }
+      try { setupSearch(); } catch(e) { console.error("Error Search:", e); }
+      try { setupScrollSpy(); } catch(e) { console.error("Error ScrollSpy:", e); }
+    });
+
+    // --------------------------------------------------------------------------
+    // BUSCADOR RÁPIDO
+    // --------------------------------------------------------------------------
+    function setupSearch() {
+      const input = document.getElementById("searchInput");
+      if (!input) return;
+      input.addEventListener("input", function(e) {
+        const q = e.target.value.toLowerCase().trim();
+        const targets = document.querySelectorAll(".searchable-target");
+        targets.forEach(el => {
+          const text = el.innerText.toLowerCase();
+          if (!q || text.includes(q)) {
+            el.classList.remove("hidden-item");
+          } else {
+            el.classList.add("hidden-item");
+          }
+        });
+      });
+    }
+
+    // --------------------------------------------------------------------------
+    // SCROLL SPY PARA MENÚ LATERAL
+    // --------------------------------------------------------------------------
+    function setupScrollSpy() {
+      const sections = document.querySelectorAll(".section-block");
+      const sideLinks = document.querySelectorAll(".side-item a");
+      window.addEventListener("scroll", () => {
+        let current = "";
+        sections.forEach(sec => {
+          const top = sec.offsetTop - 120;
+          if (window.pageYOffset >= top) {
+            current = sec.getAttribute("id");
+          }
+        });
+        sideLinks.forEach(link => {
+          link.classList.remove("active");
+          if (link.getAttribute("href") === "#" + current) {
+            link.classList.add("active");
+          }
+        });
+      }, { passive: true });
+    }
+
+    // --------------------------------------------------------------------------
+    // 1. GRAFO SVG INTERACTIVO
+    // --------------------------------------------------------------------------
+    const pipelineData = {
+      1: { name: "1. KDD y Modelos", desc: "El ciclo de 5 fases para pasar de datos crudos a conocimiento real y los 3 pilares de cualquier modelo." },
+      2: { name: "2. Cobertura Convexa (Hull)", desc: "El perímetro elástico de tus datos: por qué tu modelo solo sabe predecir dentro de este límite." },
+      3: { name: "3. Estratificación", desc: "Asegurar que la muestra tenga las mismas proporciones que la realidad sin inventar categorías vacías." },
+      4: { name: "4. Muestreo Progresivo", desc: "Meter datos por lotes y parar cuando la ventana W muestre que el promedio ya no se mueve." },
+      5: { name: "5. Muestreo Sistemático y FPS", desc: "Monitoreo continuo de cámaras: calcular la tasa exacta de fotos por segundo para no gastar GPU." },
+      6: { name: "6. Limpieza y Ortogonalidad", desc: "Medir textos con distancias angulares (coseno) y asegurar que las variables sean independientes." },
+      7: { name: "7. Outliers: Puebla vs Veracruz", desc: "Por qué las cajas de Tukey no ven anomalías cuando hay dos o más variables juntas y cómo lo resuelve KNN." },
+      8: { name: "8. Imputación y Bartlett", desc: "Revisar si los datos forman canicas o balones aplastados para rellenar huecos usando comunidades DBSCAN." },
+      9: { name: "9. La Neurona y el Perceptrón", desc: "Imitar a la biología: entradas, volumen del DJ (pesos) y el cadenero del antro (sesgo)." },
+      10: { name: "10. La Barrera del XOR y Backprop", desc: "Por qué una sola línea no puede separar el XOR y cómo las capas ocultas se reparten culpas hacia atrás." },
+      11: { name: "11. Momento e Inercia", desc: "Frenar el zigzag al optimizar con inercia beta y la obligación estricta de normalizar las escalas." },
+      12: { name: "12. Topología y Fuga de Datos", desc: "Cómo probar redes sin engañarse: evitar normalizar antes de partir y prevenir cuellos de botella." }
+    };
+
+    function selectPipelineNode(id) {
+      document.querySelectorAll(".node-group circle").forEach(c => c.setAttribute("fill", "#ffffff"));
+      const sel = document.getElementById("pnode-" + id);
+      if (sel) {
+        sel.querySelector("circle").setAttribute("fill", "#e5e3dd");
+      }
+      const info = pipelineData[id];
+      if (info) {
+        document.getElementById("pipelineDescText").innerHTML = `
+          <strong>${info.name}:</strong> ${info.desc}
+        `;
+      }
+    }
+
+    function resetPipelineSelection() {
+      document.querySelectorAll(".node-group circle").forEach(c => c.setAttribute("fill", "#ffffff"));
+      document.getElementById("pipelineDescText").innerText = "Toca cualquier paso del diagrama arriba para ver su explicación y por qué lo necesitamos.";
+    }
+
+    // --------------------------------------------------------------------------
+    // 2. LABORATORIO CONVEX HULL (CANVAS 2D)
+    // --------------------------------------------------------------------------
+    let hCanvas, hCtx;
+    let hTrain = [];
+    let hTest = [];
+    let hHull = [];
+
+    function initHull() {
+      hCanvas = document.getElementById("hullCanvas");
+      if (!hCanvas) return;
+      hCtx = hCanvas.getContext("2d");
+      fitCanvas(hCanvas);
+      genHullData();
+
+      hCanvas.addEventListener("click", function(e) {
+        const rect = hCanvas.getBoundingClientRect();
+        const x = (e.clientX - rect.left) * (hCanvas.width / rect.width);
+        const y = (e.clientY - rect.top) * (hCanvas.height / rect.height);
+        const inside = isInsidePoly([x, y], hHull);
+        hTest.push({ x, y, inside });
+
+        const msg = document.getElementById("hullMsg");
+        if (inside) {
+          msg.innerHTML = "<strong style='color:var(--accent-sage);'>✓ ¡INTERPOLACIÓN SEGURA!</strong> El punto cayó dentro de la liga elástica. Tu modelo puede predecir con confianza.";
+        } else {
+          msg.innerHTML = "<strong style='color:var(--accent-clay);'>⚠ ¡EXTRAPOLACIÓN A CIEGAS!</strong> El punto cayó fuera de la cobertura de entrenamiento. El modelo está adivinando en terreno desconocido.";
+        }
+        drawHull();
+      });
+    }
+
+    function fitCanvas(c) {
+      c.width = c.parentElement.clientWidth || 600;
+      c.height = c.parentElement.clientHeight || 340;
+    }
+
+    function genHullData() {
+      if (!hCanvas) return;
+      fitCanvas(hCanvas);
+      hTrain = [];
+      hTest = [];
+      const cx = hCanvas.width / 2;
+      const cy = hCanvas.height / 2;
+      const rMax = Math.min(cx, cy) * 0.7;
+
+      for (let i = 0; i < 24; i++) {
+        const a = Math.random() * Math.PI * 2;
+        const r = Math.random() * rMax;
+        hTrain.push({ x: cx + Math.cos(a) * r, y: cy + Math.sin(a) * r });
+      }
+
+      computeHullPoly();
+      drawHull();
+    }
+
+    function computeHullPoly() {
+      if (hTrain.length < 3) return;
+      const pts = hTrain.slice().sort((a, b) => a.x === b.x ? a.y - b.y : a.x - b.x);
+      const cross = (o, a, b) => (a.x - o.x) * (b.y - o.y) - (a.y - o.y) * (b.x - o.x);
+
+      const lower = [];
+      for (let p of pts) {
+        while (lower.length >= 2 && cross(lower[lower.length - 2], lower[lower.length - 1], p) <= 0) lower.pop();
+        lower.push(p);
+      }
+      const upper = [];
+      for (let i = pts.length - 1; i >= 0; i--) {
+        const p = pts[i];
+        while (upper.length >= 2 && cross(upper[upper.length - 2], upper[upper.length - 1], p) <= 0) upper.pop();
+        upper.push(p);
+      }
+      upper.pop();
+      lower.pop();
+      hHull = lower.concat(upper);
+    }
+
+    function isInsidePoly(pt, poly) {
+      let x = pt[0], y = pt[1], inside = false;
+      for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+        let xi = poly[i].x, yi = poly[i].y, xj = poly[j].x, yj = poly[j].y;
+        let intersect = ((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+        if (intersect) inside = !inside;
+      }
+      return inside;
+    }
+
+    function drawHull() {
+      if (!hCtx) return;
+      hCtx.clearRect(0, 0, hCanvas.width, hCanvas.height);
+
+      // Dibujar Polígono
+      if (hHull.length > 2) {
+        hCtx.beginPath();
+        hCtx.moveTo(hHull[0].x, hHull[0].y);
+        for (let i = 1; i < hHull.length; i++) hCtx.lineTo(hHull[i].x, hHull[i].y);
+        hCtx.closePath();
+        hCtx.fillStyle = "rgba(58, 83, 105, 0.07)";
+        hCtx.fill();
+        hCtx.strokeStyle = "#3a5369";
+        hCtx.lineWidth = 1.5;
+        hCtx.stroke();
+      }
+
+      // Puntos de Entrenamiento (Azul piedra)
+      for (let p of hTrain) {
+        hCtx.beginPath();
+        hCtx.arc(p.x, p.y, 4, 0, Math.PI * 2);
+        hCtx.fillStyle = "#3a5369";
+        hCtx.fill();
+      }
+
+      // Puntos de Prueba (Verde si interpola, Arcilla si extrapola)
+      for (let p of hTest) {
+        hCtx.beginPath();
+        hCtx.arc(p.x, p.y, 6, 0, Math.PI * 2);
+        hCtx.fillStyle = p.inside ? "#456152" : "#7c5445";
+        hCtx.fill();
+        hCtx.strokeStyle = "#ffffff";
+        hCtx.lineWidth = 1.5;
+        hCtx.stroke();
+      }
+
+      document.getElementById("hullCounter").innerText = `Train: ${hTrain.length} | Test: ${hTest.length}`;
+    }
+
+    // --------------------------------------------------------------------------
+    // 3. LABORATORIO MUESTREO PROGRESIVO
+    // --------------------------------------------------------------------------
+    let pCanvas, pCtx;
+    let pSizes = [50];
+    let pMeans = [4.1];
+    let pReal = 5.0;
+    let pWin = 0;
+
+    function initProg() {
+      pCanvas = document.getElementById("progCanvas");
+      if (!pCanvas) return;
+      pCtx = pCanvas.getContext("2d");
+      fitCanvas(pCanvas);
+      drawProg();
+    }
+
+    function stepProgressive() {
+      if (pWin >= 3) return;
+      const lastN = pSizes[pSizes.length - 1];
+      const newN = lastN + 25;
+      pSizes.push(newN);
+
+      const noise = (Math.random() - 0.5) * (2.8 / Math.sqrt(newN));
+      const newMean = pReal + noise;
+      pMeans.push(newMean);
+
+      const prev = pMeans[pMeans.length - 2];
+      const change = Math.abs(newMean - prev) / prev;
+
+      if (change < 0.03) {
+        pWin++;
+      } else {
+        pWin = 0;
+      }
+
+      const st = document.getElementById("progStatus");
+      if (pWin >= 3) {
+        st.innerHTML = `<strong style="color:var(--accent-sage);">¡CONVERGENCIA ALCANZADA EN N = ${newN}!</strong> Tres lotes seguidos sin cambios (Δ < 3%). Puedes detener el muestreo y ahorrar memoria.`;
+      } else {
+        st.innerText = `Lote con ${newN} datos. Variación: ${(change * 100).toFixed(1)}%. Esperando 3 lotes estables seguidos.`;
+      }
+
+      document.getElementById("progStats").innerText = `Lote N: ${newN} | Ventana: ${pWin}/3`;
+      drawProg();
+    }
+
+    function runProgressiveAuto() {
+      while (pWin < 3 && pSizes[pSizes.length - 1] < 450) {
+        stepProgressive();
+      }
+    }
+
+    function resetProgressive() {
+      pSizes = [50];
+      pMeans = [4.1];
+      pWin = 0;
+      document.getElementById("progStatus").innerText = "Haz clic en '+ Agregar Lote' para ver cómo la estimación se calma hasta alcanzar la estabilidad.";
+      document.getElementById("progStats").innerText = "Lote N: 50 | Ventana: 0/3";
+      drawProg();
+    }
+
+    function drawProg() {
+      if (!pCtx) return;
+      pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+      const w = pCanvas.width, h = pCanvas.height;
+      const pad = 40;
+
+      // Línea objetivo real
+      const targetY = h / 2;
+      pCtx.strokeStyle = "#d4d1c8";
+      pCtx.setLineDash([4, 4]);
+      pCtx.beginPath();
+      pCtx.moveTo(pad, targetY);
+      pCtx.lineTo(w - pad, targetY);
+      pCtx.stroke();
+      pCtx.setLineDash([]);
+
+      pCtx.font = "10px var(--font-mono)";
+      pCtx.fillStyle = "#878a92";
+      pCtx.fillText("Valor Real Poblacional (μ = 5.0)", w - 190, targetY - 6);
+
+      // Trazo de la curva
+      if (pSizes.length > 1) {
+        pCtx.beginPath();
+        pCtx.strokeStyle = "#3a5369";
+        pCtx.lineWidth = 2;
+        for (let i = 0; i < pSizes.length; i++) {
+          const x = pad + (pSizes[i] / 500) * (w - 2 * pad);
+          const y = targetY - (pMeans[i] - pReal) * 110;
+          if (i === 0) pCtx.moveTo(x, y);
+          else pCtx.lineTo(x, y);
+        }
+        pCtx.stroke();
+
+        // Puntos
+        for (let i = 0; i < pSizes.length; i++) {
+          const x = pad + (pSizes[i] / 500) * (w - 2 * pad);
+          const y = targetY - (pMeans[i] - pReal) * 110;
+          pCtx.beginPath();
+          pCtx.arc(x, y, 4, 0, Math.PI * 2);
+          pCtx.fillStyle = (i === pSizes.length - 1 && pWin >= 3) ? "#456152" : "#3a5369";
+          pCtx.fill();
+        }
+      }
+    }
+
+    // --------------------------------------------------------------------------
+    // 4. LABORATORIO OUTLIERS (PUERTO VS PUEBLA)
+    // --------------------------------------------------------------------------
+    let oCanvas, oCtx;
+    let oMode = 'tukey';
+
+    function initOutlier() {
+      oCanvas = document.getElementById("outlierCanvas");
+      if (!oCanvas) return;
+      oCtx = oCanvas.getContext("2d");
+      fitCanvas(oCanvas);
+      drawOutliers();
+    }
+
+    function switchOutlierLab(m) {
+      oMode = m;
+      document.getElementById("btnTukey").classList.toggle("active", m === 'tukey');
+      document.getElementById("btnKNN").classList.toggle("active", m === 'knn');
+      document.getElementById("btnDBSCAN").classList.toggle("active", m === 'dbscan');
+
+      const msg = document.getElementById("outlierMsg");
+      if (m === 'tukey') {
+        msg.innerHTML = "<strong>Modo Tukey (1D):</strong> Mira cómo el punto anómalo del centro queda adentro de las vallas en X y en Y. ¡Se escapa!";
+      } else if (m === 'knn') {
+        msg.innerHTML = "<strong>Modo KNN:</strong> Medimos la distancia a sus vecinos. Como vive en medio de la nada, su distancia es gigante y queda al descubierto.";
+      } else {
+        msg.innerHTML = "<strong>Modo DBSCAN:</strong> Agrupa por densidad de puntos. El punto raro no tiene suficientes vecinos y recibe la etiqueta <code>-1 (Ruido)</code>.";
+      }
+      drawOutliers();
+    }
+
+    function drawOutliers() {
+      if (!oCtx) return;
+      oCtx.clearRect(0, 0, oCanvas.width, oCanvas.height);
+      const w = oCanvas.width, h = oCanvas.height;
+
+      // Nube Puebla (Templado, humedad baja)
+      const pueblaPts = [
+        {x: 140, y: 220}, {x: 160, y: 200}, {x: 130, y: 240}, {x: 170, y: 210}, {x: 150, y: 230}
+      ];
+      // Nube Veracruz (Caluroso, humedad alta)
+      const veracruzPts = [
+        {x: 360, y: 90}, {x: 380, y: 80}, {x: 350, y: 110}, {x: 390, y: 100}, {x: 370, y: 95}
+      ];
+      // Outlier Contextual (32°C pero en la montaña)
+      const anomalyPt = {x: 180, y: 95};
+
+      if (oMode === 'tukey') {
+        // Vallas de Tukey
+        oCtx.strokeStyle = "#d4d1c8";
+        oCtx.strokeRect(100, 50, 320, 210);
+        oCtx.font = "10px var(--font-mono)";
+        oCtx.fillStyle = "#878a92";
+        oCtx.fillText("Valla combinada de Tukey", 110, 68);
+      }
+
+      // Dibujar Puebla
+      pueblaPts.forEach(p => {
+        oCtx.beginPath();
+        oCtx.arc(p.x, p.y, 4.5, 0, Math.PI * 2);
+        oCtx.fillStyle = oMode === 'dbscan' ? "#456152" : "#3a5369";
+        oCtx.fill();
+      });
+
+      // Dibujar Veracruz
+      veracruzPts.forEach(p => {
+        oCtx.beginPath();
+        oCtx.arc(p.x, p.y, 4.5, 0, Math.PI * 2);
+        oCtx.fillStyle = oMode === 'dbscan' ? "#3a5369" : "#3a5369";
+        oCtx.fill();
+      });
+
+      // Dibujar Anomalia
+      oCtx.beginPath();
+      if (oMode === 'knn') {
+        oCtx.arc(anomalyPt.x, anomalyPt.y, 16, 0, Math.PI * 2);
+        oCtx.fillStyle = "rgba(124, 84, 69, 0.15)";
+        oCtx.fill();
+        oCtx.beginPath();
+      }
+      oCtx.arc(anomalyPt.x, anomalyPt.y, 6, 0, Math.PI * 2);
+      oCtx.fillStyle = oMode === 'tukey' ? "#3a5369" : "#7c5445";
+      oCtx.fill();
+      oCtx.strokeStyle = "#ffffff";
+      oCtx.lineWidth = 1.5;
+      oCtx.stroke();
+
+      oCtx.font = "11px var(--font-sans)";
+      oCtx.fillStyle = "#232528";
+      oCtx.fillText("Puebla (Normal)", 130, 260);
+      oCtx.fillText("Veracruz (Normal)", 340, 65);
+      oCtx.fillText(oMode === 'tukey' ? "Dato (No detectado)" : "¡Outlier Contextual!", anomalyPt.x + 10, anomalyPt.y - 8);
+    }
+
+    // --------------------------------------------------------------------------
+    // 5. LABORATORIO 3D HIPERPLANO (THREE.JS + FALLBACK 2D SEGURO)
+    // --------------------------------------------------------------------------
+    let tScene, tCamera, tRenderer, tPlaneMesh, tGroup;
+    let tIsBartlett = false;
+
+    function init3DOr2DPlane() {
+      const container = document.getElementById("threeView");
+      if (!container) return;
+
+      if (typeof THREE !== "undefined") {
+        try {
+          const w = container.clientWidth || 500;
+          const h = container.clientHeight || 350;
+
+          tScene = new THREE.Scene();
+          tScene.background = new THREE.Color(0xfbfbfa);
+
+          tCamera = new THREE.PerspectiveCamera(45, w / h, 0.1, 100);
+          tCamera.position.set(4, 3, 6);
+          tCamera.lookAt(0, 0, 0);
+
+          tRenderer = new THREE.WebGLRenderer({ antialias: true });
+          tRenderer.setSize(w, h);
+          container.appendChild(tRenderer.domElement);
+
+          const light = new THREE.AmbientLight(0xffffff, 0.9);
+          tScene.add(light);
+
+          const pGeo = new THREE.PlaneGeometry(5, 5);
+          const pMat = new THREE.MeshBasicMaterial({ color: 0x3a5369, transparent: true, opacity: 0.35, side: THREE.DoubleSide });
+          tPlaneMesh = new THREE.Mesh(pGeo, pMat);
+          tScene.add(tPlaneMesh);
+
+          tGroup = new THREE.Group();
+          tScene.add(tGroup);
+          create3DPoints();
+
+          // Mouse rotate
+          let isDown = false, px = 0, py = 0;
+          container.addEventListener("mousedown", e => { isDown = true; px = e.clientX; py = e.clientY; });
+          window.addEventListener("mouseup", () => isDown = false);
+          container.addEventListener("mousemove", e => {
+            if (!isDown) return;
+            tScene.rotation.y += (e.clientX - px) * 0.01;
+            tScene.rotation.x += (e.clientY - py) * 0.01;
+            px = e.clientX; py = e.clientY;
+            tRenderer.render(tScene, tCamera);
+          });
+
+          update3DPlane();
+          return;
+        } catch (e) {
+          console.warn("Fallo WebGL, activando Canvas 2D alternativo:", e);
+        }
+      }
+
+      // Si falla WebGL, usar canvas 2D
+      const fbCanvas = document.getElementById("fallbackPlaneCanvas");
+      fbCanvas.style.display = "block";
+      fitCanvas(fbCanvas);
+      draw2DPlaneFallback();
+    }
+
+    function create3DPoints() {
+      if (!tGroup) return;
+      while (tGroup.children.length > 0) tGroup.remove(tGroup.children[0]);
+      const sGeo = new THREE.SphereGeometry(0.12, 10, 10);
+      const m1 = new THREE.MeshBasicMaterial({ color: 0x456152 });
+      const m2 = new THREE.MeshBasicMaterial({ color: 0x7c5445 });
+
+      for (let i = 0; i < 40; i++) {
+        const mesh = new THREE.Mesh(sGeo, i < 20 ? m1 : m2);
+        if (tIsBartlett) {
+          // Elipsoide estirado
+          const t = (Math.random() - 0.5) * 3;
+          mesh.position.set(t, t * 0.8 + (Math.random() - 0.5) * 0.3, (Math.random() - 0.5) * 0.3);
+        } else {
+          const off = i < 20 ? -1.2 : 1.2;
+          mesh.position.set((Math.random() - 0.5) * 1.5 + off, (Math.random() - 0.5) * 1.5, (Math.random() - 0.5) * 1.5);
+        }
+        tGroup.add(mesh);
+      }
+      if (tRenderer) tRenderer.render(tScene, tCamera);
+    }
+
+    function update3DPlane() {
+      const w1 = parseFloat(document.getElementById("slW1").value);
+      const w2 = parseFloat(document.getElementById("slW2").value);
+      const b = parseFloat(document.getElementById("slB").value);
+
+      if (tPlaneMesh && tRenderer) {
+        tPlaneMesh.rotation.z = Math.atan2(w2, w1);
+        tPlaneMesh.position.x = -b * 0.5;
+        tRenderer.render(tScene, tCamera);
+      } else {
+        draw2DPlaneFallback();
+      }
+    }
+
+    function toggle3DSphericity() {
+      tIsBartlett = !tIsBartlett;
+      const desc = document.getElementById("threeDesc");
+      if (tIsBartlett) {
+        desc.innerHTML = "<strong>Modo Bartlett (Balón de Americano):</strong> Variables correlacionadas. La nube se aplasta y la distancia recta euclidiana falla.";
+      } else {
+        desc.innerHTML = "Arrastra con el ratón para rotar el espacio 3D. Mueve los deslizadores para ver cómo los pesos giran el plano y el sesgo lo empuja.";
+      }
+      create3DPoints();
+    }
+
+    function draw2DPlaneFallback() {
+      const fb = document.getElementById("fallbackPlaneCanvas");
+      if (!fb) return;
+      const ctx = fb.getContext("2d");
+      ctx.clearRect(0, 0, fb.width, fb.height);
+      const w1 = parseFloat(document.getElementById("slW1").value);
+      const w2 = parseFloat(document.getElementById("slW2").value);
+      const b = parseFloat(document.getElementById("slB").value);
+
+      ctx.strokeStyle = "#3a5369";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(0, fb.height / 2 - (-b * 40));
+      ctx.lineTo(fb.width, fb.height / 2 - (w1 * 80 - b * 40));
+      ctx.stroke();
+    }
+
+    // --------------------------------------------------------------------------
+    // 6. LABORATORIO XOR
+    // --------------------------------------------------------------------------
+    let xCanvas, xCtx;
+    let xMode = 'single';
+
+    function initXOR() {
+      xCanvas = document.getElementById("xorCanvas");
+      if (!xCanvas) return;
+      xCtx = xCanvas.getContext("2d");
+      fitCanvas(xCanvas);
+      drawXOR();
+    }
+
+    function switchXOR(m) {
+      xMode = m;
+      document.getElementById("btnXorSingle").classList.toggle("active", m === 'single');
+      document.getElementById("btnXorMLP").classList.toggle("active", m === 'mlp');
+
+      const msg = document.getElementById("xorMsg");
+      const stat = document.getElementById("xorStat");
+      if (m === 'single') {
+        msg.innerText = "1 Sola Línea: Imposible separar los 4 puntos (error mínimo de 25%).";
+        stat.innerText = "Error: 25.0%";
+      } else {
+        msg.innerHTML = "<strong style='color:var(--accent-sage);'>Red Multicapa (MLP):</strong> Con 2 neuronas ocultas trazamos dos líneas que encierran el área con 100% de acierto.";
+        stat.innerText = "Error: 0.0%";
+      }
+      drawXOR();
+    }
+
+    function drawXOR() {
+      if (!xCtx) return;
+      xCtx.clearRect(0, 0, xCanvas.width, xCanvas.height);
+      const cx = xCanvas.width / 2;
+      const cy = xCanvas.height / 2;
+      const s = 90;
+
+      // Ejes
+      xCtx.strokeStyle = "#e5e3dd";
+      xCtx.lineWidth = 1;
+      xCtx.beginPath();
+      xCtx.moveTo(cx - 140, cy); xCtx.lineTo(cx + 140, cy);
+      xCtx.moveTo(cx, cy - 120); xCtx.lineTo(cx, cy + 120);
+      xCtx.stroke();
+
+      // Líneas de decisión
+      xCtx.lineWidth = 2;
+      if (xMode === 'single') {
+        xCtx.strokeStyle = "#7c5445";
+        xCtx.beginPath();
+        xCtx.moveTo(cx - 130, cy + 100);
+        xCtx.lineTo(cx + 130, cy - 100);
+        xCtx.stroke();
+      } else {
+        xCtx.strokeStyle = "#456152";
+        xCtx.beginPath();
+        xCtx.moveTo(cx - 110, cy + 30); xCtx.lineTo(cx + 30, cy - 110);
+        xCtx.moveTo(cx - 30, cy + 110); xCtx.lineTo(cx + 110, cy - 30);
+        xCtx.stroke();
+      }
+
+      // 4 Puntos XOR
+      const pts = [
+        { x: cx - s, y: cy + s, t: 0, l: "(0,0) → 0" },
+        { x: cx + s, y: cy - s, t: 0, l: "(1,1) → 0" },
+        { x: cx - s, y: cy - s, t: 1, l: "(0,1) → 1" },
+        { x: cx + s, y: cy + s, t: 1, l: "(1,0) → 1" }
+      ];
+
+      pts.forEach(p => {
+        xCtx.beginPath();
+        xCtx.arc(p.x, p.y, 7, 0, Math.PI * 2);
+        xCtx.fillStyle = p.t === 1 ? "#3a5369" : "#e5e3dd";
+        xCtx.fill();
+        xCtx.strokeStyle = "#232528";
+        xCtx.lineWidth = 1.5;
+        xCtx.stroke();
+
+        xCtx.font = "11px var(--font-mono)";
+        xCtx.fillStyle = "#232528";
+        xCtx.fillText(p.l, p.x + 10, p.y + 4);
+      });
+    }
+  </script>
+</body>
+</html>
