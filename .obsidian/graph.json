@@ -8,21 +8,21 @@
   "collapse-color-groups": false,
   "colorGroups": [
     {
-      "query": "path:\"arquitectura funcional de computadoras\"  ",
+      "query": "path:\"arquitectura funcional de computadoras\"",
       "color": {
         "a": 1,
         "rgb": 14701138
       }
     },
     {
-      "query": "path:\"minería de datos\"  ",
+      "query": "path:\"minería de datos\"",
       "color": {
         "a": 1,
         "rgb": 14725458
       }
     },
     {
-      "query": "path:\"proyectos I+d\"  ",
+      "query": "path:\"proyectos I+d\"",
       "color": {
         "a": 1,
         "rgb": 11657298
@@ -30,7 +30,7 @@
     }
   ],
   "collapse-display": true,
-  "showArrow": false,
+  "showArrow": true,
   "textFadeMultiplier": 0,
   "nodeSizeMultiplier": 1,
   "lineSizeMultiplier": 1,

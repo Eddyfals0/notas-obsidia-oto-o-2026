@@ -13,10 +13,11 @@ Panel centralizado para el seguimiento de criterios de evaluación, avisos y tar
 ---
 
 ## 📢 Avisos Generales y Calendario
+- 📊 **Minería de Datos (14 de octubre de 2026):** Publicación del **1er Parcial / Proyecto Práctico 1: Clasificación de 1M Clientes de Comercio con RNA**. Fecha límite de entrega: **Martes 3 de noviembre de 2026, 11:59 PM por Teams**.
 - 📊 **Minería de Datos (Miércoles 7 de octubre de 2026):**
   - Ejercicio práctico en código con **Scikit-learn** para implementar **Grid Search Jerárquico** (*Coarse-to-Fine*).
   - Revisión empírica de resultados de las combinaciones de hiperparámetros exploradas.
-  - **Definición del Primer Examen Parcial:** Se acordará fecha, formato y alcance temático (cierra en búsqueda jerárquica; Algoritmos Genéticos pasan al 2do Parcial).
+  - **Definición del Primer Examen Parcial:** Se acordó fecha, formato y alcance temático (cierra en búsqueda jerárquica; Algoritmos Genéticos pasan al 2do Parcial).
 - 📊 **Minería de Datos:** El **Miércoles 30 de septiembre de 2026**, la sesión comenzará a las **11:30 AM** (en lugar de las 11:00 AM) por compromiso del docente en reunión del comité académico de la facultad.
 - 📊 **Minería de Datos:** Entrega de la **Actividad Integral del Titanic** (Kaggle) el **Jueves 10 de septiembre de 2026**.
 - 📊 **Minería de Datos:** El **Viernes 4 de septiembre de 2026** se concluye el bloque temático de **Construcción de Muestras** y balanceo sintético.
@@ -30,8 +31,8 @@ Panel centralizado para el seguimiento de criterios de evaluación, avisos y tar
 
 | Materia | Rubro / Hito | Ponderación | Modalidad | Periodo Estimado |
 | :--- | :--- | :---: | :---: | :--- |
-| 📊 **Minería de Datos** | Proyecto 1: Aprendizaje Supervisado | Evaluación Parcial | Individual | Mediados de Septiembre |
-| 📊 **Minería de Datos** | Proyecto 2: Aprendizaje No Supervisado | Evaluación Parcial | En equipo | Finales de Octubre |
+| 📊 **Minería de Datos** | Proyecto 1: Aprendizaje Supervisado (1er Parcial) | Evaluación Parcial | Individual | 3 de Noviembre (11:59 PM) |
+| 📊 **Minería de Datos** | Proyecto 2: Aprendizaje No Supervisado (2do Parcial) | Evaluación Parcial | En equipo | Finales de Noviembre |
 | ⚙️ **Arquitectura** | Proyecto Final | 40% | En equipo | Fin de semestre |
 | ⚙️ **Arquitectura** | Prácticas en VHDL | 35% | En equipo | A lo largo del curso |
 | ⚙️ **Arquitectura** | Actividades y Ejercicios Teóricos | 25% | Individual | A lo largo del curso |

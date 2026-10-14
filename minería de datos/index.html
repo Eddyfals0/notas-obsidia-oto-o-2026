@@ -666,10 +666,15 @@
     }
     .node-group {
       cursor: pointer;
+      pointer-events: all;
       transition: transform 0.15s ease;
     }
     .node-group:hover circle {
       stroke-width: 3px;
+    }
+    .node-group circle,
+    .node-group text {
+      pointer-events: none;
     }
     .node-group text {
       font-family: var(--font-sans);
@@ -756,6 +761,127 @@
       flex-wrap: wrap;
       gap: 1rem;
     }
+  
+    /* Resaltado táctil al saltar desde un nodo */
+    @keyframes targetPulseAnim {
+      0% {
+        box-shadow: 0 0 0 0 rgba(69, 97, 82, 0.4);
+        border-color: var(--accent-sage);
+        background-color: rgba(69, 97, 82, 0.08);
+      }
+      50% {
+        box-shadow: 0 0 0 8px rgba(69, 97, 82, 0);
+        border-color: var(--accent-sage);
+        background-color: rgba(69, 97, 82, 0.08);
+      }
+      100% {
+        box-shadow: none;
+        border-color: var(--border-subtle);
+        background-color: var(--bg-card);
+      }
+    }
+    .target-pulse {
+      animation: targetPulseAnim 2.2s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+      scroll-margin-top: 5.5rem;
+    }
+
+    /* Ficha Inspectora de Nodos */
+    .node-inspector-card {
+      padding: 1.25rem 1.4rem;
+      background: var(--bg-card);
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      transition: all 0.2s ease;
+    }
+    .inspector-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .inspector-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+    .inspector-badge {
+      font-size: 0.725rem;
+      font-family: var(--font-mono);
+      padding: 0.15rem 0.5rem;
+      border-radius: 3px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      color: var(--accent-slate);
+    }
+    .inspector-desc {
+      font-size: 0.885rem;
+      color: var(--text-soft);
+      line-height: 1.6;
+    }
+    .inspector-formula {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      padding: 0.5rem 0.75rem;
+      border-radius: 4px;
+      color: var(--text-main);
+      overflow-x: auto;
+    }
+    .inspector-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      padding-top: 0.65rem;
+      border-top: 1px solid var(--border-subtle);
+    }
+    .inspector-nav-group {
+      display: flex;
+      gap: 0.4rem;
+    }
+    .btn-jump-note {
+      background: var(--accent-slate);
+      color: #ffffff;
+      border: 1px solid var(--accent-slate);
+      padding: 0.45rem 1rem;
+      font-size: 0.825rem;
+      font-weight: 600;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.15s ease;
+    }
+    .btn-jump-note:hover {
+      background: #2d4255;
+      border-color: #2d4255;
+    }
+    .btn-inspector-nav {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      padding: 0.4rem 0.75rem;
+      font-size: 0.785rem;
+      color: var(--text-soft);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-inspector-nav:hover:not(:disabled) {
+      background: var(--bg-subtle);
+      color: var(--text-main);
+      border-color: var(--border-medium);
+    }
+    .btn-inspector-nav:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
   </style>
 </head>
 <body>
@@ -869,122 +995,61 @@
              ================================================================== -->
         <section id="grafo-pipeline" class="section-block">
           <div class="section-head">
-            <div class="section-tag">Visión Panorámica</div>
-            <h2 class="section-title">El Hilo Conductor: La Cadena del Conocimiento</h2>
+            <div class="section-tag">Visión Panorámica · Red de Conceptos</div>
+            <h2 class="section-title">El Grafo Interactivo: Las 17 Sesiones Conectadas</h2>
             <p class="section-intro">
-              En esta materia nada está suelto. Cada clase nació para resolver un problema de la clase anterior.
-              Haz clic en cualquier círculo del diagrama para ver de qué trata y cómo se conecta con el resto.
+              Cada tema del curso es un nodo en este grafo. Puedes arrastrar los nodos con el mouse, alternar entre vista de flujo ordenado 
+              y red libre, hacer clic en cualquier nodo para ver su explicación y <strong>pulsar el botón de salto</strong> (o dar doble clic en el nodo) 
+              para ir directamente a sus notas completas en la página.
             </p>
           </div>
 
           <div class="lab-box">
             <div class="lab-topbar">
               <span class="lab-title">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-                Mapa de Ruta Interactivo
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                Red de Nodos del Semestre (17 Temas)
               </span>
               <div class="lab-controls">
-                <button class="lab-btn" onclick="resetPipelineSelection()">Ver Todos</button>
+                <button class="lab-btn active" id="btnLayoutFlow" onclick="switchGraphLayout('flow')">🛣️ Flujo Ordenado</button>
+                <button class="lab-btn" id="btnLayoutForce" onclick="switchGraphLayout('force')">🌐 Red Flotante</button>
+                <button class="lab-btn" onclick="resetGraphView()">🎯 Centrar</button>
               </div>
             </div>
 
-            <!-- Grafo SVG 100% responsivo y nítido -->
-            <div class="lab-viewport" style="height: auto; padding: 1rem 0;">
-              <svg class="svg-pipeline" viewBox="0 0 920 300" id="pipelineSvg">
-                <!-- Conexiones -->
-                <line x1="80" y1="70" x2="220" y2="70" class="edge-line" id="edge-1-2" />
-                <line x1="220" y1="70" x2="360" y2="70" class="edge-line" id="edge-2-3" />
-                <line x1="360" y1="70" x2="500" y2="70" class="edge-line" id="edge-3-4" />
-                <line x1="500" y1="70" x2="640" y2="70" class="edge-line" id="edge-4-5" />
-                <line x1="640" y1="70" x2="780" y2="70" class="edge-line" id="edge-5-6" />
-
-                <line x1="780" y1="70" x2="780" y2="210" class="edge-line" id="edge-6-7" />
-
-                <line x1="780" y1="210" x2="640" y2="210" class="edge-line" id="edge-7-8" />
-                <line x1="640" y1="210" x2="500" y2="210" class="edge-line" id="edge-8-9" />
-                <line x1="500" y1="210" x2="360" y2="210" class="edge-line" id="edge-9-10" />
-                <line x1="360" y1="210" x2="220" y2="210" class="edge-line" id="edge-10-11" />
-                <line x1="220" y1="210" x2="80" y2="210" class="edge-line" id="edge-11-12" />
-
-                <!-- Nodos Fila 1 -->
-                <g class="node-group" onclick="selectPipelineNode(1)" id="pnode-1">
-                  <circle cx="80" cy="70" r="24" fill="#ffffff" stroke="#3a5369" stroke-width="2" />
-                  <text x="80" y="74" font-weight="600">1. KDD</text>
-                  <text x="80" y="112" fill="#5b5e65" font-size="10">Proceso Base</text>
-                </g>
-
-                <g class="node-group" onclick="selectPipelineNode(2)" id="pnode-2">
-                  <circle cx="220" cy="70" r="24" fill="#ffffff" stroke="#3a5369" stroke-width="2" />
-                  <text x="220" y="74" font-weight="600">2. Hull</text>
-                  <text x="220" y="112" fill="#5b5e65" font-size="10">Cobertura</text>
-                </g>
-
-                <g class="node-group" onclick="selectPipelineNode(3)" id="pnode-3">
-                  <circle cx="360" cy="70" r="24" fill="#ffffff" stroke="#456152" stroke-width="2" />
-                  <text x="360" y="74" font-weight="600">3. Estratos</text>
-                  <text x="360" y="112" fill="#5b5e65" font-size="10">Proporciones</text>
-                </g>
-
-                <g class="node-group" onclick="selectPipelineNode(4)" id="pnode-4">
-                  <circle cx="500" cy="70" r="24" fill="#ffffff" stroke="#456152" stroke-width="2" />
-                  <text x="500" y="74" font-weight="600">4. Progr.</text>
-                  <text x="500" y="112" fill="#5b5e65" font-size="10">Estabilidad W</text>
-                </g>
-
-                <g class="node-group" onclick="selectPipelineNode(5)" id="pnode-5">
-                  <circle cx="640" cy="70" r="24" fill="#ffffff" stroke="#7c5445" stroke-width="2" />
-                  <text x="640" y="74" font-weight="600">5. Sistem.</text>
-                  <text x="640" y="112" fill="#5b5e65" font-size="10">FPS y Faltantes</text>
-                </g>
-
-                <g class="node-group" onclick="selectPipelineNode(6)" id="pnode-6">
-                  <circle cx="780" cy="70" r="24" fill="#ffffff" stroke="#7c5445" stroke-width="2" />
-                  <text x="780" y="74" font-weight="600">6. Limpieza</text>
-                  <text x="780" y="112" fill="#5b5e65" font-size="10">Ortogonalidad</text>
-                </g>
-
-                <!-- Nodos Fila 2 (regreso hacia redes) -->
-                <g class="node-group" onclick="selectPipelineNode(7)" id="pnode-7">
-                  <circle cx="780" cy="210" r="24" fill="#ffffff" stroke="#3a5369" stroke-width="2" />
-                  <text x="780" y="214" font-weight="600">7. Outliers</text>
-                  <text x="780" y="252" fill="#5b5e65" font-size="10">KNN y Tukey</text>
-                </g>
-
-                <g class="node-group" onclick="selectPipelineNode(8)" id="pnode-8">
-                  <circle cx="640" cy="210" r="24" fill="#ffffff" stroke="#3a5369" stroke-width="2" />
-                  <text x="640" y="214" font-weight="600">8. Imputa</text>
-                  <text x="640" y="252" fill="#5b5e65" font-size="10">DBSCAN y Bartlett</text>
-                </g>
-
-                <g class="node-group" onclick="selectPipelineNode(9)" id="pnode-9">
-                  <circle cx="500" cy="210" r="24" fill="#ffffff" stroke="#456152" stroke-width="2" />
-                  <text x="500" y="214" font-weight="600">9. Neurona</text>
-                  <text x="500" y="252" fill="#5b5e65" font-size="10">Perceptrón</text>
-                </g>
-
-                <g class="node-group" onclick="selectPipelineNode(10)" id="pnode-10">
-                  <circle cx="360" cy="210" r="24" fill="#ffffff" stroke="#456152" stroke-width="2" />
-                  <text x="360" y="214" font-weight="600">10. XOR</text>
-                  <text x="360" y="252" fill="#5b5e65" font-size="10">Backpropagation</text>
-                </g>
-
-                <g class="node-group" onclick="selectPipelineNode(11)" id="pnode-11">
-                  <circle cx="220" cy="210" r="24" fill="#ffffff" stroke="#69655f" stroke-width="2" />
-                  <text x="220" y="214" font-weight="600">11. Escalas</text>
-                  <text x="220" y="252" fill="#5b5e65" font-size="10">Momento β</text>
-                </g>
-
-                <g class="node-group" onclick="selectPipelineNode(12)" id="pnode-12">
-                  <circle cx="80" cy="210" r="24" fill="#ffffff" stroke="#69655f" stroke-width="2" />
-                  <text x="80" y="214" font-weight="600">12. Topol.</text>
-                  <text x="80" y="252" fill="#5b5e65" font-size="10">Evitar Fuga</text>
-                </g>
-              </svg>
+            <!-- Canvas interactivo de nodos -->
+            <div class="lab-viewport" style="height: 400px; cursor: grab;" id="graphViewport">
+              <canvas id="knowledgeGraphCanvas"></canvas>
             </div>
 
-            <div class="lab-footer">
-              <div id="pipelineDescText">
-                Toca cualquier paso del diagrama arriba para ver su explicación y por qué lo necesitamos.
+            <!-- Ficha Inspectora del Nodo Seleccionado -->
+            <div class="node-inspector-card" id="nodeInspector">
+              <div class="inspector-header">
+                <div>
+                  <span class="inspector-badge" id="inspBlockBadge">Bloque I · Fundamentos y KDD</span>
+                  <h3 class="inspector-title" id="inspTitle">Nota 1 · Aprendizaje Supervisado vs No Supervisado</h3>
+                </div>
+                <div class="inspector-nav-group">
+                  <button class="btn-inspector-nav" id="btnInspPrev" onclick="navigateNode(-1)">⬅️ Anterior</button>
+                  <button class="btn-inspector-nav" id="btnInspNext" onclick="navigateNode(1)">Siguiente ➡️</button>
+                </div>
+              </div>
+
+              <p class="inspector-desc" id="inspDesc">
+                ¿Sabemos la respuesta correcta o no? Clasificación y Regresión frente a Clustering y Reglas de Asociación.
+              </p>
+
+              <div class="inspector-formula" id="inspFormula">
+                $$f: \mathcal{X} \to \mathcal{Y} \quad \text{vs} \quad \{\mathbf{x}_i\}_{i=1}^N$$
+              </div>
+
+              <div class="inspector-actions">
+                <span style="font-size: 0.775rem; color: var(--text-muted);" id="inspHint">
+                  💡 Tip: Puedes arrastrar cualquier nodo con el mouse o dar doble clic para ir directo al apunte.
+                </span>
+                <button class="btn-jump-note" id="btnJumpToNote" onclick="jumpToActiveNote()">
+                  📖 Saltar a la Nota Completa en los Apuntes (Nota 1) ↓
+                </button>
               </div>
             </div>
           </div>
@@ -1005,7 +1070,7 @@
           </div>
 
           <!-- NOTA 1 -->
-          <article class="topic-card searchable-target">
+          <article id="nota-1" class="topic-card searchable-target">
             <div class="topic-card-head">
               <h3 class="topic-card-title">Nota 1 · Aprendizaje Supervisado vs No Supervisado</h3>
               <div class="topic-meta-badges">
@@ -1157,7 +1222,7 @@
           </div>
 
           <!-- NOTA 4 -->
-          <article class="topic-card searchable-target">
+          <article id="nota-4" class="topic-card searchable-target">
             <div class="topic-card-head">
               <h3 class="topic-card-title">Nota 4 · Cobertura Convexa (*Convex Hull*) y Partición Train-Test</h3>
               <div class="topic-meta-badges">
@@ -1302,7 +1367,7 @@
           </div>
 
           <!-- NOTA 6 -->
-          <article class="topic-card searchable-target">
+          <article id="nota-6" class="topic-card searchable-target">
             <div class="topic-card-head">
               <h3 class="topic-card-title">Nota 6 · Recolección y la Regla Sagrada: P > 0</h3>
               <div class="topic-meta-badges">
@@ -1447,7 +1512,7 @@
           </div>
 
           <!-- NOTA 9 -->
-          <article class="topic-card searchable-target">
+          <article id="nota-9" class="topic-card searchable-target">
             <div class="topic-card-head">
               <h3 class="topic-card-title">Nota 9 · Muestreo Sistemático, Deducción de FPS y Tipos de Datos Faltantes</h3>
               <div class="topic-meta-badges">
@@ -1507,7 +1572,7 @@
           </div>
 
           <!-- NOTA 10 -->
-          <article class="topic-card searchable-target">
+          <article id="nota-10" class="topic-card searchable-target">
             <div class="topic-card-head">
               <h3 class="topic-card-title">Nota 10 · Embeddings, Distancia Coseno y Variables Ortogonales</h3>
               <div class="topic-meta-badges">
@@ -1567,7 +1632,7 @@
           </div>
 
           <!-- NOTA 11 -->
-          <article class="topic-card searchable-target">
+          <article id="nota-11" class="topic-card searchable-target">
             <div class="topic-card-head">
               <h3 class="topic-card-title">Nota 11 · Outliers Contextuales, IQR de Tukey y Detección con KNN</h3>
               <div class="topic-meta-badges">
@@ -1644,7 +1709,7 @@
           </div>
 
           <!-- NOTA 12 -->
-          <article class="topic-card searchable-target">
+          <article id="nota-12" class="topic-card searchable-target">
             <div class="topic-card-head">
               <h3 class="topic-card-title">Nota 12 · Prueba de Esfericidad e Imputación en 2 Etapas con DBSCAN</h3>
               <div class="topic-meta-badges">
@@ -1699,7 +1764,7 @@
           </div>
 
           <!-- NOTA 13 -->
-          <article class="topic-card searchable-target">
+          <article id="nota-13" class="topic-card searchable-target">
             <div class="topic-card-head">
               <h3 class="topic-card-title">Nota 13 · Biología Cerebral y la Neurona Artificial</h3>
               <div class="topic-meta-badges">
@@ -1799,7 +1864,7 @@
               <div class="lab-topbar">
                 <span class="lab-title">
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
-                  Laboratorio 5: Mueve el Hiperplano en 3D
+                  Laboratorio 5: Hiperplano en 3D (Rotación por Pesos y Desplazamiento por Bias)
                 </span>
                 <div class="lab-controls">
                   <div class="lab-slider">
@@ -1814,17 +1879,18 @@
                     <label>Bias b</label>
                     <input type="range" id="slB" min="-3" max="3" step="0.2" value="0.4" oninput="update3DPlane()">
                   </div>
-                  <button class="lab-btn" onclick="toggle3DSphericity()">Modo Bartlett</button>
+                  <button class="lab-btn" id="btnBartlettToggle" onclick="toggle3DSphericity()">Modo Bartlett</button>
+                  <button class="lab-btn" onclick="reset3DCamera()">Centrar</button>
                 </div>
               </div>
-              <div class="lab-viewport" id="threeView" style="height:360px;">
-                <!-- Three.js o Canvas 2D interactivo -->
-                <canvas id="fallbackPlaneCanvas" style="display:none;"></canvas>
+              <div class="lab-viewport" id="threeView" style="height:360px; cursor: grab;">
+                <canvas id="hyperplane3DCanvas"></canvas>
               </div>
               <div class="lab-footer">
                 <div id="threeDesc">
-                  Arrastra con el ratón para rotar el espacio 3D. Mueve los deslizadores para ver cómo los pesos giran el plano y el sesgo lo empuja.
+                  Arrastra con el ratón dentro del recuadro para rotar la cámara 3D. Mueve los deslizadores para ver cómo los pesos w rotan el plano y el sesgo b lo traslada.
                 </div>
+                <div class="lab-footer-stat" id="planeEqStat">1.2x₁ - 0.8x₂ + 0.4 = 0</div>
               </div>
             </div>
 
@@ -1854,7 +1920,7 @@
           </div>
 
           <!-- NOTA 15 -->
-          <article class="topic-card searchable-target">
+          <article id="nota-15" class="topic-card searchable-target">
             <div class="topic-card-head">
               <h3 class="topic-card-title">Nota 15 · La Pared del XOR y el Algoritmo de Backpropagation</h3>
               <div class="topic-badges">
@@ -1874,26 +1940,51 @@
               </p>
             </div>
 
-            <!-- LAB 6: XOR INTERACTIVO -->
+            <!-- LAB 6: XOR Y RED NEURONAL MULTICAPA -->
             <div class="lab-box">
               <div class="lab-topbar">
                 <span class="lab-title">
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg>
-                  Laboratorio 6: Demostración Visual del XOR
+                  Laboratorio 6: Demostración del XOR y Nodos de la Red
                 </span>
                 <div class="lab-controls">
-                  <button class="lab-btn active" id="btnXorSingle" onclick="switchXOR('single')">1 Línea (Perceptrón Falla)</button>
-                  <button class="lab-btn" id="btnXorMLP" onclick="switchXOR('mlp')">2 Líneas (Red Multicapa Resuelve)</button>
+                  <button class="lab-btn active" id="btnXorViewPlano" onclick="switchXorTab('plano')">📊 Plano 2D (Líneas)</button>
+                  <button class="lab-btn" id="btnXorViewNodos" onclick="switchXorTab('nodos')">🧠 Red Neuronal (Flujo por Nodos)</button>
                 </div>
               </div>
-              <div class="lab-viewport" style="height:320px;">
-                <canvas id="xorCanvas"></canvas>
-              </div>
-              <div class="lab-footer">
-                <div id="xorMsg">
-                  1 Sola Línea: Imposible separar los 4 puntos (error mínimo de 25%).
+
+              <!-- Pestaña 1: Plano 2D de Rectas -->
+              <div id="xorTabPlano">
+                <div class="lab-viewport" style="height:320px;">
+                  <canvas id="xorCanvas"></canvas>
                 </div>
-                <div class="lab-footer-stat" id="xorStat">Error: 25.0%</div>
+                <div class="lab-footer">
+                  <div style="display:flex; gap:0.5rem; align-items:center;">
+                    <button class="lab-btn active" id="btnXorSingle" onclick="switchXOR('single')">1 Línea (Falla 25%)</button>
+                    <button class="lab-btn" id="btnXorMLP" onclick="switchXOR('mlp')">2 Líneas Ocultas (100% Acierto)</button>
+                  </div>
+                  <div class="lab-footer-stat" id="xorStat">Error: 25.0%</div>
+                </div>
+              </div>
+
+              <!-- Pestaña 2: Diagrama de Nodos de la Red Neuronal -->
+              <div id="xorTabNodos" style="display:none;">
+                <div class="lab-viewport" style="height:320px;">
+                  <canvas id="nnNodesCanvas"></canvas>
+                </div>
+                <div class="lab-footer">
+                  <div style="display:flex; gap:0.4rem; align-items:center; flex-wrap:wrap;">
+                    <span style="font-size:0.775rem; font-weight:600; color:var(--text-main);">Probar Entradas:</span>
+                    <button class="lab-btn active" id="btnCase00" onclick="simulateNNCase(0, 0)">X=(0, 0) ➔ 0</button>
+                    <button class="lab-btn" id="btnCase01" onclick="simulateNNCase(0, 1)">X=(0, 1) ➔ 1</button>
+                    <button class="lab-btn" id="btnCase10" onclick="simulateNNCase(1, 0)">X=(1, 0) ➔ 1</button>
+                    <button class="lab-btn" id="btnCase11" onclick="simulateNNCase(1, 1)">X=(1, 1) ➔ 0</button>
+                  </div>
+                  <div class="lab-footer-stat" id="nnOutputStat">Salida Y = 0 (Correcto)</div>
+                </div>
+                <div style="padding:0.75rem 1.15rem; background:var(--bg-card); border-top:1px solid var(--border-subtle); font-size:0.825rem; color:var(--text-soft);" id="nnDescText">
+                  Haz clic en cualquiera de los botones de arriba para ver cómo los pulsos viajan por los nodos de entrada hacia los nodos ocultos y la salida.
+                </div>
               </div>
             </div>
 
@@ -1939,7 +2030,7 @@
           </div>
 
           <!-- NOTA 16 -->
-          <article class="topic-card searchable-target">
+          <article id="nota-16" class="topic-card searchable-target">
             <div class="topic-card-head">
               <h3 class="topic-card-title">Nota 16 · El Término de Momento y la Normalización Obligatoria</h3>
               <div class="topic-meta-badges">
@@ -2006,7 +2097,7 @@
           </div>
 
           <!-- NOTA 17 -->
-          <article class="topic-card searchable-target">
+          <article id="nota-17" class="topic-card searchable-target">
             <div class="topic-card-head">
               <h3 class="topic-card-title">Nota 17 · Búsqueda Coarse-to-Fine, Cuellos de Botella y Fuga de Datos</h3>
               <div class="topic-badges">
@@ -2229,9 +2320,239 @@
        SCRIPTS ROBUSTOS (KATEX, PIPELINE SVG, 6 SIMULADORES ACTIVOS)
        ========================================================================== -->
   <script>
+    // ==========================================================================
+    // DATA MODEL: LAS 17 SESIONES COMPLETAS DE MINERÍA DE DATOS
+    // ==========================================================================
+    const courseNodes = [
+      {
+        id: 1,
+        num: "1",
+        short: "1. Supervisado",
+        title: "Nota 1 · Aprendizaje Supervisado vs No Supervisado",
+        block: "Bloque I · Fundamentos y KDD",
+        color: "#3a5369",
+        desc: "¿Sabemos la respuesta correcta o no? Clasificación (categorías) y Regresión (números continuos) frente a Clustering (grupos espontáneos) y Reglas de Asociación.",
+        prev: null,
+        next: 2,
+        formula: "f: \\mathcal{X} \\to \\mathcal{Y} \\quad \\text{vs} \\quad \\{\\mathbf{x}_i\\}_{i=1}^N"
+      },
+      {
+        id: 2,
+        num: "2",
+        short: "2. Proceso KDD",
+        title: "Nota 2 · El Proceso KDD y los 4 Atributos de un Patrón",
+        block: "Bloque I · Fundamentos y KDD",
+        color: "#3a5369",
+        desc: "KDD no es magia: es un pipeline de 5 fases (Selección, Limpieza, Transformación, Minería, Evaluación). Un patrón real debe ser Frecuente, Válido, Comprensible y Útil.",
+        prev: 1,
+        next: 3,
+        formula: "\\text{Datos Crudos} \\to \\text{Objetivo} \\to \\text{Limpios} \\to \\text{Patrones} \\to \\text{Conocimiento}"
+      },
+      {
+        id: 3,
+        num: "3",
+        short: "3. Tres Pilares",
+        title: "Nota 3 · Los Tres Pilares de Cualquier Modelo",
+        block: "Bloque I · Fundamentos y KDD",
+        color: "#3a5369",
+        desc: "Todo modelo se responde con tres preguntas: ¿Cómo guardo lo aprendido? (Representación), ¿Cómo mido qué tan bien va? (Evaluación) y ¿Cómo busco los mejores parámetros? (Búsqueda).",
+        prev: 2,
+        next: 4,
+        formula: "\\text{Tríada: } \\{ \\text{Representación, Evaluación, Búsqueda} \\}"
+      },
+      {
+        id: 4,
+        num: "4",
+        short: "4. Convex Hull",
+        title: "Nota 4 · Cobertura Convexa (Convex Hull) y Train-Test",
+        block: "Bloque II · Muestreo y Población",
+        color: "#456152",
+        desc: "La liga elástica que rodea los datos: si un dato de prueba cae adentro, el modelo interpola con seguridad; si cae afuera, adivina a ciegas en territorio virgen.",
+        prev: 3,
+        next: 5,
+        formula: "\\mathbf{w}^T \\mathbf{x} + b = 0 \\quad \\text{en } \\mathbb{R}^D"
+      },
+      {
+        id: 5,
+        num: "5",
+        short: "5. Estratos",
+        title: "Nota 5 · Estratificación y la Trampa de los 12 Estratos",
+        block: "Bloque II · Muestreo y Población",
+        color: "#456152",
+        desc: "Al cruzar Género (2) × Turno (2) × Rendimiento (3) salen 12 estratos. Si uno queda casi vacío en Test, la métrica salta de 0% a 100% por puro azar. El random_state fija la semilla para repetir resultados.",
+        prev: 4,
+        next: 6,
+        formula: "k\\text{-Fold Cross Validation} \\quad \\& \\quad \\text{random\\_state}=42"
+      },
+      {
+        id: 6,
+        num: "6",
+        short: "6. Regla P > 0",
+        title: "Nota 6 · Recolección y la Regla Sagrada: P > 0",
+        block: "Bloque II · Muestreo y Población",
+        color: "#456152",
+        desc: "Para que un muestreo sea probabilístico y representativo, todo individuo de la población debe tener una probabilidad estrictamente mayor a cero de ser elegido (P > 0).",
+        prev: 5,
+        next: 7,
+        formula: "P(x_i \\in \\text{Muestra}) > 0 \\quad \\forall x_i \\in \\text{Población}"
+      },
+      {
+        id: 7,
+        num: "7",
+        short: "7. Progresivo W",
+        title: "Nota 7 · Muestreo Progresivo y la Ventana de Estabilidad (W)",
+        block: "Bloque II · Muestreo y Población",
+        color: "#456152",
+        desc: "¿Por qué no usar fórmulas fijas? En big data metemos datos por lotes crecientes. Cuando la estimación no se mueve más de un umbral \\epsilon durante W pasos seguidos, paramos y ahorramos cómputo.",
+        prev: 6,
+        next: 8,
+        formula: "|(\\mu_k - \\mu_{k-1}) / \\mu_{k-1}| < \\epsilon \\quad \\text{durante } W \\text{ pasos}"
+      },
+      {
+        id: 8,
+        num: "8",
+        short: "8. Arcos y Raros",
+        title: "Nota 8 · Poblaciones Complejas: Arcos y Clases Raras",
+        block: "Bloque II · Muestreo y Población",
+        color: "#456152",
+        desc: "Cuando los datos forman medias lunas entrelazadas o una clase tiene el 95% y otra el 5%, un muestreo ingenuo borra a la minoría. Se requiere muestreo guiado por densidad.",
+        prev: 7,
+        next: 9,
+        formula: "\\text{Preservación de curvatura en figuras no convexas}"
+      },
+      {
+        id: 9,
+        num: "9",
+        short: "9. FPS y Faltantes",
+        title: "Nota 9 · Muestreo Sistemático, Deducción de FPS y Tipos de Faltantes",
+        block: "Bloque III · Calidad y Espacios",
+        color: "#7c5445",
+        desc: "Cámaras industriales: calcular la menor tasa de fotos por segundo para atrapar intrusos sin quemar la GPU. Y los 3 tipos de faltantes: MCAR (puro accidente), MAR (explicable) y MNAR (tramposo).",
+        prev: 8,
+        next: 10,
+        formula: "FPS_{\\text{ML}} \\ge \\alpha \\cdot (V_{\\text{máx}} / L_{\\text{puerta}})"
+      },
+      {
+        id: 10,
+        num: "10",
+        short: "10. Ortogonalidad",
+        title: "Nota 10 · Embeddings, Distancia Coseno y Descriptores Ortogonales",
+        block: "Bloque III · Calidad y Espacios",
+        color: "#7c5445",
+        desc: "Medir similitud semántica con el ángulo entre flechas (1 - cos(θ)). Y la analogía del volante y el acelerador: dos variables deben ser ortogonales (correlación cero) para no distorsionar las distancias.",
+        prev: 9,
+        next: 11,
+        formula: "d_{\\cos}(\\mathbf{u}, \\mathbf{v}) = 1 - \\frac{\\mathbf{u} \\cdot \\mathbf{v}}{\\|\\mathbf{u}\\| \\|\\mathbf{v}\\|}"
+      },
+      {
+        id: 11,
+        num: "11",
+        short: "11. Outliers KNN",
+        title: "Nota 11 · Outliers Contextuales: Puebla vs Veracruz y KNN",
+        block: "Bloque III · Calidad y Espacios",
+        color: "#7c5445",
+        desc: "32°C es normal en el puerto jarocho pero una anomalía en la sierra poblana. Las cajas univariadas (IQR) no ven el peligro conjunto; KNN y DBSCAN sí lo detectan midiendo distancia y densidad.",
+        prev: 10,
+        next: 12,
+        formula: "\\text{Vallas Tukey: } [Q_1 - 1.5 \\cdot IQR, \\; Q_3 + 1.5 \\cdot IQR]"
+      },
+      {
+        id: 12,
+        num: "12",
+        short: "12. Bartlett / DBSCAN",
+        title: "Nota 12 · Prueba de Esfericidad e Imputación en 2 Etapas con DBSCAN",
+        block: "Bloque III · Calidad y Espacios",
+        color: "#7c5445",
+        desc: "La prueba de Bartlett: ¿canica redonda o balón de americano aplastado? Si las variables están correlacionadas, la distancia recta falla. Usamos DBSCAN en variables limpias e imputamos con la mediana del cluster.",
+        prev: 11,
+        next: 13,
+        formula: "\\text{Prueba de Bartlett: } H_0: \\mathbf{\\Sigma} \\propto \\mathbf{I} \\quad (\\text{Esfericidad})"
+      },
+      {
+        id: 13,
+        num: "13",
+        short: "13. Biología Neurona",
+        title: "Nota 13 · Biología Cerebral y la Neurona Artificial",
+        block: "Bloque IV · Redes Neuronales",
+        color: "#525660",
+        desc: "86 mil millones de neuronas. Dendritas = Entradas, Sinapsis = Pesos (perilla del DJ), Soma = Sumador, Umbral = Sesgo (el cadenero del antro) y Axón = Función hardlim (la ley del todo o nada).",
+        prev: 12,
+        next: 14,
+        formula: "n = \\sum w_i x_i + b \\implies a = \\text{hardlim}(n)"
+      },
+      {
+        id: 14,
+        num: "14",
+        short: "14. Rosenblatt",
+        title: "Nota 14 · Cómo Aprende el Perceptrón (Regla de Rosenblatt)",
+        block: "Bloque IV · Redes Neuronales",
+        color: "#525660",
+        desc: "Error e = t - a. Si falló, rotamos el hiperplano con los pesos y lo empujamos con el bias. La tasa de aprendizaje es el tiro de golf: driver al inicio para avanzar rápido y putter suave en el green para no oscilar.",
+        prev: 13,
+        next: 15,
+        formula: "\\mathbf{w}^{\\text{nuevo}} = \\mathbf{w}^{\\text{ant}} + \\eta \\cdot e \\cdot \\mathbf{x}^T"
+      },
+      {
+        id: 15,
+        num: "15",
+        short: "15. XOR y Backprop",
+        title: "Nota 15 · La Pared del XOR y el Algoritmo de Backpropagation",
+        block: "Bloque IV · Redes Neuronales",
+        color: "#525660",
+        desc: "Una sola línea no puede separar el XOR (error mínimo del 25%). Necesitamos dos rectas (capa oculta). Backpropagation reparte las culpas hacia atrás usando la regla de la cadena del cálculo diferencial.",
+        prev: 14,
+        next: 16,
+        formula: "\\frac{\\partial E}{\\partial w_{ij}} = \\frac{\\partial E}{\\partial a} \\cdot \\frac{\\partial a}{\\partial z} \\cdot \\frac{\\partial z}{\\partial w_{ij}}"
+      },
+      {
+        id: 16,
+        num: "16",
+        short: "16. Momento β",
+        title: "Nota 16 · El Término de Momento y la Normalización Obligatoria",
+        block: "Bloque IV · Redes Neuronales",
+        color: "#525660",
+        desc: "El descenso de gradiente oscila en zigzag en valles estrechos; el momento agrega inercia pesada (bola de boliche) para cancelar rebotes y acelerar hacia el fondo. Y por qué One-Hot evita inventar jerarquías falsas en colores.",
+        prev: 15,
+        next: 17,
+        formula: "\\Delta \\mathbf{w}_t = \\eta \\nabla E + \\beta \\Delta \\mathbf{w}_{t-1}"
+      },
+      {
+        id: 17,
+        num: "17",
+        short: "17. Topología y Fuga",
+        title: "Nota 17 · Búsqueda Coarse-to-Fine, Cuellos de Botella y Fuga de Datos",
+        block: "Bloque IV · Redes Neuronales",
+        color: "#525660",
+        desc: "Escalar antes de partir en Train y Test es un fraude experimental (Data Leakage). La búsqueda Coarse-to-Fine prueba primero en grande y luego refina. Y evitar cuellos de botella (embudos que destruyen información).",
+        prev: 16,
+        next: null,
+        formula: "\\text{Scaler.fit(X\\_train)} \\to \\text{Scaler.transform(X\\_test)}"
+      }
+    ];
+
+    // Conexiones causales entre notas
+    const courseEdges = [
+      [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7], [7, 8], [8, 9],
+      [9, 10], [10, 11], [11, 12], [12, 13], [13, 14], [14, 15], [15, 16], [16, 17],
+      // Conexiones cruzadas
+      [4, 14], [9, 12], [10, 16], [5, 17]
+    ];
+
+    // Estado del Grafo
+    let activeNodeId = 1;
+    let graphLayoutMode = 'flow'; // 'flow' o 'force'
+    let graphCanvas, gCtx;
+    let graphNodes = [];
+    let isDraggingNode = false;
+    let draggedNode = null;
+    let isPanning = false;
+    let panStartX = 0, panStartY = 0;
+    let panX = 0, panY = 0;
+    let graphZoom = 1;
+
     // Inicialización al cargar la página
     document.addEventListener("DOMContentLoaded", function() {
-      // 1. Render de KaTeX seguro
+      // 1. KaTeX seguro
       if (typeof renderMathInElement === "function") {
         try {
           renderMathInElement(document.body, {
@@ -2246,18 +2567,20 @@
         }
       }
 
-      // 2. Inicializar los laboratorios con protección contra fallos
+      // 2. Inicializar los laboratorios
+      try { initKnowledgeGraph(); } catch(e) { console.error("Error KnowledgeGraph:", e); }
       try { initHull(); } catch(e) { console.error("Error Hull:", e); }
       try { initProg(); } catch(e) { console.error("Error Prog:", e); }
       try { initOutlier(); } catch(e) { console.error("Error Outlier:", e); }
-      try { init3DOr2DPlane(); } catch(e) { console.error("Error 3D:", e); }
+      try { initNative3DPlane(); } catch(e) { console.error("Error 3D Plane:", e); }
       try { initXOR(); } catch(e) { console.error("Error XOR:", e); }
+      try { initNNNodesDiagram(); } catch(e) { console.error("Error NNDiagram:", e); }
       try { setupSearch(); } catch(e) { console.error("Error Search:", e); }
       try { setupScrollSpy(); } catch(e) { console.error("Error ScrollSpy:", e); }
     });
 
     // --------------------------------------------------------------------------
-    // BUSCADOR RÁPIDO
+    // BUSCADOR RÁPIDO CON FILTRO DE NODOS
     // --------------------------------------------------------------------------
     function setupSearch() {
       const input = document.getElementById("searchInput");
@@ -2273,6 +2596,15 @@
             el.classList.add("hidden-item");
           }
         });
+
+        // Filtrar nodos del grafo
+        if (graphNodes.length > 0) {
+          graphNodes.forEach(n => {
+            const match = !q || n.title.toLowerCase().includes(q) || n.desc.toLowerCase().includes(q) || n.short.toLowerCase().includes(q);
+            n.highlighted = match;
+          });
+          drawKnowledgeGraph();
+        }
       });
     }
 
@@ -2300,40 +2632,423 @@
     }
 
     // --------------------------------------------------------------------------
-    // 1. GRAFO SVG INTERACTIVO
+    // 1. MOTOR DEL GRAFO DE CONOCIMIENTO (17 NODOS INTERACTIVOS)
     // --------------------------------------------------------------------------
-    const pipelineData = {
-      1: { name: "1. KDD y Modelos", desc: "El ciclo de 5 fases para pasar de datos crudos a conocimiento real y los 3 pilares de cualquier modelo." },
-      2: { name: "2. Cobertura Convexa (Hull)", desc: "El perímetro elástico de tus datos: por qué tu modelo solo sabe predecir dentro de este límite." },
-      3: { name: "3. Estratificación", desc: "Asegurar que la muestra tenga las mismas proporciones que la realidad sin inventar categorías vacías." },
-      4: { name: "4. Muestreo Progresivo", desc: "Meter datos por lotes y parar cuando la ventana W muestre que el promedio ya no se mueve." },
-      5: { name: "5. Muestreo Sistemático y FPS", desc: "Monitoreo continuo de cámaras: calcular la tasa exacta de fotos por segundo para no gastar GPU." },
-      6: { name: "6. Limpieza y Ortogonalidad", desc: "Medir textos con distancias angulares (coseno) y asegurar que las variables sean independientes." },
-      7: { name: "7. Outliers: Puebla vs Veracruz", desc: "Por qué las cajas de Tukey no ven anomalías cuando hay dos o más variables juntas y cómo lo resuelve KNN." },
-      8: { name: "8. Imputación y Bartlett", desc: "Revisar si los datos forman canicas o balones aplastados para rellenar huecos usando comunidades DBSCAN." },
-      9: { name: "9. La Neurona y el Perceptrón", desc: "Imitar a la biología: entradas, volumen del DJ (pesos) y el cadenero del antro (sesgo)." },
-      10: { name: "10. La Barrera del XOR y Backprop", desc: "Por qué una sola línea no puede separar el XOR y cómo las capas ocultas se reparten culpas hacia atrás." },
-      11: { name: "11. Momento e Inercia", desc: "Frenar el zigzag al optimizar con inercia beta y la obligación estricta de normalizar las escalas." },
-      12: { name: "12. Topología y Fuga de Datos", desc: "Cómo probar redes sin engañarse: evitar normalizar antes de partir y prevenir cuellos de botella." }
-    };
+    function initKnowledgeGraph() {
+      graphCanvas = document.getElementById("knowledgeGraphCanvas");
+      if (!graphCanvas) return;
+      gCtx = graphCanvas.getContext("2d");
+      resizeKnowledgeGraph();
 
-    function selectPipelineNode(id) {
-      document.querySelectorAll(".node-group circle").forEach(c => c.setAttribute("fill", "#ffffff"));
-      const sel = document.getElementById("pnode-" + id);
-      if (sel) {
-        sel.querySelector("circle").setAttribute("fill", "#e5e3dd");
+      // Inicializar nodos
+      graphNodes = courseNodes.map(c => ({
+        ...c,
+        x: 0, y: 0,
+        vx: 0, vy: 0,
+        radius: 23,
+        highlighted: true
+      }));
+
+      calcFlowPositions();
+      setupGraphEvents();
+      updateInspectorCard(activeNodeId);
+
+      // Loop de render y física
+      requestAnimationFrame(graphAnimationLoop);
+    }
+
+    function resizeKnowledgeGraph() {
+      const container = document.getElementById("graphViewport");
+      if (!container || !graphCanvas) return;
+      const rect = container.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      graphCanvas.width = rect.width * dpr;
+      graphCanvas.height = rect.height * dpr;
+      gCtx.scale(dpr, dpr);
+    }
+
+    window.addEventListener("resize", () => {
+      if (graphCanvas) {
+        resizeKnowledgeGraph();
+        if (graphLayoutMode === 'flow') calcFlowPositions();
       }
-      const info = pipelineData[id];
-      if (info) {
-        document.getElementById("pipelineDescText").innerHTML = `
-          <strong>${info.name}:</strong> ${info.desc}
-        `;
+      if (hCanvas) fitCanvas(hCanvas), drawHull();
+      if (pCanvas) fitCanvas(pCanvas), drawProg();
+      if (oCanvas) fitCanvas(oCanvas), drawOutliers();
+      if (xCanvas) fitCanvas(xCanvas), drawXOR();
+      if (nnCanvas) fitCanvas(nnCanvas), drawNNNodes();
+      if (p3dCanvas) fitCanvas(p3dCanvas), render3DScene();
+    });
+
+    // Calcula posiciones en serpiente organizada de 4 filas
+    function calcFlowPositions() {
+      const container = document.getElementById("graphViewport");
+      const w = container ? container.clientWidth : 800;
+      const h = container ? container.clientHeight : 400;
+
+      // 4 Filas: 1-5, 6-9, 10-13, 14-17
+      const rows = [
+        [1, 2, 3, 4, 5],
+        [9, 8, 7, 6],
+        [10, 11, 12, 13],
+        [17, 16, 15, 14]
+      ];
+
+      const startY = 55;
+      const rowHeight = (h - 110) / 3;
+
+      rows.forEach((row, rIdx) => {
+        const y = startY + rIdx * rowHeight;
+        const count = row.length;
+        const margin = 80;
+        const stepX = (w - 2 * margin) / (count - 1 || 1);
+
+        row.forEach((id, cIdx) => {
+          const node = graphNodes.find(n => n.id === id);
+          if (node) {
+            node.targetX = margin + cIdx * stepX;
+            node.targetY = y;
+            if (graphLayoutMode === 'flow') {
+              node.x = node.targetX;
+              node.y = node.targetY;
+            }
+          }
+        });
+      });
+    }
+
+    function switchGraphLayout(mode) {
+      graphLayoutMode = mode;
+      document.getElementById("btnLayoutFlow").classList.toggle("active", mode === 'flow');
+      document.getElementById("btnLayoutForce").classList.toggle("active", mode === 'force');
+
+      if (mode === 'flow') {
+        calcFlowPositions();
+        graphNodes.forEach(n => {
+          n.x = n.targetX;
+          n.y = n.targetY;
+          n.vx = 0; n.vy = 0;
+        });
+      } else {
+        // En modo libre darles impulso
+        graphNodes.forEach(n => {
+          n.vx = (Math.random() - 0.5) * 5;
+          n.vy = (Math.random() - 0.5) * 5;
+        });
+      }
+      drawKnowledgeGraph();
+    }
+
+    function resetGraphView() {
+      panX = 0;
+      panY = 0;
+      graphZoom = 1;
+      if (graphLayoutMode === 'flow') calcFlowPositions();
+      drawKnowledgeGraph();
+    }
+
+    function setupGraphEvents() {
+      let isClick = true;
+      let startX = 0, startY = 0;
+
+      graphCanvas.addEventListener("mousedown", e => {
+        const rect = graphCanvas.getBoundingClientRect();
+        const mouseX = (e.clientX - rect.left - panX) / graphZoom;
+        const mouseY = (e.clientY - rect.top - panY) / graphZoom;
+
+        startX = e.clientX;
+        startY = e.clientY;
+        isClick = true;
+
+        // Verificar si pulsó en un nodo
+        let clicked = null;
+        for (let i = graphNodes.length - 1; i >= 0; i--) {
+          const n = graphNodes[i];
+          const dist = Math.hypot(mouseX - n.x, mouseY - n.y);
+          if (dist <= n.radius + 4) {
+            clicked = n;
+            break;
+          }
+        }
+
+        if (clicked) {
+          isDraggingNode = true;
+          draggedNode = clicked;
+          graphCanvas.style.cursor = "grabbing";
+        } else {
+          isPanning = true;
+          panStartX = e.clientX - panX;
+          panStartY = e.clientY - panY;
+          graphCanvas.style.cursor = "move";
+        }
+      });
+
+      window.addEventListener("mousemove", e => {
+        if (!graphCanvas) return;
+        const rect = graphCanvas.getBoundingClientRect();
+
+        if (Math.hypot(e.clientX - startX, e.clientY - startY) > 5) {
+          isClick = false;
+        }
+
+        if (isDraggingNode && draggedNode) {
+          const mouseX = (e.clientX - rect.left - panX) / graphZoom;
+          const mouseY = (e.clientY - rect.top - panY) / graphZoom;
+          draggedNode.x = mouseX;
+          draggedNode.y = mouseY;
+          draggedNode.vx = 0;
+          draggedNode.vy = 0;
+        } else if (isPanning) {
+          panX = e.clientX - panStartX;
+          panY = e.clientY - panStartY;
+        } else {
+          // Hover cursor
+          const mouseX = (e.clientX - rect.left - panX) / graphZoom;
+          const mouseY = (e.clientY - rect.top - panY) / graphZoom;
+          let hovering = false;
+          for (let n of graphNodes) {
+            if (Math.hypot(mouseX - n.x, mouseY - n.y) <= n.radius + 2) {
+              hovering = true;
+              break;
+            }
+          }
+          graphCanvas.style.cursor = hovering ? "pointer" : "grab";
+        }
+      });
+
+      window.addEventListener("mouseup", e => {
+        if (isClick && !isDraggingNode && !isPanning) {
+          // Click sin arrastre
+        }
+
+        if (isClick && draggedNode) {
+          // Click en un nodo!
+          selectNode(draggedNode.id);
+        }
+
+        isDraggingNode = false;
+        draggedNode = null;
+        isPanning = false;
+        if (graphCanvas) graphCanvas.style.cursor = "grab";
+      });
+
+      // Doble clic en nodo para saltar directo al apunte
+      graphCanvas.addEventListener("dblclick", e => {
+        const rect = graphCanvas.getBoundingClientRect();
+        const mouseX = (e.clientX - rect.left - panX) / graphZoom;
+        const mouseY = (e.clientY - rect.top - panY) / graphZoom;
+
+        for (let n of graphNodes) {
+          if (Math.hypot(mouseX - n.x, mouseY - n.y) <= n.radius + 4) {
+            selectNode(n.id);
+            jumpToActiveNote();
+            break;
+          }
+        }
+      });
+    }
+
+    function selectNode(id) {
+      activeNodeId = id;
+      updateInspectorCard(id);
+      drawKnowledgeGraph();
+    }
+
+    function navigateNode(dir) {
+      const nextId = activeNodeId + dir;
+      if (nextId >= 1 && nextId <= 17) {
+        selectNode(nextId);
       }
     }
 
-    function resetPipelineSelection() {
-      document.querySelectorAll(".node-group circle").forEach(c => c.setAttribute("fill", "#ffffff"));
-      document.getElementById("pipelineDescText").innerText = "Toca cualquier paso del diagrama arriba para ver su explicación y por qué lo necesitamos.";
+    function updateInspectorCard(id) {
+      const node = courseNodes.find(n => n.id === id);
+      if (!node) return;
+
+      document.getElementById("inspBlockBadge").innerText = node.block;
+      document.getElementById("inspTitle").innerText = node.title;
+      document.getElementById("inspDesc").innerText = node.desc;
+      document.getElementById("inspFormula").innerHTML = `$$\\text{Clave: } ${node.formula}$$`;
+      document.getElementById("btnJumpToNote").innerText = `📖 Saltar a la Nota Completa en los Apuntes (Nota ${node.num}) ↓`;
+
+      document.getElementById("btnInspPrev").disabled = (id <= 1);
+      document.getElementById("btnInspNext").disabled = (id >= 17);
+
+      // Re-render KaTeX in formula box
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.getElementById("inspFormula"), {
+          delimiters: [{left: "$$", right: "$$", display: true}]
+        });
+      }
+    }
+
+    // Salto suave directo al artículo y animación de pulso
+    function jumpToActiveNote() {
+      jumpToNote(activeNodeId);
+    }
+
+    function jumpToNote(id) {
+      const target = document.getElementById("nota-" + id);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        target.classList.remove('target-pulse');
+        void target.offsetWidth; // forzar reflow
+        target.classList.add('target-pulse');
+      }
+    }
+
+    // Loop de render y física
+    function graphAnimationLoop() {
+      if (graphLayoutMode === 'force') {
+        updateGraphPhysics();
+      }
+      drawKnowledgeGraph();
+      requestAnimationFrame(graphAnimationLoop);
+    }
+
+    function updateGraphPhysics() {
+      const container = document.getElementById("graphViewport");
+      const w = container ? container.clientWidth : 800;
+      const h = container ? container.clientHeight : 400;
+      const cx = w / 2, cy = h / 2;
+
+      // 1. Repulsión entre nodos (Coulomb)
+      for (let i = 0; i < graphNodes.length; i++) {
+        for (let j = i + 1; j < graphNodes.length; j++) {
+          const n1 = graphNodes[i];
+          const n2 = graphNodes[j];
+          let dx = n2.x - n1.x;
+          let dy = n2.y - n1.y;
+          let dist = Math.hypot(dx, dy) || 1;
+          if (dist < 220) {
+            const force = (220 - dist) * 0.08 / dist;
+            if (!n1.isDragging) { n1.vx -= dx * force; n1.vy -= dy * force; }
+            if (!n2.isDragging) { n2.vx += dx * force; n2.vy += dy * force; }
+          }
+        }
+      }
+
+      // 2. Atracción por aristas (Hooke)
+      for (let [u, v] of courseEdges) {
+        const n1 = graphNodes.find(n => n.id === u);
+        const n2 = graphNodes.find(n => n.id === v);
+        if (n1 && n2) {
+          let dx = n2.x - n1.x;
+          let dy = n2.y - n1.y;
+          let dist = Math.hypot(dx, dy) || 1;
+          const targetDist = 95;
+          const force = (dist - targetDist) * 0.04;
+          const fx = (dx / dist) * force;
+          const fy = (dy / dist) * force;
+          if (!n1.isDragging) { n1.vx += fx; n1.vy += fy; }
+          if (!n2.isDragging) { n2.vx -= fx; n2.vy -= fy; }
+        }
+      }
+
+      // 3. Atracción al centro y fricción
+      for (let n of graphNodes) {
+        if (!n.isDragging) {
+          n.vx += (cx - n.x) * 0.005;
+          n.vy += (cy - n.y) * 0.005;
+          n.vx *= 0.88;
+          n.vy *= 0.88;
+          n.x += n.vx;
+          n.y += n.vy;
+        }
+      }
+    }
+
+    function drawKnowledgeGraph() {
+      if (!gCtx || !graphCanvas) return;
+      const rect = graphCanvas.getBoundingClientRect();
+      const w = rect.width;
+      const h = rect.height;
+
+      gCtx.save();
+      gCtx.clearRect(0, 0, w, h);
+      gCtx.translate(panX, panY);
+      gCtx.scale(graphZoom, graphZoom);
+
+      // Dibujar Aristas (Flechas)
+      for (let [u, v] of courseEdges) {
+        const n1 = graphNodes.find(n => n.id === u);
+        const n2 = graphNodes.find(n => n.id === v);
+        if (!n1 || !n2) continue;
+
+        const isConnected = (activeNodeId === u || activeNodeId === v);
+        const color = isConnected ? "#3a5369" : "#d8d6cf";
+        const width = isConnected ? 2.5 : 1.2;
+
+        drawDirectedArrow(gCtx, n1.x, n1.y, n2.x, n2.y, color, width, isConnected);
+      }
+
+      // Dibujar Nodos
+      for (let node of graphNodes) {
+        const isSel = (node.id === activeNodeId);
+        const isDim = !node.highlighted;
+
+        gCtx.save();
+        if (isDim) gCtx.globalAlpha = 0.25;
+
+        // Halo si está seleccionado
+        if (isSel) {
+          gCtx.beginPath();
+          gCtx.arc(node.x, node.y, node.radius + 6, 0, Math.PI * 2);
+          gCtx.fillStyle = "rgba(58, 83, 105, 0.16)";
+          gCtx.fill();
+        }
+
+        // Círculo del nodo
+        gCtx.beginPath();
+        gCtx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
+        gCtx.fillStyle = isSel ? "#ffffff" : "#ffffff";
+        gCtx.fill();
+
+        gCtx.strokeStyle = isSel ? "#3a5369" : node.color;
+        gCtx.lineWidth = isSel ? 3 : 2;
+        gCtx.stroke();
+
+        // Número interior
+        gCtx.font = "bold 11px var(--font-mono)";
+        gCtx.fillStyle = isSel ? "#3a5369" : "#232528";
+        gCtx.textAlign = "center";
+        gCtx.textBaseline = "middle";
+        gCtx.fillText(node.num, node.x, node.y - 1);
+
+        // Etiqueta abajo
+        gCtx.font = isSel ? "bold 10px var(--font-sans)" : "10px var(--font-sans)";
+        gCtx.fillStyle = isSel ? "#232528" : "#5b5e65";
+        gCtx.fillText(node.short, node.x, node.y + node.radius + 13);
+
+        gCtx.restore();
+      }
+
+      gCtx.restore();
+    }
+
+    function drawDirectedArrow(ctx, fromX, fromY, toX, toY, color, width, isActive) {
+      const angle = Math.atan2(toY - fromY, toX - fromX);
+      const startX = fromX + Math.cos(angle) * 23;
+      const startY = fromY + Math.sin(angle) * 23;
+      const endX = toX - Math.cos(angle) * 26;
+      const endY = toY - Math.sin(angle) * 26;
+
+      ctx.beginPath();
+      ctx.moveTo(startX, startY);
+      ctx.lineTo(endX, endY);
+      ctx.strokeStyle = color;
+      ctx.lineWidth = width;
+      ctx.stroke();
+
+      // Flecha triangular
+      const headLen = isActive ? 8 : 6;
+      ctx.beginPath();
+      ctx.moveTo(endX, endY);
+      ctx.lineTo(endX - headLen * Math.cos(angle - Math.PI / 6), endY - headLen * Math.sin(angle - Math.PI / 6));
+      ctx.lineTo(endX - headLen * Math.cos(angle + Math.PI / 6), endY - headLen * Math.sin(angle + Math.PI / 6));
+      ctx.closePath();
+      ctx.fillStyle = color;
+      ctx.fill();
     }
 
     // --------------------------------------------------------------------------
@@ -2369,6 +3084,7 @@
     }
 
     function fitCanvas(c) {
+      if (!c || !c.parentElement) return;
       c.width = c.parentElement.clientWidth || 600;
       c.height = c.parentElement.clientHeight || 340;
     }
@@ -2427,7 +3143,6 @@
       if (!hCtx) return;
       hCtx.clearRect(0, 0, hCanvas.width, hCanvas.height);
 
-      // Dibujar Polígono
       if (hHull.length > 2) {
         hCtx.beginPath();
         hCtx.moveTo(hHull[0].x, hHull[0].y);
@@ -2440,7 +3155,6 @@
         hCtx.stroke();
       }
 
-      // Puntos de Entrenamiento (Azul piedra)
       for (let p of hTrain) {
         hCtx.beginPath();
         hCtx.arc(p.x, p.y, 4, 0, Math.PI * 2);
@@ -2448,7 +3162,6 @@
         hCtx.fill();
       }
 
-      // Puntos de Prueba (Verde si interpola, Arcilla si extrapola)
       for (let p of hTest) {
         hCtx.beginPath();
         hCtx.arc(p.x, p.y, 6, 0, Math.PI * 2);
@@ -2530,7 +3243,6 @@
       const w = pCanvas.width, h = pCanvas.height;
       const pad = 40;
 
-      // Línea objetivo real
       const targetY = h / 2;
       pCtx.strokeStyle = "#d4d1c8";
       pCtx.setLineDash([4, 4]);
@@ -2544,7 +3256,6 @@
       pCtx.fillStyle = "#878a92";
       pCtx.fillText("Valor Real Poblacional (μ = 5.0)", w - 190, targetY - 6);
 
-      // Trazo de la curva
       if (pSizes.length > 1) {
         pCtx.beginPath();
         pCtx.strokeStyle = "#3a5369";
@@ -2557,7 +3268,6 @@
         }
         pCtx.stroke();
 
-        // Puntos
         for (let i = 0; i < pSizes.length; i++) {
           const x = pad + (pSizes[i] / 500) * (w - 2 * pad);
           const y = targetY - (pMeans[i] - pReal) * 110;
@@ -2603,21 +3313,15 @@
     function drawOutliers() {
       if (!oCtx) return;
       oCtx.clearRect(0, 0, oCanvas.width, oCanvas.height);
-      const w = oCanvas.width, h = oCanvas.height;
-
-      // Nube Puebla (Templado, humedad baja)
       const pueblaPts = [
         {x: 140, y: 220}, {x: 160, y: 200}, {x: 130, y: 240}, {x: 170, y: 210}, {x: 150, y: 230}
       ];
-      // Nube Veracruz (Caluroso, humedad alta)
       const veracruzPts = [
         {x: 360, y: 90}, {x: 380, y: 80}, {x: 350, y: 110}, {x: 390, y: 100}, {x: 370, y: 95}
       ];
-      // Outlier Contextual (32°C pero en la montaña)
       const anomalyPt = {x: 180, y: 95};
 
       if (oMode === 'tukey') {
-        // Vallas de Tukey
         oCtx.strokeStyle = "#d4d1c8";
         oCtx.strokeRect(100, 50, 320, 210);
         oCtx.font = "10px var(--font-mono)";
@@ -2625,7 +3329,6 @@
         oCtx.fillText("Valla combinada de Tukey", 110, 68);
       }
 
-      // Dibujar Puebla
       pueblaPts.forEach(p => {
         oCtx.beginPath();
         oCtx.arc(p.x, p.y, 4.5, 0, Math.PI * 2);
@@ -2633,7 +3336,6 @@
         oCtx.fill();
       });
 
-      // Dibujar Veracruz
       veracruzPts.forEach(p => {
         oCtx.beginPath();
         oCtx.arc(p.x, p.y, 4.5, 0, Math.PI * 2);
@@ -2641,7 +3343,6 @@
         oCtx.fill();
       });
 
-      // Dibujar Anomalia
       oCtx.beginPath();
       if (oMode === 'knn') {
         oCtx.arc(anomalyPt.x, anomalyPt.y, 16, 0, Math.PI * 2);
@@ -2664,138 +3365,189 @@
     }
 
     // --------------------------------------------------------------------------
-    // 5. LABORATORIO 3D HIPERPLANO (THREE.JS + FALLBACK 2D SEGURO)
+    // 5. LABORATORIO 3D NATIVO (SIN LIBRERÍAS EXTERNAS, 100% FIABLE)
     // --------------------------------------------------------------------------
-    let tScene, tCamera, tRenderer, tPlaneMesh, tGroup;
-    let tIsBartlett = false;
+    let p3dCanvas, p3dCtx;
+    let rotX = 0.45, rotY = -0.65;
+    let isBartlett3D = false;
+    let pts3D = [];
 
-    function init3DOr2DPlane() {
-      const container = document.getElementById("threeView");
-      if (!container) return;
+    function initNative3DPlane() {
+      p3dCanvas = document.getElementById("hyperplane3DCanvas");
+      if (!p3dCanvas) return;
+      p3dCtx = p3dCanvas.getContext("2d");
+      fitCanvas(p3dCanvas);
+      gen3DPoints();
 
-      if (typeof THREE !== "undefined") {
-        try {
-          const w = container.clientWidth || 500;
-          const h = container.clientHeight || 350;
+      let isDown = false, lastX = 0, lastY = 0;
+      p3dCanvas.addEventListener("mousedown", e => {
+        isDown = true;
+        lastX = e.clientX;
+        lastY = e.clientY;
+      });
+      window.addEventListener("mouseup", () => isDown = false);
+      window.addEventListener("mousemove", e => {
+        if (!isDown) return;
+        const dx = e.clientX - lastX;
+        const dy = e.clientY - lastY;
+        rotY += dx * 0.01;
+        rotX += dy * 0.01;
+        lastX = e.clientX;
+        lastY = e.clientY;
+        render3DScene();
+      });
 
-          tScene = new THREE.Scene();
-          tScene.background = new THREE.Color(0xfbfbfa);
-
-          tCamera = new THREE.PerspectiveCamera(45, w / h, 0.1, 100);
-          tCamera.position.set(4, 3, 6);
-          tCamera.lookAt(0, 0, 0);
-
-          tRenderer = new THREE.WebGLRenderer({ antialias: true });
-          tRenderer.setSize(w, h);
-          container.appendChild(tRenderer.domElement);
-
-          const light = new THREE.AmbientLight(0xffffff, 0.9);
-          tScene.add(light);
-
-          const pGeo = new THREE.PlaneGeometry(5, 5);
-          const pMat = new THREE.MeshBasicMaterial({ color: 0x3a5369, transparent: true, opacity: 0.35, side: THREE.DoubleSide });
-          tPlaneMesh = new THREE.Mesh(pGeo, pMat);
-          tScene.add(tPlaneMesh);
-
-          tGroup = new THREE.Group();
-          tScene.add(tGroup);
-          create3DPoints();
-
-          // Mouse rotate
-          let isDown = false, px = 0, py = 0;
-          container.addEventListener("mousedown", e => { isDown = true; px = e.clientX; py = e.clientY; });
-          window.addEventListener("mouseup", () => isDown = false);
-          container.addEventListener("mousemove", e => {
-            if (!isDown) return;
-            tScene.rotation.y += (e.clientX - px) * 0.01;
-            tScene.rotation.x += (e.clientY - py) * 0.01;
-            px = e.clientX; py = e.clientY;
-            tRenderer.render(tScene, tCamera);
-          });
-
-          update3DPlane();
-          return;
-        } catch (e) {
-          console.warn("Fallo WebGL, activando Canvas 2D alternativo:", e);
-        }
-      }
-
-      // Si falla WebGL, usar canvas 2D
-      const fbCanvas = document.getElementById("fallbackPlaneCanvas");
-      fbCanvas.style.display = "block";
-      fitCanvas(fbCanvas);
-      draw2DPlaneFallback();
+      render3DScene();
     }
 
-    function create3DPoints() {
-      if (!tGroup) return;
-      while (tGroup.children.length > 0) tGroup.remove(tGroup.children[0]);
-      const sGeo = new THREE.SphereGeometry(0.12, 10, 10);
-      const m1 = new THREE.MeshBasicMaterial({ color: 0x456152 });
-      const m2 = new THREE.MeshBasicMaterial({ color: 0x7c5445 });
-
+    function gen3DPoints() {
+      pts3D = [];
       for (let i = 0; i < 40; i++) {
-        const mesh = new THREE.Mesh(sGeo, i < 20 ? m1 : m2);
-        if (tIsBartlett) {
-          // Elipsoide estirado
-          const t = (Math.random() - 0.5) * 3;
-          mesh.position.set(t, t * 0.8 + (Math.random() - 0.5) * 0.3, (Math.random() - 0.5) * 0.3);
+        const cls = i < 20 ? 0 : 1;
+        if (isBartlett3D) {
+          // Elipsoide estirado tipo balón de fútbol americano
+          const t = (Math.random() - 0.5) * 3.2;
+          pts3D.push({
+            x: t,
+            y: t * 0.85 + (Math.random() - 0.5) * 0.4,
+            z: (Math.random() - 0.5) * 0.5,
+            cls
+          });
         } else {
-          const off = i < 20 ? -1.2 : 1.2;
-          mesh.position.set((Math.random() - 0.5) * 1.5 + off, (Math.random() - 0.5) * 1.5, (Math.random() - 0.5) * 1.5);
+          // Nubes esféricas separables
+          const offset = cls === 0 ? -1.2 : 1.2;
+          pts3D.push({
+            x: (Math.random() - 0.5) * 1.5 + offset,
+            y: (Math.random() - 0.5) * 1.5,
+            z: (Math.random() - 0.5) * 1.5,
+            cls
+          });
         }
-        tGroup.add(mesh);
-      }
-      if (tRenderer) tRenderer.render(tScene, tCamera);
-    }
-
-    function update3DPlane() {
-      const w1 = parseFloat(document.getElementById("slW1").value);
-      const w2 = parseFloat(document.getElementById("slW2").value);
-      const b = parseFloat(document.getElementById("slB").value);
-
-      if (tPlaneMesh && tRenderer) {
-        tPlaneMesh.rotation.z = Math.atan2(w2, w1);
-        tPlaneMesh.position.x = -b * 0.5;
-        tRenderer.render(tScene, tCamera);
-      } else {
-        draw2DPlaneFallback();
       }
     }
 
     function toggle3DSphericity() {
-      tIsBartlett = !tIsBartlett;
+      isBartlett3D = !isBartlett3D;
+      document.getElementById("btnBartlettToggle").classList.toggle("active", isBartlett3D);
       const desc = document.getElementById("threeDesc");
-      if (tIsBartlett) {
-        desc.innerHTML = "<strong>Modo Bartlett (Balón de Americano):</strong> Variables correlacionadas. La nube se aplasta y la distancia recta euclidiana falla.";
+      if (isBartlett3D) {
+        desc.innerHTML = "<strong>Modo Bartlett (Balón de Americano):</strong> Las variables están correlacionadas y la nube se estira. La distancia euclidiana falla y se necesita DBSCAN.";
       } else {
-        desc.innerHTML = "Arrastra con el ratón para rotar el espacio 3D. Mueve los deslizadores para ver cómo los pesos giran el plano y el sesgo lo empuja.";
+        desc.innerHTML = "Arrastra con el ratón dentro del recuadro para rotar la cámara 3D. Mueve los deslizadores para ver cómo los pesos w rotan el plano y el sesgo b lo traslada.";
       }
-      create3DPoints();
+      gen3DPoints();
+      render3DScene();
     }
 
-    function draw2DPlaneFallback() {
-      const fb = document.getElementById("fallbackPlaneCanvas");
-      if (!fb) return;
-      const ctx = fb.getContext("2d");
-      ctx.clearRect(0, 0, fb.width, fb.height);
+    function reset3DCamera() {
+      rotX = 0.45;
+      rotY = -0.65;
+      render3DScene();
+    }
+
+    function update3DPlane() {
+      render3DScene();
+    }
+
+    function project3D(x, y, z, cx, cy, scale) {
+      const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
+      const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
+
+      // Rotación Y
+      let x1 = x * cosY - z * sinY;
+      let z1 = x * sinY + z * cosY;
+
+      // Rotación X
+      let y1 = y * cosX - z1 * sinX;
+      let z2 = y * sinX + z1 * cosX;
+
+      return {
+        px: cx + x1 * scale,
+        py: cy - y1 * scale,
+        depth: z2
+      };
+    }
+
+    function render3DScene() {
+      if (!p3dCtx || !p3dCanvas) return;
+      p3dCtx.clearRect(0, 0, p3dCanvas.width, p3dCanvas.height);
+
+      const cx = p3dCanvas.width / 2;
+      const cy = p3dCanvas.height / 2;
+      const scale = 55;
+
       const w1 = parseFloat(document.getElementById("slW1").value);
       const w2 = parseFloat(document.getElementById("slW2").value);
       const b = parseFloat(document.getElementById("slB").value);
+      document.getElementById("planeEqStat").innerText = `${w1.toFixed(1)}x₁ + ${w2.toFixed(1)}x₂ + ${b.toFixed(1)} = 0`;
 
-      ctx.strokeStyle = "#3a5369";
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(0, fb.height / 2 - (-b * 40));
-      ctx.lineTo(fb.width, fb.height / 2 - (w1 * 80 - b * 40));
-      ctx.stroke();
+      // 1. Ejes coordenados 3D
+      const axes = [
+        {x: 2.5, y: 0, z: 0, l: "X₁"},
+        {x: 0, y: 2.5, z: 0, l: "X₂"},
+        {x: 0, y: 0, z: 2.5, l: "X₃"}
+      ];
+      const origin = project3D(0, 0, 0, cx, cy, scale);
+
+      p3dCtx.lineWidth = 1;
+      p3dCtx.font = "10px var(--font-mono)";
+      axes.forEach((ax, idx) => {
+        const p = project3D(ax.x, ax.y, ax.z, cx, cy, scale);
+        p3dCtx.strokeStyle = "#d4d1c8";
+        p3dCtx.beginPath();
+        p3dCtx.moveTo(origin.px, origin.py);
+        p3dCtx.lineTo(p.px, p.py);
+        p3dCtx.stroke();
+        p3dCtx.fillStyle = "#878a92";
+        p3dCtx.fillText(ax.l, p.px + 4, p.py - 2);
+      });
+
+      // 2. Plano de separación 3D (Cuadrilátero)
+      // w1*x + w2*y + b = 0 => x = (-b - w2*y)/w1
+      const pSize = 2.2;
+      const corners = [
+        {x: -pSize, y: (-b - w1 * (-pSize)) / (w2 || 0.001), z: -pSize},
+        {x: pSize, y: (-b - w1 * pSize) / (w2 || 0.001), z: -pSize},
+        {x: pSize, y: (-b - w1 * pSize) / (w2 || 0.001), z: pSize},
+        {x: -pSize, y: (-b - w1 * (-pSize)) / (w2 || 0.001), z: pSize}
+      ];
+
+      const projCorners = corners.map(c => project3D(c.x, Math.max(-2.5, Math.min(2.5, c.y)), c.z, cx, cy, scale));
+
+      p3dCtx.beginPath();
+      p3dCtx.moveTo(projCorners[0].px, projCorners[0].py);
+      projCorners.forEach(c => p3dCtx.lineTo(c.px, c.py));
+      p3dCtx.closePath();
+      p3dCtx.fillStyle = "rgba(58, 83, 105, 0.22)";
+      p3dCtx.fill();
+      p3dCtx.strokeStyle = "#3a5369";
+      p3dCtx.lineWidth = 1.5;
+      p3dCtx.stroke();
+
+      // 3. Puntos ordenados por profundidad (Painter's algorithm)
+      const projectedPts = pts3D.map(p => {
+        const pr = project3D(p.x, p.y, p.z, cx, cy, scale);
+        return { ...p, px: pr.px, py: pr.py, depth: pr.depth };
+      }).sort((a, b) => b.depth - a.depth);
+
+      for (let p of projectedPts) {
+        p3dCtx.beginPath();
+        p3dCtx.arc(p.px, p.py, 4.5, 0, Math.PI * 2);
+        p3dCtx.fillStyle = p.cls === 0 ? "#456152" : "#7c5445";
+        p3dCtx.fill();
+        p3dCtx.strokeStyle = "#ffffff";
+        p3dCtx.lineWidth = 1;
+        p3dCtx.stroke();
+      }
     }
 
     // --------------------------------------------------------------------------
-    // 6. LABORATORIO XOR
+    // 6. LABORATORIO XOR Y RED NEURONAL MULTICAPA (DIAGRAMA DE NODOS)
     // --------------------------------------------------------------------------
     let xCanvas, xCtx;
     let xMode = 'single';
+    let nnCanvas, nnCtx;
+    let currentNNCase = { x1: 0, x2: 0 };
 
     function initXOR() {
       xCanvas = document.getElementById("xorCanvas");
@@ -2803,6 +3555,20 @@
       xCtx = xCanvas.getContext("2d");
       fitCanvas(xCanvas);
       drawXOR();
+    }
+
+    function switchXorTab(tab) {
+      document.getElementById("btnXorViewPlano").classList.toggle("active", tab === 'plano');
+      document.getElementById("btnXorViewNodos").classList.toggle("active", tab === 'nodos');
+      document.getElementById("xorTabPlano").style.display = tab === 'plano' ? "block" : "none";
+      document.getElementById("xorTabNodos").style.display = tab === 'nodos' ? "block" : "none";
+
+      if (tab === 'nodos') {
+        initNNNodesDiagram();
+      } else {
+        fitCanvas(xCanvas);
+        drawXOR();
+      }
     }
 
     function switchXOR(m) {
@@ -2823,21 +3589,19 @@
     }
 
     function drawXOR() {
-      if (!xCtx) return;
+      if (!xCtx || !xCanvas) return;
       xCtx.clearRect(0, 0, xCanvas.width, xCanvas.height);
       const cx = xCanvas.width / 2;
       const cy = xCanvas.height / 2;
       const s = 90;
 
-      // Ejes
       xCtx.strokeStyle = "#e5e3dd";
       xCtx.lineWidth = 1;
       xCtx.beginPath();
       xCtx.moveTo(cx - 140, cy); xCtx.lineTo(cx + 140, cy);
-      xCtx.moveTo(cx, cy - 120); xCtx.lineTo(cx, cy + 120);
+      xCtx.moveTo(cx, cy - 120); xCtx.lineTo(cx + 120, cy);
       xCtx.stroke();
 
-      // Líneas de decisión
       xCtx.lineWidth = 2;
       if (xMode === 'single') {
         xCtx.strokeStyle = "#7c5445";
@@ -2853,7 +3617,6 @@
         xCtx.stroke();
       }
 
-      // 4 Puntos XOR
       const pts = [
         { x: cx - s, y: cy + s, t: 0, l: "(0,0) → 0" },
         { x: cx + s, y: cy - s, t: 0, l: "(1,1) → 0" },
@@ -2874,6 +3637,117 @@
         xCtx.fillStyle = "#232528";
         xCtx.fillText(p.l, p.x + 10, p.y + 4);
       });
+    }
+
+    // DIAGRAMA INTERACTIVO DE NODOS DE LA RED NEURONAL
+    function initNNNodesDiagram() {
+      nnCanvas = document.getElementById("nnNodesCanvas");
+      if (!nnCanvas) return;
+      nnCtx = nnCanvas.getContext("2d");
+      fitCanvas(nnCanvas);
+      drawNNNodes();
+    }
+
+    function simulateNNCase(x1, x2) {
+      currentNNCase = { x1, x2 };
+      document.querySelectorAll("[id^='btnCase']").forEach(b => b.classList.remove("active"));
+      const btn = document.getElementById(`btnCase${x1}${x2}`);
+      if (btn) btn.classList.add("active");
+
+      // Cálculo de los nodos
+      // H1 se activa si x1+x2 >= 1 (OR gate)
+      const h1Val = (x1 + x2 >= 1) ? 1 : 0;
+      // H2 se activa si x1+x2 >= 2 (AND gate)
+      const h2Val = (x1 + x2 >= 2) ? 1 : 0;
+      // Y = H1 - H2 (XOR)
+      const yVal = (h1Val === 1 && h2Val === 0) ? 1 : 0;
+
+      document.getElementById("nnOutputStat").innerText = `Salida Y = ${yVal} (Esperado: ${x1 ^ x2})`;
+
+      const desc = document.getElementById("nnDescText");
+      if (yVal === 1) {
+        desc.innerHTML = `<strong>¡La neurona de salida Y dispara (1)!</strong> Con entradas X1=${x1} y X2=${x2}, el nodo oculto <strong>H1 se activa (1)</strong> y <strong>H2 permanece en 0</strong>, permitiendo que la señal llegue a la salida con éxito.`;
+      } else {
+        desc.innerHTML = `<strong>La neurona de salida Y queda en 0.</strong> Con entradas X1=${x1} y X2=${x2}, ${x1 === 0 ? "ningún nodo oculto se activa" : "ambos nodos H1 y H2 se activan y se cancelan mutuamente"}, resultando en salida 0.`;
+      }
+
+      drawNNNodes();
+    }
+
+    function drawNNNodes() {
+      if (!nnCtx || !nnCanvas) return;
+      nnCtx.clearRect(0, 0, nnCanvas.width, nnCanvas.height);
+      const w = nnCanvas.width;
+      const h = nnCanvas.height;
+
+      const { x1, x2 } = currentNNCase;
+      const h1Val = (x1 + x2 >= 1) ? 1 : 0;
+      const h2Val = (x1 + x2 >= 2) ? 1 : 0;
+      const yVal = (h1Val === 1 && h2Val === 0) ? 1 : 0;
+
+      // Posiciones de los Nodos
+      const inNodes = [
+        { x: w * 0.18, y: h * 0.35, val: x1, name: "X₁" },
+        { x: w * 0.18, y: h * 0.65, val: x2, name: "X₂" }
+      ];
+
+      const hidNodes = [
+        { x: w * 0.50, y: h * 0.35, val: h1Val, name: "H₁" },
+        { x: w * 0.50, y: h * 0.65, val: h2Val, name: "H₂" }
+      ];
+
+      const outNodes = [
+        { x: w * 0.82, y: h * 0.50, val: yVal, name: "Y (Salida)" }
+      ];
+
+      // 1. Dibujar Conexiones Sinápticas (Entrada -> Oculta)
+      inNodes.forEach(iN => {
+        hidNodes.forEach(hN => {
+          const active = (iN.val === 1);
+          nnCtx.strokeStyle = active ? "#3a5369" : "#d8d6cf";
+          nnCtx.lineWidth = active ? 2.5 : 1.2;
+          nnCtx.beginPath();
+          nnCtx.moveTo(iN.x, iN.y);
+          nnCtx.lineTo(hN.x, hN.y);
+          nnCtx.stroke();
+        });
+      });
+
+      // 2. Conexiones (Oculta -> Salida)
+      hidNodes.forEach(hN => {
+        const active = (hN.val === 1);
+        nnCtx.strokeStyle = active ? "#456152" : "#d8d6cf";
+        nnCtx.lineWidth = active ? 2.5 : 1.2;
+        nnCtx.beginPath();
+        nnCtx.moveTo(hN.x, hN.y);
+        nnCtx.lineTo(outNodes[0].x, outNodes[0].y);
+        nnCtx.stroke();
+      });
+
+      // Función para dibujar un nodo individual
+      function renderCircleNode(node, isOut) {
+        nnCtx.beginPath();
+        nnCtx.arc(node.x, node.y, 22, 0, Math.PI * 2);
+        nnCtx.fillStyle = node.val === 1 ? (isOut ? "#456152" : "#3a5369") : "#ffffff";
+        nnCtx.fill();
+        nnCtx.strokeStyle = node.val === 1 ? (isOut ? "#456152" : "#3a5369") : "#878a92";
+        nnCtx.lineWidth = 2.5;
+        nnCtx.stroke();
+
+        nnCtx.font = "bold 12px var(--font-mono)";
+        nnCtx.fillStyle = node.val === 1 ? "#ffffff" : "#232528";
+        nnCtx.textAlign = "center";
+        nnCtx.textBaseline = "middle";
+        nnCtx.fillText(node.val, node.x, node.y);
+
+        nnCtx.font = "11px var(--font-sans)";
+        nnCtx.fillStyle = "#232528";
+        nnCtx.fillText(node.name, node.x, node.y - 32);
+      }
+
+      inNodes.forEach(n => renderCircleNode(n, false));
+      hidNodes.forEach(n => renderCircleNode(n, false));
+      outNodes.forEach(n => renderCircleNode(n, true));
     }
   </script>
 </body>
