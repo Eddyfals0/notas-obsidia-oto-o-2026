@@ -472,6 +472,43 @@ Metodología estándar de división de datos para machine learning supervisado:
 ### Parada Temprana (*Early Stopping*)
 Mecanismo de regularización que monitorea la función de pérdida del conjunto de validación en cada época y detiene automáticamente el entrenamiento en el instante en que dicha pérdida alcanza su valor mínimo y comienza a ascender, previniendo que la red entre en la zona de sobreajuste.
 
+---
+
+## Módulo 7: Árboles de Decisión y Algoritmos Basados en Entropía
+
+### Árbol de Decisión (*Decision Tree*)
+Modelo de aprendizaje supervisado no paramétrico que particiona el espacio de atributos de forma recursiva en regiones hiper-rectangulares disyuntas. Su estructura jerárquica está compuesta por un nodo raíz, nodos internos de decisión que aplican pruebas lógicas sobre atributos, ramas que corresponden a los resultados de dichas pruebas, y nodos hoja terminales que contienen la predicción de clase o valor continuo.
+
+### Modelo de Caja Blanca (*White-Box Model*)
+Familia de algoritmos cuya lógica interna, reglas de decisión y ponderación de atributos son completamente transparentes, auditables y comprensibles por humanos sin recurrir a aproximaciones post-hoc. Se contrapone a los modelos de "caja negra" como las redes neuronales profundas.
+
+### Algoritmo Voraz / Heurística Miope (*Greedy Algorithm*)
+Estrategia de optimización que toma la mejor decisión local en cada paso inmediato (la que maximiza la ganancia o minimiza la impureza en ese nodo) sin considerar el impacto global futuro y sin posibilidad de retroceso (*no backtracking*). Resuelve de forma computacionalmente eficiente ($O(m \cdot n)$) un problema que globalmente es NP-completo.
+
+### Entropía de Shannon ($H(S)$)
+Métrica fundamental de la teoría de la información formulada por Claude Shannon (1948) que cuantifica el grado de incertidumbre, desorden o impureza en un conjunto de datos $S$:
+$$H(S) = - \sum_{i=1}^{c} p_i \log_2(p_i)$$
+Donde $p_i$ es la **proporción o probabilidad empírica** de instancias pertenecientes a la clase $i$ dentro de $S$ ($p_i = |S_i| / |S|$). Un nodo puro tiene $H(S) = 0$, mientras que un conjunto balanceado 50/50 alcanza la máxima incertidumbre ($H(S) = 1.0$ bit en clasificación binaria).
+
+### Ganancia de Información ($IG$ - *Information Gain*)
+Métrica de reducción de impureza utilizada por el algoritmo ID3 para seleccionar el mejor atributo divisor en cada nodo:
+$$IG(S, A) = H(S) - \sum_{v \in \text{Valores}(A)} \frac{|S_v|}{|S|} H(S_v)$$
+Mide la cantidad neta de información o certeza que se gana al particionar el conjunto $S$ de acuerdo con las ramas del atributo $A$. En cada paso se elige el atributo con el mayor $IG$.
+
+### Algoritmo ID3 (*Iterative Dichotomiser 3*)
+Algoritmo pionero de inducción de árboles creado por Ross Quinlan (1986). Construye árboles voraces de arriba hacia abajo (*TDIDT*) evaluando exclusivamente atributos cualitativos/categóricos y empleando la Ganancia de Información como función de selección. Carece de poda nativa y no soporta valores continuos ni faltantes.
+
+### Algoritmo C4.5
+Sucesor de ID3 desarrollado por Quinlan (1993). Supera sus debilidades al incorporar:
+1. **Gain Ratio (Razón de Ganancia):** Penaliza atributos con alta cardinalidad o demasiados valores únicos (como IDs).
+2. **Atributos Continuos:** Genera divisiones binarias dinámicas por umbrales numéricos ($A \le \theta$).
+3. **Valores Faltantes:** Asigna instancias incompletas a múltiples ramas de forma probabilística.
+4. **Poda (*Pruning*):** Corta ramas redundantes para evitar el sobreajuste.
+
+### Algoritmo CART (*Classification and Regression Trees*)
+Desarrollado por Breiman et al. (1984), genera árboles **estrictamente binarios** (cada nodo tiene exactamente dos ramas). Emplea el **Índice de Impureza de Gini** ($1 - \sum p_i^2$) para clasificación y la reducción de varianza (MSE) para regresión.
+
+
 
 
 
