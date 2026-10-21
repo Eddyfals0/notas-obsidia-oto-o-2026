@@ -508,6 +508,18 @@ Sucesor de ID3 desarrollado por Quinlan (1993). Supera sus debilidades al incorp
 ### Algoritmo CART (*Classification and Regression Trees*)
 Desarrollado por Breiman et al. (1984), genera árboles **estrictamente binarios** (cada nodo tiene exactamente dos ramas). Emplea el **Índice de Impureza de Gini** ($1 - \sum p_i^2$) para clasificación y la reducción de varianza (MSE) para regresión.
 
+### Atributo Clasificador y Atributo Ganador (*Target Attribute* y *Winning Attribute*)
+En la notación del curso, el **atributo clasificador** $A_c$ es la columna que se quiere predecir (su cardinalidad $|D(A_c)|$ da el número de clases). El **atributo ganador** $A_g$ es el atributo descriptor con mayor ganancia $G(A_x)$ en el nodo actual; se asocia a un nodo del árbol y genera una rama por cada valor de su dominio.
+
+### Entropía de un Atributo ($E(A_x)$)
+Desorden promedio que queda en la clase después de particionar por el atributo $A_x$: suma, sobre cada bloque, del peso del bloque $\text{Pr}(S_i^x)$ por la entropía de Shannon de las clases dentro de ese bloque. La ganancia es $G(A_x) = I - E(A_x)$, donde $I$ es la información general de la clase.
+
+### Criterio de Paro por Umbral (*Tolerance Threshold*)
+Regla que permite cerrar una rama aunque no sea totalmente pura, etiquetándola con su clase mayoritaria cuando la probabilidad de esa clase supera un valor fijado de antemano. Evita el sobreajuste que produce expandir ramas que ya no se pueden separar por completo.
+
+### Gain Ratio e Información de Partición (*Split Information*)
+Corrección a la ganancia que divide $G(A_x)$ entre la entropía de los pesos de los bloques del atributo (la *Split Information*), para no favorecer atributos con muchos valores en su dominio. Es la base del criterio de C4.5.
+
 
 
 
