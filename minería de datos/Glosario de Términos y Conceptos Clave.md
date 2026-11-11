@@ -531,3 +531,6 @@ Los tres roles de una instancia en DBSCAN. **Núcleo:** tiene al menos `MinPts` 
 
 ### Métricas de Distancia (Euclidiana, Manhattan y Chebyshev)
 Formas de medir la cercanía entre instancias. **Euclidiana:** línea recta, vecindad en forma de hiperesfera. **Manhattan:** suma de diferencias absolutas, vecindad en forma de rombo. **Chebyshev:** mayor diferencia en una sola dimensión, vecindad cuadrada. La métrica cambia quién es vecino y requiere variables escaladas.
+
+### Distancia Inter-cluster e Intra-cluster
+Criterio de calidad de un agrupamiento. La distancia **intra-cluster** (entre elementos del mismo cluster) se desea **minimizar** para obtener grupos compactos; la distancia **inter-cluster** (entre clusters distintos) se desea **maximizar** para que estén bien separados. Índices como la silueta y Davies-Bouldin combinan ambas.
