@@ -534,3 +534,9 @@ Formas de medir la cercanía entre instancias. **Euclidiana:** línea recta, vec
 
 ### Distancia Inter-cluster e Intra-cluster
 Criterio de calidad de un agrupamiento. La distancia **intra-cluster** (entre elementos del mismo cluster) se desea **minimizar** para obtener grupos compactos; la distancia **inter-cluster** (entre clusters distintos) se desea **maximizar** para que estén bien separados. Índices como la silueta y Davies-Bouldin combinan ambas.
+
+### Método del Codo (*Elbow Method*)
+Métrica interna para elegir el número de clusters $K$: se grafica la dispersión intra-cluster total $W_K$ contra $K$ y se escoge el punto donde la curva deja de bajar bruscamente (el "codo"), porque más clusters ya aportan poca mejora.
+
+### Estadístico de Brecha (*Gap Statistic*)
+Métrica interna que compara la dispersión intra-cluster de los datos reales contra la esperada en datos de referencia sin estructura (uniformes aleatorios): $\text{Gap}(K) = \mathbb{E}[\log W_K^{\text{ref}}] - \log W_K$. Se elige el $K$ con mayor brecha; es más objetivo que el codo.
