@@ -520,13 +520,14 @@ Regla que permite cerrar una rama aunque no sea totalmente pura, etiquetándola 
 ### Gain Ratio e Información de Partición (*Split Information*)
 Corrección a la ganancia que divide $G(A_x)$ entre la entropía de los pesos de los bloques del atributo (la *Split Information*), para no favorecer atributos con muchos valores en su dominio. Es la base del criterio de C4.5.
 
+### DBSCAN (*Density-Based Spatial Clustering of Applications with Noise*)
+Algoritmo de clustering no supervisado por densidad. Dado un radio $\epsilon$, un mínimo de vecinos `MinPts` y una métrica de distancia, clasifica cada instancia como **núcleo** (al menos `MinPts` vecinos dentro de $\epsilon$), **frontera** (cerca de un núcleo, pero con menos vecinos) o **ruido** (etiqueta `-1`). Los núcleos propagan el cluster a sus vecinos, formando hiperesferas locales encadenadas; no requiere fijar el número de clusters.
 
+### Épsilon ($\epsilon$) y MinPts
+Parámetros críticos de DBSCAN. $\epsilon$ es el radio de la hiperesfera de vecindad (radio de densidad) y `MinPts` es el número mínimo de instancias dentro de ese radio para que exista un cluster. Un $\epsilon$ muy grande fusiona todo en un único cluster global; uno muy pequeño deja todo como ruido.
 
+### Punto Núcleo, Frontera y Ruido
+Los tres roles de una instancia en DBSCAN. **Núcleo:** tiene al menos `MinPts` vecinos dentro de $\epsilon$ y expande el cluster. **Frontera:** pertenece a un cluster por estar dentro de $\epsilon$ de un núcleo, pero no lo expande. **Ruido:** no es núcleo ni frontera (`-1`).
 
-
-
-
-
-
-
-
+### Métricas de Distancia (Euclidiana, Manhattan y Chebyshev)
+Formas de medir la cercanía entre instancias. **Euclidiana:** línea recta, vecindad en forma de hiperesfera. **Manhattan:** suma de diferencias absolutas, vecindad en forma de rombo. **Chebyshev:** mayor diferencia en una sola dimensión, vecindad cuadrada. La métrica cambia quién es vecino y requiere variables escaladas.

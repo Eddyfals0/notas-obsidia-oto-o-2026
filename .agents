@@ -41,7 +41,7 @@ El agente debe asumir un rol activo y resolver:
      - Si en la sesión **no se dejaron tareas**, la sección `## Tareas Asignadas` debe indicar: `*(Sin tareas asignadas en esta sesión)*`.
 
 4. **Interconectar la Bóveda:**
-   - Vincular siempre con la nota de la sesión anterior mediante `[[[N° Sesión Anterior]. [Tema Anterior]]]`.
+   - Vincular siempre con la nota de la sesión anterior mediante `[[N°. Tema Anterior]]`.
 
 5. **Principio de Continuidad Obligatoria (Trazabilidad con Clases Anteriores):**
    - Siempre fundamentar, definir y conectar los temas y ejercicios con lo visto en clases anteriores.
@@ -51,7 +51,7 @@ El agente debe asumir un rol activo y resolver:
 
 ## 2. Nomenclatura y Rutas de Archivos
 
-- **Ruta:** `/Notas Universidad 2026/[nombre de la materia]/`
+- **Ruta:** `/notas-universidad-2026/[nombre de la materia]/`
 - **Formato de nombre:** `[N° de Sesión]. [Tema Principal].md`
 - **Ejemplos:**
   - `1. Introducción y Evaluación.md`
@@ -116,6 +116,7 @@ tags:
 Para garantizar la persistencia de la información y evitar pérdida de notas, en cada actualización o procesamiento de apuntes el agente DEBE:
 
 1. **Pull previo:** Ejecutar `git pull origin main` antes de confirmar cambios o al iniciar trabajo para sincronizar cambios remotos.
-2. **Commit descriptivo:** Ejecutar `git add .` y crear un commit claro indicando la materia y la sesión procesada (ej. `git commit -m "docs(minería de datos): agregar sesión 7 de muestreo progresivo"`).
+2. **Commit descriptivo:** Ejecutar `git add .` y crear un commit claro indicando la materia y la sesión procesada (ej. `git commit -m "docs(minería de datos): agregar sesión 21 de clustering DBSCAN"`).
 3. **Push a remoto:** Ejecutar `git push origin main` de inmediato tras cada modificación sustancial.
-
+4. **Glosario:** en minería de datos, agregar al `Glosario de Términos y Conceptos Clave.md` los términos nuevos de cada sesión.
+5. **Commits selectivos:** si hay cambios sin relacionar en el árbol de trabajo (por ejemplo `.obsidian/graph.json`), hacer `git add` solo de los archivos de la sesión procesada.
